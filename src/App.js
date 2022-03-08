@@ -6,21 +6,28 @@ function App() {
   const [backendData, setBackendData] = useState({data: null})
 
 
-  useEffect((callBackendAPI) => {
-      callBackendAPI()
-        .then(res => setBackendData({data: res.express}))
-        .catch(error => console.log(error))
-  })
-
-  callBackendAPI = async () => {
-    const response = await fetch('/express_backend');
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      throw Error(body.message) 
+  useEffect(() => {
+    /*
+    async function callBackendAPI() {
+      const response = await fetch('/express_backend');
+      const body = await response.json();
+      
+      if (response.status !== 200) {
+        throw Error(body.message) 
+      }
+      
+      return body;
     }
-    return body;
-  }
+    */
+    /*
+    
+    callBackendAPI()
+      .then(res => setBackendData({data: res.express}))
+      .catch(error => console.log(error))
+      */
+  }, [])
+
+  
 
   return (
     <div className="App">
