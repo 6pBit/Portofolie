@@ -1,13 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
-import {useState, useEffect} from "react"
+import React, {useState, useEffect} from "react"
 
 function App() {
   const [backendData, setBackendData] = useState({data: null})
 
 
   useEffect(() => {
-    /*
+    
     async function callBackendAPI() {
       const response = await fetch('/express_backend');
       const body = await response.json();
@@ -18,13 +18,12 @@ function App() {
       
       return body;
     }
-    */
-    /*
+    
     
     callBackendAPI()
       .then(res => setBackendData({data: res.express}))
       .catch(error => console.log(error))
-      */
+      
   }, [])
 
   
@@ -35,7 +34,7 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         {/*test*/}
         <p>
-          Edit <code>src/App.js</code> and save to reload. {backendData.data}
+          Edit <code>src/App.js</code> and save to reoad. {backendData.data}
         </p>
         <a
           className="App-link"
