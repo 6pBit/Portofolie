@@ -5,7 +5,7 @@ import React, {useState, useEffect} from "react"
 function App() {
   const [backendData, setBackendData] = useState({data: null})
 
-
+  console.log("App component kjørt")
   useEffect(() => {
     
     async function callBackendAPI() {
@@ -14,11 +14,9 @@ function App() {
       
       if (response.status !== 200) {
         throw Error(body.message) 
-      }
-      
+      }      
       return body;
-    }
-    
+    }   
     
     callBackendAPI()
       .then(res => setBackendData({data: res.express}))
