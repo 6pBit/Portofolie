@@ -1,2 +1,0 @@
-# Portofolie
-Vårt bachelor prosjekt
