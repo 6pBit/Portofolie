@@ -37,17 +37,28 @@ app.get("/api", (req, res) => {
   let db_connect = dbo.getDb("sample_mflix");
   db_connect
     .collection("movies")
-    .find({title: "Blacksmith Scene"})
+<<<<<<< HEAD
+    .find({})
     .toArray(function (err, result) {
       if (err) throw err;
-      res.json({ message: result[0].title });
+      res.json(res.json(result));
+=======
+    .find({})
+    .toArray(function (err, result) {
+      if (err) throw err;
+      console.log(res.json(result));
+>>>>>>> ff395a910ce2450afc008e554e4aab0e314b0515
     });
   //res.json({ message: "Hello from server!" });
   
 });
 
 // All other GET requests not handled before will return our React app
-app.get("/", (req, res) => {
+<<<<<<< HEAD
+app.get('*', (req, res) => {
+=======
+app.get('*', (req, res) => {
+>>>>>>> ff395a910ce2450afc008e554e4aab0e314b0515
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
