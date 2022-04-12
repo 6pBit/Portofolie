@@ -2,6 +2,8 @@ const express = require('express')
 const dbo = require("../db/index.js");
 const router = express.Router()
 
+const ObjectId = require("mongodb").ObjectId;
+
 router.get("/:name", (req, res) => {
     let db_connect = dbo.getDb();
     db_connect
@@ -13,6 +15,7 @@ router.get("/:name", (req, res) => {
       });
 });
 router.get("/", (req, res) => {
+    console.log(req.baseUrl)
     let db_connect = dbo.getDb();
     db_connect
       .collection("sites")
@@ -22,11 +25,15 @@ router.get("/", (req, res) => {
         res.json(result);
       });
 });
+//TODO: (API) lag denne bedre
+
 router.post("/", (req, res) => {
+    //console.log(router.path())
+    console.log("sett inn metode kjørt")
     let db_connect = dbo.getDb();
     let myObj = {
-        name: req.body.name,
-        title: req.body.title
+        name: "testside",
+        title: "tabulator"
     };
     db_connect.collection("sites")
         .insertOne(myObj, (err, result) => {
@@ -34,15 +41,29 @@ router.post("/", (req, res) => {
             res.json(result);
         })
 })
+
+router.param('name', (req, res, next, name) => {
+    const modified = name.toLowerCase()
+    req.name = modified
+    console.log(JSON.stringify(name))
+    next()
+})
+
 router.post("/:name", (req, res) => {
+    console.log("updaten kjørt")
     let db_connect = dbo.getDb();
-    let myquery = { _id: ObjectId( req.params.id )};  
+    let myquery = { name: req.params.name };  
     let newvalues = {    
-        $set: req.body.newvalues
+        $set: {
+            name: "Landing",
+            title: "Velkommen igjen og igjen",
+            introductionTxt: "Hei igjen."
+        }
     }
-    dbo.collection("sites").updateOne(myquery, newvalues, (err, res) => {
+    db_connect.collection("sites").updateOne(myquery, newvalues, (err, result) => {
         if (err) throw err;
-        console.log("1 document updated");
+        //console.log("1 document updated"+"\n"+JSON.stringify(result));
+        res.json(result);
     })
 })
 
