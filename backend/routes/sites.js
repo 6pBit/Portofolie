@@ -28,13 +28,10 @@ router.get("/", (req, res) => {
 //TODO: (API) lag denne bedre
 
 router.post("/", (req, res) => {
-    //console.log(router.path())
     console.log("sett inn metode kjørt")
     let db_connect = dbo.getDb();
-    let myObj = {
-        name: "testside",
-        title: "tabulator"
-    };
+    let myObj = req.body.myObj
+    
     db_connect.collection("sites")
         .insertOne(myObj, (err, result) => {
             if (err) throw err;
@@ -54,11 +51,7 @@ router.post("/:name", (req, res) => {
     let db_connect = dbo.getDb();
     let myquery = { name: req.params.name };  
     let newvalues = {    
-        $set: {
-            name: "Landing",
-            title: "Velkommen igjen og igjen",
-            introductionTxt: "Hei igjen."
-        }
+        $set: req.budy.myObj
     }
     db_connect.collection("sites").updateOne(myquery, newvalues, (err, result) => {
         if (err) throw err;

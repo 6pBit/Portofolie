@@ -6,12 +6,25 @@ function App() {
   const [data, setData] = React.useState(null);
 
   React.useEffect(() => {
+    
+  
+    const requestNewSite = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name: "side-fra-frontend",
+        title: "halla balla"
+      })
+    }
+    fetch("/sites", requestNewSite )
+      .then(async response => {
+        console.log(response.ok)
+      })
+
     fetch("/user")
       .then((res) => res.json())
-      .then((data) => setData(data.message));
-
-
-  }, []);
+      .then((data) => setData(data.message))
+  },[])
 
 
   return (
