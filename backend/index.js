@@ -16,9 +16,9 @@ const app = express();
 const sitesApp = express();
 const userApp = express();
 
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 app.use(cors())
-app.use(bodyParser.json())
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 

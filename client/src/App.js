@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import { BrowserRouter} from "react-router-dom"
 
 function App() {
   const [data, setData] = React.useState(null);
@@ -17,23 +18,29 @@ function App() {
       })
     }
     fetch("/sites", requestNewSite )
-      .then(async response => {
-        console.log(response.ok)
+      .then( response => {
+        console.log("fetch resultat "+response.json())
+        setData(JSON.stringify(response.json()))
+        
       })
-
+    /*
     fetch("/user")
       .then((res) => res.json())
       .then((data) => setData(data.message))
+    */
   },[])
 
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>{!data ? "Loading..." : data}</p>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>{!data ? "Loading..." : data}</p>
+          <p>"halla"</p>
+        </header>
+      </div>
+    </BrowserRouter>
   );
 }
 

@@ -30,12 +30,12 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
     console.log("sett inn metode kjørt")
     let db_connect = dbo.getDb();
-    let myObj = req.body.myObj
-    
+    let myObj = req.body    
     db_connect.collection("sites")
         .insertOne(myObj, (err, result) => {
             if (err) throw err;
             res.json(result);
+            console.log(result)
         })
 })
 
