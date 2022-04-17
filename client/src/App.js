@@ -2,6 +2,11 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter} from "react-router-dom"
+import Sideheader from "./component/sideheader/Sideheader.js"
+import Main from "./component/main/Main"
+import Title from "./component/sideheader/Title"
+
+import { Link } from "react-scroll";
 
 function App() {
   const [data, setData] = React.useState(null);
@@ -27,18 +32,25 @@ function App() {
     fetch("/user")
       .then((res) => res.json())
       .then((data) => setData(data.message))
+
+    <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>{!data ? "Loading..." : data}</p>
+          <p>"halla"</p>
+        </header>
     */
   },[])
 
 
   return (
     <BrowserRouter>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>{!data ? "Loading..." : data}</p>
-          <p>"halla"</p>
-        </header>
+      <div className="body">
+        <div className="App">
+          
+          <Main />
+          <Sideheader />
+          
+        </div>
       </div>
     </BrowserRouter>
   );

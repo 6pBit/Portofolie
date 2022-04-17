@@ -25,7 +25,7 @@ router.get("/", (req, res) => {
         res.json(result);
       });
 });
-//TODO: (API) lag denne bedre
+
 
 router.post("/", (req, res) => {
     console.log("sett inn metode kjørt")
