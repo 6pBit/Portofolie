@@ -1,14 +1,11 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter} from "react-router-dom"
-import Sideheader from "./component/sideheader/Sideheader.js"
+import Sidebar from "./component/sidebar/Sidebar.js"
 import Main from "./component/main/Main"
-import Title from "./component/sideheader/Title"
-
-import { Link } from "react-scroll";
 
 function App() {
+
   const [data, setData] = React.useState(null);
 
   React.useEffect(() => {
@@ -48,7 +45,7 @@ function App() {
         <div className="App">
           
           <Main />
-          <Sideheader />
+          <Sidebar />
           
         </div>
       </div>
