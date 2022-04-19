@@ -9,7 +9,7 @@ import Title from "./component/sideheader/Title"
 import { Link } from "react-scroll";
 
 function App() {
-  const [data, setData] = React.useState(null);
+  const [data, setData] = React.useState([]);
 
   
   React.useEffect(() => {
