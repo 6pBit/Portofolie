@@ -1,6 +1,6 @@
 import React from "react"
 
-export default function Edit() {
+export default function Edit(props) {
 
     const [formData, setFormData] = React.useState({
       fornavn: "",

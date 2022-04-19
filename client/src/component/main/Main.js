@@ -16,7 +16,7 @@ export default function Main(props) {
             <Project />
             <Resume />
             <Contact />
-            <Edit/>
+            <Edit />
         </div>
     )
 }

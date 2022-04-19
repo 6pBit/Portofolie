@@ -33,8 +33,6 @@ console.log(app.path()+"hei")
 console.log(sitesApp.path()+"hei")
 console.log(userApp.path()+"hei")
 // All other GET requests not handled before will return our React app
-
-
 app.get("/", (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });

@@ -5,8 +5,7 @@ import Sidebar from "./component/sidebar/Sidebar.js"
 import Main from "./component/main/Main"
 
 function App() {
-
-  const [data, setData] = React.useState(null);
+  const [data, setData] = React.useState([]);
 
   
   React.useEffect(() => {
