@@ -11,9 +11,10 @@ import { Link } from "react-scroll";
 function App() {
   const [data, setData] = React.useState(null);
 
+  
   React.useEffect(() => {
     
-  
+    /*
     const requestNewSite = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json'},
@@ -28,7 +29,10 @@ function App() {
         setData(JSON.stringify(response.json()))
         
       })
-    /*
+      */
+  },[])
+  
+   /*
     fetch("/user")
       .then((res) => res.json())
       .then((data) => setData(data.message))
@@ -39,8 +43,7 @@ function App() {
           <p>"halla"</p>
         </header>
     */
-  },[])
-
+  
 
   return (
     <BrowserRouter>

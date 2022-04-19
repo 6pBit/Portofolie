@@ -3,6 +3,18 @@ const dbo = require("../db/index.js");
 const router = express.Router()
 
 // Eksisterer kun en bruker. Så holder å 
+
+router.get("/:name", (req, res) => {
+  let db_connect = dbo.getDb();
+  db_connect
+    .collection("user")
+    .findOne({fornavn: `${req.params.name}` }, function(err, result) {
+      if (err) throw err;
+      console.log(result.name);
+      res.json(result);
+    });
+});
+
 router.get("/", (req, res) => {
     let db_connect = dbo.getDb();
     db_connect
