@@ -1,25 +1,35 @@
 import React from "react"
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+const USER_ID = process.env.USER_ID
 
 export default function Edit(props) {
+
+    const isMounted = React.useRef(false)
+    const idHelper = React.useRef("")
 
     const [formData, setFormData] = React.useState({
       fornavn: "",
       etternavn: "",
       tlfNummer: "",
       epost: "",
-      bilde: "" // får se om det blir en lenke eller ikke.
+      bildelenke: "",
+      bildeAltTekst: ""
+       // får se om det blir en lenke eller ikke.
     })
 
-    const [currentData, setCurrentData] = React.useState({
-        currentFornavn: "",
-        currentEtternavn: "",
-        currentTlfNummer: "",
-        currentEpost: "",
-        currentBilde: {
-          currentBildelenke: "",
-          currentBilde_alt_tekst: ""
-        } // får se om det blir en lenke eller ikke.
+    const [oldData, setOldData] = React.useState({
+      fornavn: "",
+      etternavn: "",
+      tlfNummer: "",
+      epost: "",
+      bildelenke: "",
+      bildeAltTekst: ""
+       // får se om det blir en lenke eller ikke.
     })
+
+    
 
     function handleChange(event) {
       console.log(event.target.value)
@@ -35,43 +45,64 @@ export default function Edit(props) {
 
     function handleSubmit(event){
         event.preventDefault();
-    }
 
-    const test_fornavn = "test_bruker_fornavn"
+        setOldData( {
+          ...formData
+        })
+
+    }
     
     React.useEffect(() => {
-      console.log("Henta currentUser")
-      fetch(`/user/test_bruker_fornavn`) // polyfill om man bruker ${test_fornavn}
-      .then(response => response.json()) // feilen kommer om man bruker res eller response. Polyfill shit
+      //console.log(USER_ID)
+      fetch(`/user/6254341b8acb5f014cfe0800`) 
+      .then(response => response.json()) 
       .then(data => (
-        console.log(data.fornavn),
-        setCurrentData( {
-          currentFornavn: data.fornavn,
-          currentEtternavn: data.etternavn,
-          currentTlfNummer: data.tlfnummer,
-          currentEpost: data.epost,
-          currentBilde: {
-            currentBildelenke: data.bilde.bildelenke,
-            currentBildeAltTekst: data.bilde.bilde_alt_tekst
-          }
-        })
+        console.log(data + " type objekt useEffect som getter bruker Edit.js"),
+        idHelper.current = data._id,
+        setOldData( {
+          fornavn: data.fornavn,
+          etternavn: data.etternavn,
+          tlfNummer: data.tlfNummer,
+          epost: data.epost,
+          bildelenke: data.bildelenke, 
+          bildeAltTekst: data.bildeAltTekst
+        }, () => console.log(" Setstate kjørt Edit.js"))
         )
       )
-
     }, []) // Kan lastes inn på nytt etter at man har lastet opp ny info.
+
+    React.useEffect(() => {
+      if(isMounted.current) {
+        const requestNewUser = {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(
+            oldData
+          )
+        }
+        console.log(idHelper.current + " her er _id  fra finalFormData oppdaterer bruker Edit.js")
+        fetch(`/user/${idHelper.current}`, requestNewUser )
+          .then( response => {
+            console.log("fetch resultat "+ response.json())
+            //setCurrentData(JSON.stringify(response.json()))
+            
+          })
+      } else {
+        isMounted.current = true
+      }
+    }, [oldData])
 
     return (
         <div className="container">
 
           <div className="current_info">
             <article>
-              <p>Current firstname: {currentData.currentFornavn}</p>
-              <p>Current lastname: {currentData.currentEtternavn}</p>
-              <p>Current tlfNumber: {currentData.currentTlfNummer}</p>
-              <p>Current email: {currentData.currentEpost}</p>
-              <p>Current picture: {currentData.currentBilde.currentBildelenke +
-                                " " + currentData.currentBilde.currentBildeAltTekst}
-              </p>
+              <p>Current firstname: {oldData.fornavn}</p>
+              <p>Current lastname: {oldData.etternavn}</p>
+              <p>Current tlfNumber: {oldData.tlfNummer}</p>
+              <p>Current email: {oldData.epost}</p>
+              <img src={oldData.bildelenke}
+                alt={oldData.bildeAltTekst}/>
             </article>
           </div>
 
@@ -106,15 +137,23 @@ export default function Edit(props) {
             />
             <input
               type="text"
-              placeholder="Bilde"
+              placeholder="Bildelenke"
               onChange={handleChange}
-              name="bilde"
-              value={formData.bilde}
+              name="bildelenke"
+              value={formData.bildelenke}
+            />
+            <input
+              type="text"
+              placeholder="Bilde alt tekst"
+              onChange={handleChange}
+              name="bildeAltTekst"
+              value={formData.bildeAltTekst}
             />
 
             <input
               type="button"
-              onSubmit={handleSubmit}
+              text="Submit"
+              onClick={handleSubmit}
             />
 
           </form>
@@ -122,3 +161,12 @@ export default function Edit(props) {
         </div>
     )
 }
+
+/*
+fornavn: finalFormData.fornavn,
+            etternavn: finalFormData.etternavn,
+            tlfNummer: finalFormData.tlfNummer,
+            epost: finalFormData.epost,
+            bildelenke: finalFormData.bildelenke,
+            bildeAltTekst: finalFormData.bildeAltTekst
+            */
