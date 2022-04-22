@@ -6,7 +6,18 @@ import Main from "./component/main/Main"
 
 function App() {
   const [data, setData] = React.useState([]);
-
+  
+  const landingRef = React.useRef()
+  const projectRef = React.useRef()
+  const resumeRef = React.useRef()
+  const contactRef = React.useRef()
+  const navRefList = [
+    {navRef: landingRef},
+    {navRef: projectRef},
+    {navRef: resumeRef},
+    {navRef: contactRef},
+    
+  ]
   
   React.useEffect(() => {
     
@@ -16,16 +27,17 @@ function App() {
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({
         name: "side-fra-frontend",
-        title: "halla balla"
+        title: "halla balla",
+        introductionTxt: "Tabulator ftw"
       })
     }
-    fetch("/sites", requestNewSite )
+    fetch("/sites/Landing", requestNewSite )
       .then( response => {
         console.log("fetch resultat "+response.json())
         setData(JSON.stringify(response.json()))
         
       })
-      */
+    */
   },[])
   
    /*
@@ -46,7 +58,7 @@ function App() {
       <div className="body">
         <div className="App">
           
-          <Main />
+          <Main navRefList={navRefList}/>
           <Sidebar />
           
         </div>

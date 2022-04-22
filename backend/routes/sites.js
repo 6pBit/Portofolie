@@ -51,7 +51,7 @@ router.post("/:name", (req, res) => {
     let db_connect = dbo.getDb();
     let myquery = { name: req.params.name };  
     let newvalues = {    
-        $set: req.budy.myObj
+        $set: req.body
     }
     db_connect.collection("sites").updateOne(myquery, newvalues, (err, result) => {
         if (err) throw err;
