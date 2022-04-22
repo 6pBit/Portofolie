@@ -1,7 +1,9 @@
 import React from "react";
 import './Sidebar.css'
+import { Link } from 'react-router-dom'
+import { propTypes } from "react-bootstrap/esm/Image";
 
-export default function Nav() {
+export default function Nav(props) {
 
     function handleClick(e, target) {
         e.preventDefault();
@@ -27,6 +29,7 @@ export default function Nav() {
             <div className="item" onClick={(e) => handleClick(e, '#contact')}>
                 <span className="sidebar-text">Kontakt</span>
             </div>
+            <Link to="/admin" onClick={props.handleAdminRouting}>Admin</Link>
             
         </ul>
     )

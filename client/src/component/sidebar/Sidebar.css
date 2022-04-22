@@ -50,3 +50,11 @@
 .sidebar-items .item:hover {
     background-color: rgba(255,255,255,0.05)
 }
+
+/* --- Collapsed Sidebar menu --- */
+.Sidebar.collapsed {
+    display: none;
+}
+.Sidebar.collapsed * {
+    display: none;
+}

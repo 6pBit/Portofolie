@@ -2,11 +2,16 @@ import React from "react"
 import { validate } from "react-email-validator"
 import {Container, Tabs, Tab} from "react-bootstrap"
 import EditTabUser from "./EditTabUser"
+<<<<<<< HEAD
 import EditTabLanding from "./EditTabLanding"
+=======
+import { Link } from 'react-router-dom'
+>>>>>>> c41f06566564b90c608eeebc262ba41a31bed809
 /*
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
+*/
 const USER_ID = process.env.USER_ID // vil ikke fungere slik den skal av en eller annen grunn
 */
 export default function Edit(props) {
@@ -203,7 +208,10 @@ export default function Edit(props) {
 
     return (
         <Container>
-
+          <header>
+            <h2>Admin </h2>
+            <Link to='/' onClick={props.handleMenuVisibility}>Tilbake</Link>
+          </header>
           <Tabs defaultActiveKey="user" id="uncontrolled-tab-example" className="mb-3">
 
             <Tab eventKey="user" title="User">

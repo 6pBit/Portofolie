@@ -9,6 +9,7 @@ import './css/Main.css'
 export default function Main(props) {
 
     const [state, setState] = React.useState(null)
+    //const navRefList = props.navRefList ref={navRefList[0].landingRef}
 
     return (
         <div id="mainContainer" className="main" onScroll={(e) => console.log(e+" Event")}>
@@ -16,7 +17,7 @@ export default function Main(props) {
             <Project />
             <Resume />
             <Contact />
-            <Edit />
+            
         </div>
     )
 }
