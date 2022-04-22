@@ -1,8 +1,12 @@
 import React from "react"
+import { validate } from "react-email-validator"
+import {Container, Tabs, Tab} from "react-bootstrap"
+import EditTabUser from "./EditTabUser"
+
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
-const USER_ID = process.env.USER_ID
+const USER_ID = process.env.USER_ID // vil ikke fungere slik den skal av en eller annen grunn
 
 export default function Edit(props) {
 
@@ -45,10 +49,13 @@ export default function Edit(props) {
 
     function handleSubmit(event){
         event.preventDefault();
-
-        setOldData( {
-          ...formData
-        })
+        if(validate(formData.epost) && formData.tlfNummer.length === 8) /* hardkoda :( */ {
+          setOldData( {
+            ...formData
+          })
+        } else {
+          alert("Eposten eller telefonnummeret er ikke gyldig!")
+        }
 
     }
     
@@ -66,7 +73,15 @@ export default function Edit(props) {
           epost: data.epost,
           bildelenke: data.bildelenke, 
           bildeAltTekst: data.bildeAltTekst
-        }, () => console.log(" Setstate kjørt Edit.js"))
+        }, () => console.log(" Setstate kjørt Edit.js")),
+        setFormData({
+          fornavn: data.fornavn,
+          etternavn: data.etternavn,
+          tlfNummer: data.tlfNummer,
+          epost: data.epost,
+          bildelenke: data.bildelenke, 
+          bildeAltTekst: data.bildeAltTekst
+        })
         )
       )
     }, []) // Kan lastes inn på nytt etter at man har lastet opp ny info.
@@ -93,75 +108,90 @@ export default function Edit(props) {
     }, [oldData])
 
     return (
-        <div className="container">
+        <Container>
 
-          <div className="current_info">
-            <article>
-              <p>Current firstname: {oldData.fornavn}</p>
-              <p>Current lastname: {oldData.etternavn}</p>
-              <p>Current tlfNumber: {oldData.tlfNummer}</p>
-              <p>Current email: {oldData.epost}</p>
-              <img src={oldData.bildelenke}
-                alt={oldData.bildeAltTekst}/>
-            </article>
-          </div>
+          <Tabs defaultActiveKey="user" id="uncontrolled-tab-example" className="mb-3">
 
-          <form>
-            <input 
-              type="text" 
-              placeholder="Fornavn"
-              onChange={handleChange}
-              name="fornavn"
-              value={formData.fornavn}
-            />
-            <input
-              type="text"
-              placeholder="Etternavn"
-              onChange={handleChange}
-              name="etternavn"
-              value={formData.etternavn}
-            />
-            <input
-              type="text"
-              placeholder="Telefonnummer"
-              onChange={handleChange}
-              name="tlfNummer"
-              value={formData.tlfNummer}
-            />
-            <input
-              type="email"
-              placeholder="Epost"
-              onChange={handleChange}
-              name="epost"
-              value={formData.epost}
-            />
-            <input
-              type="text"
-              placeholder="Bildelenke"
-              onChange={handleChange}
-              name="bildelenke"
-              value={formData.bildelenke}
-            />
-            <input
-              type="text"
-              placeholder="Bilde alt tekst"
-              onChange={handleChange}
-              name="bildeAltTekst"
-              value={formData.bildeAltTekst}
-            />
+            <Tab eventKey="user" title="User">
+              <EditTabUser formData={formData} setFormData={setFormData} oldData={oldData} setOldData={setOldData} handleChange={handleChange} handleSubmit={handleSubmit}/>
+            </Tab>
+            <Tab eventKey="landing" title="Landing" disabled>
 
-            <input
-              type="button"
-              text="Submit"
-              onClick={handleSubmit}
-            />
+            </Tab>
 
-          </form>
+          </Tabs>
 
-        </div>
+          
+
+          
+        </Container>
     )
 }
+/*
+<div className="current_info">
+<article>
+  <p>Current firstname: {oldData.fornavn}</p>
+  <p>Current lastname: {oldData.etternavn}</p>
+  <p>Current tlfNumber: {oldData.tlfNummer}</p>
+  <p>Current email: {oldData.epost}</p>
+  <img src={oldData.bildelenke}
+    alt={oldData.bildeAltTekst}/>
+</article>
+</div>
 
+<form>
+<input 
+  type="text" 
+  placeholder="Fornavn"
+  onChange={handleChange}
+  name="fornavn"
+  value={formData.fornavn}
+/>
+<input
+  type="text"
+  placeholder="Etternavn"
+  onChange={handleChange}
+  name="etternavn"
+  value={formData.etternavn}
+/>
+<input
+  type="text"
+  placeholder="Telefonnummer"
+  onChange={handleChange}
+  name="tlfNummer"
+  value={formData.tlfNummer}
+/>
+<input
+  type="email"
+  placeholder="Epost"
+  onChange={handleChange}
+  name="epost"
+  value={formData.epost}
+/>
+<input
+  type="text"
+  placeholder="Bildelenke"
+  onChange={handleChange}
+  name="bildelenke"
+  value={formData.bildelenke}
+/>
+<input
+  type="text"
+  placeholder="Bilde alt tekst"
+  onChange={handleChange}
+  name="bildeAltTekst"
+  value={formData.bildeAltTekst}
+/>
+
+<input
+  type="button"
+  text="Submit"
+  onClick={handleSubmit}
+/>
+
+</form>
+
+*/
 /*
 fornavn: finalFormData.fornavn,
             etternavn: finalFormData.etternavn,
