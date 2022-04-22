@@ -2,12 +2,13 @@ import React from "react"
 import { validate } from "react-email-validator"
 import {Container, Tabs, Tab} from "react-bootstrap"
 import EditTabUser from "./EditTabUser"
-
+import EditTabLanding from "./EditTabLanding"
+/*
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 const USER_ID = process.env.USER_ID // vil ikke fungere slik den skal av en eller annen grunn
-
+*/
 export default function Edit(props) {
 
     const isMounted = React.useRef(false)
@@ -33,6 +34,43 @@ export default function Edit(props) {
        // får se om det blir en lenke eller ikke.
     })
 
+    const [siteData, setSiteData] = React.useState(
+      [
+        {
+          name: "",
+          title: "",
+          introductionTxt: ""
+        },
+        {
+          name: "",
+          title: "",
+          projects: [
+            {
+              pictureURL: "",
+              descriptionTxt: "",
+              projectURL: ""
+            }
+          ]
+        },
+        {
+          name: "",
+          title: "",
+          resumeURL: ""
+        },
+        {
+          name: "",
+          title: "",
+          socialMedias: [
+            {
+              socialMediaLogoURL: "",
+              socialMediaName: "",
+              socialMediaURL: ""
+            }
+          ]
+        }
+      ]
+    )
+
     
 
     function handleChange(event) {
@@ -45,18 +83,67 @@ export default function Edit(props) {
         }
       })
 
+
+
     }
 
     function handleSubmit(event){
         event.preventDefault();
-        if(validate(formData.epost) && formData.tlfNummer.length === 8) /* hardkoda :( */ {
-          setOldData( {
-            ...formData
-          })
-        } else {
-          alert("Eposten eller telefonnummeret er ikke gyldig!")
+        if([event.target.name] === "userSubmit") {
+          if(validate(formData.epost) && formData.tlfNummer.length === 8) /* hardkoda :( */ {
+            setOldData( {
+              ...formData
+            })
+          } else {
+            alert("Eposten eller telefonnummeret er ikke gyldig!")
+          }
+      }
+
+      if(event.target.name === "landingSubmit") {
+        setSiteData( prevSiteData =>  {
+          
+          return {
+            ...prevSiteData,
+            [event.target.name]: event.target.value
+          }
+
         }
 
+        )
+      }
+
+    }
+
+    function handleFetchGet(collection, dbFilter) {
+
+      //Håndtere feil må implementeres
+      fetch(`/${collection}/${dbFilter}`)
+      .then(response => response.json())
+      .then(data => { 
+        console.log("Har hentet og sendt data Edit.js")
+        return data
+      })
+
+    }
+
+    function handleFetchPost(collection, dbFilter, data) {
+      if(isMounted.current) {
+        const requestForDatabase = {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(
+            data
+          )
+        }
+        
+        fetch(`/${collection}/${dbFilter}`, requestForDatabase )
+          .then( response => {
+            console.log("fetch resultat etter post fra Edit.js " + response.json())
+            //setCurrentData(JSON.stringify(response.json()))
+          })
+      } else {
+        isMounted.current = true
+      }
     }
     
     React.useEffect(() => {
@@ -84,6 +171,13 @@ export default function Edit(props) {
         })
         )
       )
+
+      fetch(`/sites`)
+      .then(response => response.json())
+      .then(data => (
+        setSiteData( data )
+      ))
+
     }, []) // Kan lastes inn på nytt etter at man har lastet opp ny info.
 
     React.useEffect(() => {
@@ -113,16 +207,22 @@ export default function Edit(props) {
           <Tabs defaultActiveKey="user" id="uncontrolled-tab-example" className="mb-3">
 
             <Tab eventKey="user" title="User">
-              <EditTabUser formData={formData} setFormData={setFormData} oldData={oldData} setOldData={setOldData} handleChange={handleChange} handleSubmit={handleSubmit}/>
+              <EditTabUser handleFetchGet={handleFetchGet} handleFetchPost={handleFetchPost}/>
             </Tab>
-            <Tab eventKey="landing" title="Landing" disabled>
-
+            <Tab eventKey="landing" title="Landing">
+              <EditTabLanding handleFetchGet={handleFetchGet} handleFetchPost={handleFetchPost}/>
+            </Tab>
+            <Tab eventKey="project" title="Project">
+              <EditTabProject handleFetchGet={handleFetchGet} handleFetchPost={handleFetchPost}/>
+            </Tab>
+            <Tab eventKey="resume" title="Resume">
+              <EdittabResume handleFetchGet={handleFetchGet} handleFetchPost={handleFetchPost}/>
+            </Tab>
+            <Tab eventKey="contact" title="Contact">
+              <EditTabContact handleFetchGet={handleFetchGet} handleFetchPost={handleFetchPost}/>
             </Tab>
 
           </Tabs>
-
-          
-
           
         </Container>
     )

@@ -14,6 +14,7 @@ router.get("/:name", (req, res) => {
         res.json(result);
       });
 });
+
 router.get("/", (req, res) => {
     console.log(req.baseUrl)
     let db_connect = dbo.getDb();
