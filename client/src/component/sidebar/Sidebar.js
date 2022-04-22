@@ -3,15 +3,13 @@ import Header from './Header'
 import Nav from './Nav'
 import './Sidebar.css'
 
-export default function Sidebar() {
+export default function Sidebar(props) {
     
-    
-
     return (
-        <div className="Sidebar">
+        <div className={props.isVisible ? "Sidebar": "Sidebar collapsed"}>
             <div className="sidebar-fixed-wrapper">
                 <Header />
-                <Nav />
+                <Nav handleAdminRouting={props.handleMenuVisibility}/>
             </div>
         </div>
     )

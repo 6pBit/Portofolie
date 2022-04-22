@@ -1,12 +1,25 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter} from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
 import Sidebar from "./component/sidebar/Sidebar.js"
 import Main from "./component/main/Main"
+import Edit from "./component/edit/Edit"
 
 function App() {
   const [data, setData] = React.useState([]);
-  
+  const sidebarCollapsed = localStorage.getItem('sidebar-collapsed')
+  const [isVisible, setIsVisible] = React.useState(sidebarCollapsed? false : true)
+
+  function handleMenuVisibility() {
+      if (isVisible) {
+          setIsVisible(false)
+          localStorage.setItem('sidebar-collapsed', true)
+          return
+      }
+      setIsVisible(true)
+      localStorage.removeItem('sidebar-collapsed')
+  }
+  /*
   const landingRef = React.useRef()
   const projectRef = React.useRef()
   const resumeRef = React.useRef()
@@ -18,7 +31,7 @@ function App() {
     {navRef: contactRef},
     
   ]
-  
+  */
   React.useEffect(() => {
     
     /*
@@ -54,16 +67,17 @@ function App() {
   
 
   return (
-    <BrowserRouter>
-      <div className="body">
-        <div className="App">
-          
-          <Main navRefList={navRefList}/>
-          <Sidebar />
-          
-        </div>
+    
+    <div className="body">
+      <div className="App">
+        <Routes>          
+          <Route index element={<Main />} />                
+          <Route path="/Admin" element={<Edit handleMenuVisibility={handleMenuVisibility}/>} />
+        </Routes>             
+        <Sidebar handleMenuVisibility={handleMenuVisibility} isVisible={isVisible}/>
       </div>
-    </BrowserRouter>
+    </div>
+    
   );
 }
 
