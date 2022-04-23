@@ -9,7 +9,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 var transport = {
-    host: 'smtp.gmail.com', // Don’t forget to replace with the SMTP host of your provider
+    host: 'smtp.gmail.com',
     port: 587,
     auth: {
     user: process.env.EMAIL,
