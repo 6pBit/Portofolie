@@ -29,7 +29,7 @@ export default function Nav(props) {
             <div className="item" onClick={(e) => handleClick(e, '#contact')}>
                 <span className="sidebar-text">Kontakt</span>
             </div>
-            <Link to="/admin" onClick={props.handleAdminRouting}>Admin</Link>
+            
             
         </ul>
     )

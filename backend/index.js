@@ -7,6 +7,7 @@ const apiExample = require('./routes/apiExample.js')
 const sites = require('./routes/sites.js')
 const user = require('./routes/user.js')
 const edit = require('./routes/edit.js')
+const email = require('./routes/email.js')
 
 const db = require('./db');
 const dbo = require("./db/index.js");
@@ -29,6 +30,7 @@ app.use("/sites", sites)
 app.use("/user", user)
 app.use("/api", apiExample);
 app.use("/edit", edit)
+app.use("/email", email)
 console.log(app.path()+"hei")
 console.log(sitesApp.path()+"hei")
 console.log(userApp.path()+"hei")

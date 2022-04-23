@@ -1,6 +1,7 @@
 import React from "react"
 import Header from './Header'
 import Nav from './Nav'
+import Footer from './Footer'
 import './Sidebar.css'
 
 export default function Sidebar(props) {
@@ -10,6 +11,7 @@ export default function Sidebar(props) {
             <div className="sidebar-fixed-wrapper">
                 <Header />
                 <Nav handleAdminRouting={props.handleMenuVisibility}/>
+                <Footer handleAdminRouting={props.handleMenuVisibility}/>
             </div>
         </div>
     )

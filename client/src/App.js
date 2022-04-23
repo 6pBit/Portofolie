@@ -72,7 +72,7 @@ function App() {
       <div className="App">
         <Routes>          
           <Route index element={<Main />} />                
-          <Route path="/Admin" element={<Edit handleMenuVisibility={handleMenuVisibility}/>} />
+          <Route path="/admin" element={<Edit handleMenuVisibility={handleMenuVisibility}/>} />
         </Routes>             
         <Sidebar handleMenuVisibility={handleMenuVisibility} isVisible={isVisible}/>
       </div>
