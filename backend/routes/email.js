@@ -4,13 +4,16 @@ var express = require('express')
 var nodemailer = require('nodemailer');
 const creds = require('../config');
 var router = express.Router();
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 
 var transport = {
     host: 'smtp.gmail.com', // Don’t forget to replace with the SMTP host of your provider
     port: 587,
     auth: {
-    user: creds.USER,
-    pass: creds.PASS
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_PASS
   }
 }
 
@@ -32,8 +35,8 @@ router.post('/send', (req, res, next) => {
 
   var mail = {
     from: name,
-    to: 'johannes.halvorsen94@gmail.com',  // Change to email address that you want to receive messages on
-    subject: 'New Message from Contact Form',
+    to: process.env.EMAIL,  // Change to email address that you want to receive messages on
+    subject: 'Portefølje Kontakt meg epost',
     text: content
   }
   transporter.sendMail(mail, (err, data) => {
@@ -45,6 +48,18 @@ router.post('/send', (req, res, next) => {
       res.json({
        status: 'success'
       })
+      transporter.sendMail({
+        from: process.env.EMAIL,
+        to: email,
+        subject: "Submission was successful",
+        text: `Thank you for contacting us!\n\nForm details\nName: ${name}\n Email: ${email}\n Message: ${message}`
+      }, function(error, info){
+        if(error) {
+          console.log(error);
+        } else{
+          console.log('Message sent: ' + info.response);
+        }
+      });
     }
   })
 })
