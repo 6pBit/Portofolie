@@ -1,4 +1,9 @@
 .main {
+    
+    display:flex;
+    flex-direction:column;
+    flex:1;
+
     /* Hide scrollbar for IE, Edge and Firefox */
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: thin;  /* Firefox */

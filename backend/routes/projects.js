@@ -26,7 +26,7 @@ router.get("/", (req, res) => {
     .collection("projects")
     .find({})
     .toArray(function(err, result) {
-        console.log(result + "sender resultat array fra første project get projects.js route")
+        console.log(JSON.stringify(result) + "sender resultat array fra første project get projects.js route")
         if(err) throw err
         res.json(result)
     })

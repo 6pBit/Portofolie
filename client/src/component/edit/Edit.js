@@ -7,6 +7,7 @@ import EditTabProject from "./EditTabProject"
 import EditTabResume from "./EditTabResume"
 import EditTabContact from "./EditTabContact"
 import { Link } from 'react-router-dom'
+import './Edit.css'
 /*
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -210,7 +211,7 @@ export default function Edit(props) {
     }, [oldData])
 
     return (
-        <Container>
+        <Container className="editContainer">
           <header>
             <h2>Admin </h2>
             <Link to='/' onClick={props.handleMenuVisibility}>Tilbake</Link>

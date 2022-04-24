@@ -2,7 +2,7 @@ import React from 'react'
 import './css/Landing.css'
 
 export default function Landing() {
-    const [landinContent, setLandinContent] = React.useState({
+    const [landingContent, setLandingContent] = React.useState({
         title:'',
         introductionTxt:''
     })
@@ -10,15 +10,15 @@ export default function Landing() {
         fetch('/sites/landing')
         .then(response => response.json())
         .then(data => {
-            setLandinContent(data)
+            setLandingContent(data)
         })
     },[])
     
 
     return (
         <section className="landingContainer" id='landing'>
-            <h1 >{landinContent.title}</h1>
-            <p >{landinContent.introductionTxt}</p>
+            <h1 >{landingContent.title}</h1>
+            <p >{landingContent.introductionTxt}</p>
         </section>
     )
 }
