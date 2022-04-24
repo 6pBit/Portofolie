@@ -33,12 +33,14 @@ router.get("/", (req, res) => {
 })
 
 router.get("/:title", (req, res) => {
+    console.log("her er parameter title: " + req.params.title)
     let db_connect = dbo.getDb();
     db_connect
         .collection("projects")
         .findOne({title: `${req.params.title}`}, function(err, result) {
         if(err) throw err
         console.log("get fra project collection spesifikk project sites.js")
+        console.log(result + " her er det som sendes fra project")
         res.json(result)
     })
 })

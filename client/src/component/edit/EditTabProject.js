@@ -1,6 +1,7 @@
 import { Dropdown } from "bootstrap"
 import React from "react"
-import {Container, DropdownButton} from "react-bootstrap"
+import { ListGroupItem } from "react-bootstrap"
+import {Container, DropdownButton, ListGroup} from "react-bootstrap"
 
 export default function EditTabProject(props) {
 
@@ -10,17 +11,23 @@ export default function EditTabProject(props) {
  
     const [formData, setFormData] = React.useState({
         title: "",
-        description: ""
+        description: "",
+        altText: "",
+        image: ""
     })
     const [currentProject, setCurrentProject] = React.useState({
-        title: "mitt_forst"
+        title: ""
     })
     const [oldSiteData, setOldSiteData] = React.useState({
         title: "",
-        description: ""
+        description: "",
+        altText: "",
+        image: ""
     })
-    const [buttonArray, setButtonArray] = React.useState([
-        
+    const [listArray, setListArray] = React.useState([
+        {
+            title: ""
+        }
     ])
 
 
@@ -47,9 +54,9 @@ export default function EditTabProject(props) {
         .then(response => response.json())
         .then(data => (
            console.log(data + " data fra første fetch editprojectstab"),
-           setButtonArray(data)
-        )
-    )}, [])
+           setListArray(data)
+        ))
+    }, [oldSiteData])
 
     React.useEffect(() => {
         if(isMounted.current) {
@@ -59,13 +66,17 @@ export default function EditTabProject(props) {
 
                 setOldSiteData( {
                     title: data.title,
-                    description: data.description
+                    description: data.description,
+                    altText: data.altText,
+                    image: data.image
 
                 }),
 
                 setFormData({
                     title: data.title,
-                    description: data.description
+                    description: data.description,
+                    altText: data.altText,
+                    image: data.image
 
                 }) 
 
@@ -94,11 +105,10 @@ export default function EditTabProject(props) {
     }, [oldSiteData])
 
     function helper(event) {
-        setCurrentProject(() => {
-            return {
-                [event.target.name]: event.target.value
-            }
-        })
+        console.log(event.target.name)
+        setCurrentProject( {
+            title: event.target.name
+        })   
     }
 
     //Finn noe annet å ha nåværende prosjekter i. Kanskje list group eller lignende.
@@ -109,14 +119,26 @@ export default function EditTabProject(props) {
                 <article>
                     <p>Current Title: {oldSiteData.title}</p>
                     <p>Current Description Text: {oldSiteData.description}</p>
+                    <p>Current altText: {oldSiteData.altText}</p>
+                    <img 
+                        src={oldSiteData.image}
+                        alt={oldSiteData.altText}
+                    />
                 </article>
             </div>
             
-            <DropdownButton id="dropdown-basic-button" title="Velg prosjekt">
-                {buttonArray.map(project => {
-                    <Dropdown.Item as="li">{project.title}</Dropdown.Item>
-                })}
-            </DropdownButton>
+            <ListGroup defaultActiveKey={"#link1"} title="Velg prosjekt">
+                {listArray.map((project) => 
+                    <ListGroup.Item 
+                        href={"#link"}
+                        action onClick={helper}
+                        name={project.title}
+                        value={project.title}
+                    >
+                    {project.title}
+                    </ListGroup.Item>
+                )}
+            </ListGroup>
 
             <input 
                 type="text"
@@ -125,12 +147,28 @@ export default function EditTabProject(props) {
                 onChange={handleChange}
                 value={formData.title}
             />
-            <input 
-                type="textarea"
+            <textarea 
+                type="text"
                 placeholder="Description Text"
                 name="description"
                 onChange={handleChange}
                 value={formData.description}
+            />
+            
+            <input
+                type="text"
+                placeholder="Alterativt tekst for bilde"
+                name="altText"
+                onChange={handleChange}
+                value={formData.altText}
+            />
+
+            <input 
+                type="text"
+                placeholder="Bilde URL"
+                name="image"
+                onChange={handleChange}
+                value={formData.image}
             />
 
             <input
