@@ -7,6 +7,7 @@ const apiExample = require('./routes/apiExample.js')
 const sites = require('./routes/sites.js')
 const user = require('./routes/user.js')
 const edit = require('./routes/edit.js')
+const projects = require('./routes/projects.js')
 const email = require('./routes/email.js')
 
 const db = require('./db');
@@ -28,6 +29,7 @@ app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 app.use("/sites", sites)
 app.use("/user", user)
+app.use("/projects", projects)
 app.use("/api", apiExample);
 app.use("/edit", edit)
 app.use("/email", email)

@@ -6,6 +6,7 @@ import Main from "./component/main/Main"
 import Edit from "./component/edit/Edit"
 
 function App() {
+  localStorage.removeItem('sidebar-collapsed')
   const [data, setData] = React.useState([]);
   const sidebarCollapsed = localStorage.getItem('sidebar-collapsed')
   const [isVisible, setIsVisible] = React.useState(sidebarCollapsed? false : true)

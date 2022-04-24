@@ -10,10 +10,27 @@ router.get("/:name", (req, res) => {
       .collection("sites")
       .findOne({name: `${req.params.name}` }, function(err, result) {
         if (err) throw err;
-        console.log(result.name);
+        //console.log(result.name);
         res.json(result);
       });
 });
+
+router.post("/:name", (req, res) => {
+    console.log("updaten kjørt")
+    let db_connect = dbo.getDb();
+    let myquery = { name: req.params.name };  
+    let newvalues = {    
+        $set: req.body
+    }
+    db_connect
+    .collection("sites")
+    .updateOne(myquery, newvalues, (err, result) => {
+        if (err) throw err;
+        //console.log("1 document updated"+"\n"+JSON.stringify(result));
+        res.json(result);
+    })
+})
+
 router.get("/", (req, res) => {
     console.log(req.baseUrl)
     let db_connect = dbo.getDb();
@@ -44,20 +61,6 @@ router.param('name', (req, res, next, name) => {
     req.name = modified
     console.log(JSON.stringify(name))
     next()
-})
-
-router.post("/:name", (req, res) => {
-    console.log("updaten kjørt")
-    let db_connect = dbo.getDb();
-    let myquery = { name: req.params.name };  
-    let newvalues = {    
-        $set: req.body
-    }
-    db_connect.collection("sites").updateOne(myquery, newvalues, (err, result) => {
-        if (err) throw err;
-        //console.log("1 document updated"+"\n"+JSON.stringify(result));
-        res.json(result);
-    })
 })
 
 module.exports = router;

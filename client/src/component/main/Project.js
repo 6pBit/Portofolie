@@ -1,4 +1,5 @@
 import React from 'react'
+import ProjectCard from "./ProjectCard"
 import './css/Project.css'
 
 export default function Project() {
@@ -14,6 +15,19 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies lectus 
 
 Vivamus vehicula, ligula a feugiat iaculis, sapien risus pellentesque nisl, a imperdiet erat magna sit amet ex. Cras malesuada gravida finibus. Donec aliquam bibendum finibus. Integer quis risus et felis elementum hendrerit. Donec ac augue nec eros maximus laoreet. Quisque feugiat odio id laoreet egestas. Vestibulum dolor purus, blandit non sem eget, pellentesque vehicula turpis. Integer cursus ornare diam sed ornare. Phasellus iaculis tincidunt lorem et aliquam.
  </p>
+<<<<<<< HEAD
+        <ProjectCard 
+        
+            title="Prosjekt tittel"
+            image="https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg"
+            altText="sommerfugl"
+            description="Her er en beskrivelse av prosjektet som skal dukke opp når man hovrer over card"
+
+        />
+        
+        </div>
+=======
         </section>
+>>>>>>> 35087d7e0e002a8ef605f0b8075af9fc04a8d6d8
     )
 }
