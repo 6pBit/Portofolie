@@ -2,7 +2,6 @@
 
 var express = require('express')
 var nodemailer = require('nodemailer');
-const creds = require('../config');
 var router = express.Router();
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
