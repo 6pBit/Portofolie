@@ -1,3 +1,4 @@
+import { Dropdown } from "bootstrap"
 import React from "react"
 import {Container, DropdownButton} from "react-bootstrap"
 
@@ -12,14 +13,14 @@ export default function EditTabProject(props) {
         description: ""
     })
     const [currentProject, setCurrentProject] = React.useState({
-        title: "mitt_forste"
+        title: "mitt_forst"
     })
     const [oldSiteData, setOldSiteData] = React.useState({
         title: "",
         description: ""
     })
     const [buttonArray, setButtonArray] = React.useState([
-        {}
+        
     ])
 
 
@@ -45,13 +46,14 @@ export default function EditTabProject(props) {
         fetch("/projects")
         .then(response => response.json())
         .then(data => (
-           console.log(data + " data fra første fetch editprojectstab")
-        ))
-    }, [])
+           console.log(data + " data fra første fetch editprojectstab"),
+           setButtonArray(data)
+        )
+    )}, [])
 
     React.useEffect(() => {
         if(isMounted.current) {
-            fetch("/projects/mitt_forst")
+            fetch(`/projects/${currentProject.title}`)
             .then(response => response.json())
             .then(data => (
 
@@ -72,7 +74,6 @@ export default function EditTabProject(props) {
 
     }, [currentProject])
 
-
     React.useEffect(() => {
         if(isMounted.current) {
             const requestForDatabase = {
@@ -92,6 +93,15 @@ export default function EditTabProject(props) {
           }
     }, [oldSiteData])
 
+    function helper(event) {
+        setCurrentProject(() => {
+            return {
+                [event.target.name]: event.target.value
+            }
+        })
+    }
+
+    //Finn noe annet å ha nåværende prosjekter i. Kanskje list group eller lignende.
     return(
         <Container>
             
@@ -101,9 +111,11 @@ export default function EditTabProject(props) {
                     <p>Current Description Text: {oldSiteData.description}</p>
                 </article>
             </div>
-
+            
             <DropdownButton id="dropdown-basic-button" title="Velg prosjekt">
-                {}
+                {buttonArray.map(project => {
+                    <Dropdown.Item as="li">{project.title}</Dropdown.Item>
+                })}
             </DropdownButton>
 
             <input 

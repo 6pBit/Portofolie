@@ -1,22 +1,38 @@
+const { response } = require('express');
 const express = require('express')
 const dbo = require("../db/index.js");
 const router = express.Router()
 
 const ObjectId = require("mongodb").ObjectId;
 
-router.get("/projects", (req, res) => {
+//Denne fungerer
+/*
+router.get("/", (req, res) => {
     console.log(req.baseUrl + " projects route uten param")
     let db_connect = dbo.getDb()
     db_connect
     .collection("projects")
-    .findOne({title: "mitt_forst"}, function(err, response) { 
+    .findOne({title: "mitt_forst"}, function(err, result) { 
         if(err) throw err
-        console.log(result + " get fra projects collection kjørt sites.js")
+        console.log(result + " get fra projects collection kjørt projects.js")
+        res.json(result)
+    })
+})
+*/
+router.get("/", (req, res) => {
+    console.log(req.baseUrl + " projects route uten param")
+    let db_connect = dbo.getDb()
+    db_connect
+    .collection("projects")
+    .find({})
+    .toArray(function(err, result) {
+        console.log(result + "sender resultat array fra første project get projects.js route")
+        if(err) throw err
         res.json(result)
     })
 })
 
-router.get("/projects/:title", (req, res) => {
+router.get("/:title", (req, res) => {
     let db_connect = dbo.getDb();
     db_connect
         .collection("projects")
@@ -27,10 +43,10 @@ router.get("/projects/:title", (req, res) => {
     })
 })
 
-router.post("/projects/:title", (req, res) => {
+router.post("/:title", (req, res) => {
     let db_connect = dbo.getDb();
 
-    let myquery = { title: req.params.name };  
+    let myquery = { title: req.params.title };  
     let newvalues = {    
         $set: req.body
     }
