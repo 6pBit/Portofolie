@@ -1,7 +1,7 @@
 .Sidebar {
     display: flex;
     flex-direction: column;
-    flex: 1 0 20vw;
+    flex: 1 0 300px;
     background-color: darkslategray;
     color: #ffffff;
 }
@@ -49,6 +49,22 @@
 
 .sidebar-items .item:hover {
     background-color: rgba(255,255,255,0.05)
+}
+.activeSidebarlink {
+    background-color:red
+}
+/*----- Footer -----*/
+.Sidebar .footer {
+    position: fixed;
+    width: 300px;
+    height: 100px;
+    bottom: 0;
+}
+.footer a{
+    color:floralwhite
+}
+.footer a:hover{
+    color:lightgray
 }
 
 /* --- Collapsed Sidebar menu --- */

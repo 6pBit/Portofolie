@@ -7,7 +7,7 @@ export default function Resume() {
 
     return (
         
-            <div id="resume" className="resumeContainer">
+            <section id="resume" className="resumeContainer">
                 <h1>Resume</h1>
                 <ul>
                     <li>Test</li>
@@ -15,7 +15,7 @@ export default function Resume() {
                     <li>Test</li>
                     <li>Test</li>
                 </ul>
-            </div>
+            </section>
         
     )
 }

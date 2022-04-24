@@ -8,6 +8,7 @@ const sites = require('./routes/sites.js')
 const user = require('./routes/user.js')
 const edit = require('./routes/edit.js')
 const projects = require('./routes/projects.js')
+const email = require('./routes/email.js')
 
 const db = require('./db');
 const dbo = require("./db/index.js");
@@ -31,6 +32,7 @@ app.use("/user", user)
 app.use("/projects", projects)
 app.use("/api", apiExample);
 app.use("/edit", edit)
+app.use("/email", email)
 console.log(app.path()+"hei")
 console.log(sitesApp.path()+"hei")
 console.log(userApp.path()+"hei")
