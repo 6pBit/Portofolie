@@ -15,7 +15,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies lectus 
 
 Vivamus vehicula, ligula a feugiat iaculis, sapien risus pellentesque nisl, a imperdiet erat magna sit amet ex. Cras malesuada gravida finibus. Donec aliquam bibendum finibus. Integer quis risus et felis elementum hendrerit. Donec ac augue nec eros maximus laoreet. Quisque feugiat odio id laoreet egestas. Vestibulum dolor purus, blandit non sem eget, pellentesque vehicula turpis. Integer cursus ornare diam sed ornare. Phasellus iaculis tincidunt lorem et aliquam.
  </p>
-<<<<<<< HEAD
         <ProjectCard 
         
             title="Prosjekt tittel"
@@ -25,9 +24,6 @@ Vivamus vehicula, ligula a feugiat iaculis, sapien risus pellentesque nisl, a im
 
         />
         
-        </div>
-=======
         </section>
->>>>>>> 35087d7e0e002a8ef605f0b8075af9fc04a8d6d8
     )
 }
