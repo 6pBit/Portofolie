@@ -3,7 +3,7 @@ import './Sidebar.css'
 import { Link } from 'react-router-dom'
 import { propTypes } from "react-bootstrap/esm/Image";
 
-export default function Nav(props) {
+export default function Nav() {
 
     function handleClick(e, target) {
         e.preventDefault();
@@ -17,20 +17,18 @@ export default function Nav(props) {
 
     return (
         <ul className="sidebar-items">
-            <div className="item" onClick={(e) => handleClick(e, '#landing')} >
+            <div id="sidebarlanding" className="item" onClick={(e) => handleClick(e, '#landing')} >
                 <span className="sidebar-text">Hjem</span>
             </div>            
-            <div className="item" onClick={(e) => handleClick(e, '#project')}>
+            <div id="sidebarproject" className="item" onClick={(e) => handleClick(e, '#project')}>
                 <span className="sidebar-text">Prosjekt</span>
             </div>            
-            <div className="item" onClick={(e) => handleClick(e, '#resume')}>
+            <div id="sidebarresume" className="item" onClick={(e) => handleClick(e, '#resume')}>
                 <span className="sidebar-text">Resume</span>
             </div>            
-            <div className="item" onClick={(e) => handleClick(e, '#contact')}>
+            <div id="sidebarcontact" className="item" onClick={(e) => handleClick(e, '#contact')}>
                 <span className="sidebar-text">Kontakt</span>
-            </div>
-            
-            
+            </div>            
         </ul>
     )
 }

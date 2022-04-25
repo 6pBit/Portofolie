@@ -7,32 +7,35 @@ import Edit from '../edit/Edit'
 import './css/Main.css'
 import '../sidebar/Sidebar.css'
 
-export default function Main(props) {
+export default function Main() {
 
-    const [sections, setSections] = React.useState(document.querySelectorAll("section[id]"))
-    const sectionsArr = document.querySelectorAll("section")
-    console.log('onscroll kjører'+sectionsArr[0])
+    const [sectionsArr, setSectionsArr] = React.useState([])
+    //let sectionsArr
+    //console.log('sections on render '+Array.from(document.querySelectorAll("section")))
     function navHighlighter() {
-        //console.log('onscroll kjører'+sections)
+        
         let scrollY = (document.getElementById('landing').getBoundingClientRect().top*(-1))
-        console.log('onscroll kjører'+scrollY)
-        for(let i = 0; i < sections.length; i++) {
-            const sectionHeight = sections[i].offsetHeight
-            const sectionTop = sections[i].offsetTop - 50
-            const sectionId = sections[i].getAttribute('id')
-            //console.log('onscroll kjører' + sectionHeight+" "+sectionTop)
+        //console.log(sectionsArr)
+        for(let i = 0; i < sectionsArr.length; i++) {
+            const sectionHeight = sectionsArr[i].offsetHeight
+            const sectionTop = sectionsArr[i].offsetTop - 200
+            const sectionId = sectionsArr[i].getAttribute('id')
+            //console.log('onscroll forloop kjører ' + sectionHeight+" "+sectionTop)
             if (
                 scrollY > sectionTop &&  
                 scrollY <= sectionTop + sectionHeight
             ){
-                console.log('onscroll kjører '+sectionId)
-                document.querySelector('.sidebar-items div[onClick={(e) => handleClick(e, '+sectionId+']').classList.add('activeSidebarlink')
+                //console.log('onscroll inne i ifen kjører '+sectionId)
+                document.querySelector('#sidebar'+sectionId).classList.add('activeSidebarlink')
             } else {
-                document.querySelector('.sidebar-items div[onClick={(e) => handleClick(e, '+sectionId+']').classList.remove('activeSidebarlink')
+                document.querySelector('#sidebar'+sectionId).classList.remove('activeSidebarlink')
             }
         }
         
     }
+    React.useEffect(() => {
+        setSectionsArr(Array.from(document.querySelectorAll("section")))
+    },[])
     //const navRefList = props.navRefList ref={navRefList[0].landingRef}
 
 

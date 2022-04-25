@@ -71,7 +71,7 @@ export default function Footer(props) {
                             />
                         }
                     </div>
-                    :<Link to="/admin" onClick={props.handleAdminRouting}><BsGearFill /></Link>
+                    :<Link to="/admin" ><BsGearFill /></Link>
                 }
             </div>
             

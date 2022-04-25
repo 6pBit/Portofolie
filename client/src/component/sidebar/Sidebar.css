@@ -51,7 +51,7 @@
     background-color: rgba(255,255,255,0.05)
 }
 .activeSidebarlink {
-    background-color:red
+    border-bottom: 5px ridge rgb(85, 181, 152);
 }
 /*----- Footer -----*/
 .Sidebar .footer {

@@ -224,8 +224,8 @@ export default function Edit(props) {
         <Container className="editContainer">
           <header>
             <h2>Admin </h2>
-            <Link to='/' onClick={props.handleMenuVisibility}>Tilbake</Link>
-            <Link to='/' onClick={props.handleMenuVisibility}><button onClick={deleteCookie} >Tilbake</button></Link>
+            <Link to='/' >Tilbake</Link>
+            <Link to='/' ><button onClick={deleteCookie} >Tilbake</button></Link>
           </header>
           <Tabs defaultActiveKey="user" id="uncontrolled-tab-example" className="mb-3">
 

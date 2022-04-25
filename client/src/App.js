@@ -6,7 +6,7 @@ import Main from "./component/main/Main"
 import Edit from "./component/edit/Edit"
 
 function App() {
-  localStorage.removeItem('sidebar-collapsed')
+  //localStorage.removeItem('sidebar-collapsed')
   
   const sidebarCollapsed = localStorage.getItem('sidebar-collapsed')
   const [isVisible, setIsVisible] = React.useState(sidebarCollapsed? false : true)
@@ -27,10 +27,10 @@ function App() {
     
     <div className="body">
       <div className="App">
-      <Sidebar handleMenuVisibility={handleMenuVisibility} isVisible={isVisible} screen={screen} setScreen={setScreen}/>
+      <Sidebar  isVisible={isVisible} screen={screen} setScreen={setScreen}/>
         <Routes>          
           <Route index element={<Main />} />                
-          <Route path="/admin" element={screen === 'auth'?<Main />:handleMenuVisibility()} />
+          <Route path="/admin" element={screen === 'auth'?<Main />:<Edit screen={screen} setScreen={setScreen}/>} />
         </Routes>     
         
       </div>
