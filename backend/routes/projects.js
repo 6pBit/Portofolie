@@ -1,5 +1,6 @@
 const { response } = require('express');
-const express = require('express')
+const express = require('express');
+const { route } = require('express/lib/application');
 const dbo = require("../db/index.js");
 const router = express.Router()
 
@@ -26,7 +27,7 @@ router.get("/", (req, res) => {
     .collection("projects")
     .find({})
     .toArray(function(err, result) {
-        console.log(JSON.stringify(result) + "sender resultat array fra første project get projects.js route")
+        //console.log(JSON.stringify(result) + " sender resultat array fra project get projects.js")
         if(err) throw err
         res.json(result)
     })
@@ -45,7 +46,7 @@ router.get("/:title", (req, res) => {
     })
 })
 
-router.post("/:title", (req, res) => {
+router.post("/update/:title", (req, res) => {
     let db_connect = dbo.getDb();
 
     let myquery = { title: req.params.title };  
@@ -61,5 +62,31 @@ router.post("/:title", (req, res) => {
         res.json(result)
     })
 })
+
+router.post("/insert", (req, res) => {
+    let db_connect = dbo.getDb();
+  
+    let newValues = req.body
+
+    db_connect
+    .collection("projects")
+    .insertOne(newValues, (err, result) => {
+        if(err) throw err
+        res.json("La til et prosjekt i databasen")
+    })
+})
+
+router.post("/delete/:title", (req, res) => {
+    let db_connect = dbo.getDb()
+    let myQuery = {title: req.params.title}
+    db_connect
+    .collection("projects")
+    .deleteOne(myQuery, (err, result) => {
+        if(err) throw err
+        res.json("Ett prosjekt med tittelen: " + result.title + " ble fjernet fra databasen")
+    })
+})
+
+
 
 module.exports = router;
