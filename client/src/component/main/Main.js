@@ -13,14 +13,14 @@ export default function Main(props) {
     const sectionsArr = document.querySelectorAll("section")
     console.log('onscroll kjører'+sectionsArr[0])
     function navHighlighter() {
-        console.log('onscroll kjører'+sections)
+        //console.log('onscroll kjører'+sections)
         let scrollY = (document.getElementById('landing').getBoundingClientRect().top*(-1))
         console.log('onscroll kjører'+scrollY)
         for(let i = 0; i < sections.length; i++) {
             const sectionHeight = sections[i].offsetHeight
             const sectionTop = sections[i].offsetTop - 50
             const sectionId = sections[i].getAttribute('id')
-            console.log('onscroll kjører' + sectionHeight+" "+sectionTop)
+            //console.log('onscroll kjører' + sectionHeight+" "+sectionTop)
             if (
                 scrollY > sectionTop &&  
                 scrollY <= sectionTop + sectionHeight

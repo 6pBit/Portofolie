@@ -46,7 +46,7 @@ export default function Contact() {
             <form id="contact-form" onSubmit={handleSubmit} method="POST">
                 <div className="form-group">
                     <label htmlFor="name">Name</label>
-                    <input name="name" type="text" className="form-control" valu={email.name} onChange={handleChange}/>
+                    <input name="name" type="text" className="form-control" value={email.name} onChange={handleChange}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="exampleInputEmail1">Email address</label>

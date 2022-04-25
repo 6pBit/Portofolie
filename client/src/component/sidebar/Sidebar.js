@@ -11,7 +11,7 @@ export default function Sidebar(props) {
             <div className="sidebar-fixed-wrapper">
                 <Header />
                 <Nav handleAdminRouting={props.handleMenuVisibility}/>
-                <Footer handleAdminRouting={props.handleMenuVisibility}/>
+                <Footer handleAdminRouting={props.handleMenuVisibility} screen={props.screen} setScreen={props.setScreen}/>
             </div>
         </div>
     )
