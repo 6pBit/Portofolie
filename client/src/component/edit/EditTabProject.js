@@ -56,7 +56,7 @@ export default function EditTabProject(props) {
             
             fetch(`/${collection}/${currentOperation.operation === "insert" ? "insert" : "update/" + currentProject.title}`, requestForDatabase )
             .then( response => {
-            console.log("fetch resultat etter post fra Editproject.js " + response.json())
+            //console.log("fetch resultat etter post fra Editproject.js " + response.json())
             })
           } else {}
 
@@ -101,7 +101,7 @@ export default function EditTabProject(props) {
 
             fetch(`/${collection}/delete/${currentProject.title}`, requestForDatabase )
             .then( response => {
-                console.log("resultat etter sletting fra Editproject.js " + response.json())
+                //console.log("resultat etter sletting fra Editproject.js " + response.json())
                 updateList()
             }) 
         } else {
@@ -113,13 +113,13 @@ export default function EditTabProject(props) {
         fetch("/projects")
         .then(response => response.json())
         .then(data => (
-           console.log(data + " data fra fetch editprojectstab"),
+           //console.log(data + " data fra fetch editprojectstab"),
            setListArray(data)
         ))
     }
 
     function handleChange(event) {
-        console.log(event.target.value)
+        //console.log(event.target.value)
   
         setFormData(prevFormData => {
           return {
@@ -157,7 +157,7 @@ export default function EditTabProject(props) {
     }
 
     function helper(event) {
-        console.log(event.target.name)
+        //console.log(event.target.name)
         setCurrentProject( {
             title: event.target.name
         })   

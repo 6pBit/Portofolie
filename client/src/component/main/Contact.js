@@ -43,21 +43,23 @@ export default function Contact() {
     return (
         <section className="contactContainer" id='contact'>
             <h1>Kontakt meg</h1>
-            <form id="contact-form" onSubmit={handleSubmit} method="POST">
-                <div className="form-group">
-                    <label htmlFor="name">Name</label>
-                    <input name="name" type="text" className="form-control" value={email.name} onChange={handleChange}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="exampleInputEmail1">Email address</label>
-                    <input name="email" type="email" className="form-control" aria-describedby="emailHelp" value={email.email} onChange={handleChange}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="message">Message</label>
-                    <textarea name="message" className="form-control" rows="5" value={email.message} onChange={handleChange}></textarea>
-                </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
-            </form>
+            <div className="emailContainer">
+                <form id="contact-form" onSubmit={handleSubmit} method="POST">
+                    <div className="form-group">
+                        <label htmlFor="name">Name</label>
+                        <input name="name" type="text" className="form-control" value={email.name} onChange={handleChange}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="exampleInputEmail1">Email address</label>
+                        <input name="email" type="email" className="form-control" aria-describedby="emailHelp" value={email.email} onChange={handleChange}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="message">Message</label>
+                        <textarea name="message" className="form-control" rows="5" value={email.message} onChange={handleChange}></textarea>
+                    </div>
+                    <button type="submit" className="btn btn-primary">Submit</button>
+                </form>
+            </div>
         </section>
     )
 }

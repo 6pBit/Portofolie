@@ -31,7 +31,7 @@ export default function EditTab(props) {
     })
 
     function handleChange(event) {
-        console.log(event.target.value)
+        //console.log(event.target.value)
   
         setFormData(prevFormData => {
           return {
@@ -58,7 +58,7 @@ export default function EditTab(props) {
       fetch(`/user/6254341b8acb5f014cfe0800`) 
       .then(response => response.json()) 
       .then(data => (
-        console.log(data + " type objekt useEffect som getter bruker EditTabUser.js"),
+        //console.log(data + " type objekt useEffect som getter bruker EditTabUser.js"),
         idHelper.current = data._id,
         setOldData( {
           fornavn: data.fornavn,
@@ -91,7 +91,7 @@ export default function EditTab(props) {
         }
         fetch(`/${collection}/${dbFilter}`, requestForDatabase )
           .then( response => {
-            console.log("fetch resultat etter post fra EditTabUser.js " + response.json())
+            //console.log("fetch resultat etter post fra EditTabUser.js " + response.json())
             //setCurrentData(JSON.stringify(response.json()))
         })
       } else {

@@ -60,7 +60,7 @@ export default function EditTabLanding(props) {
             }
             fetch(`/${collection}/${dbFilter}`, requestForDatabase )
               .then( response => {
-                console.log("fetch resultat etter post fra Editlanding.js " + response.json())
+                //console.log("fetch resultat etter post fra Editlanding.js " + response.json())
                 //setCurrentData(JSON.stringify(response.json()))
             })
           } else {

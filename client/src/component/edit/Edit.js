@@ -202,7 +202,7 @@ export default function Edit(props) {
         console.log(idHelper.current + " her er _id  fra finalFormData oppdaterer bruker Edit.js")
         fetch(`/user/${idHelper.current}`, requestNewUser )
           .then( response => {
-            console.log("fetch resultat "+ response.json())
+            //console.log("fetch resultat "+ response.json())
             //setCurrentData(JSON.stringify(response.json()))
             
           })
@@ -211,7 +211,7 @@ export default function Edit(props) {
       }
     }, [oldData])
     const deleteCookie = async () => {
-      localStorage.removeItem('login-open')
+      
       try {
         await axios.get('/auth/clear-cookie');
         props.setScreen('auth');
@@ -225,7 +225,7 @@ export default function Edit(props) {
           <header>
             <h2>Admin </h2>
             <Link to='/' >Tilbake</Link>
-            <Link to='/' ><button onClick={deleteCookie} >Tilbake</button></Link>
+            <Link to='/' ><button onClick={deleteCookie} >Logout</button></Link>
           </header>
           <Tabs defaultActiveKey="user" id="uncontrolled-tab-example" className="mb-3">
 

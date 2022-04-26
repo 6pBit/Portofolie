@@ -4,14 +4,120 @@ import './css/Project.css'
 
 export default function Project() {
     
-    const [projectSiteContent, setProjectSiteContent] = React.useState({ title:'' })
+    const [projectSiteContent, setProjectSiteContent] = React.useState({})
     const [projectsArrContent, setProjectsArrContent] = React.useState([
         {
+            id:"987654321",
             title: "Prosjekt tittel",
             image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
             altText: "sommerfugl",
             description: "Kort beskrivelse av prosjektet"
-        }
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
+        {
+            id:"987654321",
+            title: "Prosjekt tittel",
+            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
+            altText: "sommerfugl",
+            description: "Kort beskrivelse av prosjektet"
+        },
     ])
 
     React.useEffect(() => {
@@ -32,7 +138,7 @@ export default function Project() {
 
     return (
         <section className="projectContainer" id='project'>
-            <h1>{projectSiteContent.title}</h1>
+            <h1>{projectSiteContent.title || "Mine Prosjekter"}</h1>
             <div className="projectCardContainer" >
                 {projectsArrContent.map(project => {
                     //console.log("Prosjecter på frontend inne i map"+JSON.stringify(projectsArrContent))

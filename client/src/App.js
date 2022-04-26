@@ -6,28 +6,14 @@ import Main from "./component/main/Main"
 import Edit from "./component/edit/Edit"
 
 function App() {
-  //localStorage.removeItem('sidebar-collapsed')
-  
-  const sidebarCollapsed = localStorage.getItem('sidebar-collapsed')
-  const [isVisible, setIsVisible] = React.useState(sidebarCollapsed? false : true)
-  const [screen, setScreen] = React.useState('auth');
 
-  function handleMenuVisibility() {
-      if (isVisible) {
-          setIsVisible(false)
-          localStorage.setItem('sidebar-collapsed', true)
-          return <Edit handleMenuVisibility={handleMenuVisibility} screen={screen} setScreen={setScreen}/>
-      }
-      setIsVisible(true)
-      localStorage.removeItem('sidebar-collapsed')
-  }
-  
+  const [screen, setScreen] = React.useState('auth'); 
 
   return (
     
     <div className="body">
       <div className="App">
-      <Sidebar  isVisible={isVisible} screen={screen} setScreen={setScreen}/>
+      <Sidebar screen={screen} setScreen={setScreen}/>
         <Routes>          
           <Route index element={<Main />} />                
           <Route path="/admin" element={screen === 'auth'?<Main />:<Edit screen={screen} setScreen={setScreen}/>} />

@@ -1,7 +1,13 @@
 .body{
-  
+  font-family: 'Montserrat', sans-serif;
   overflow: hidden;
   height: 100vh;
+}
+.body p {
+  font-weight: 400;
+}
+.body p {
+  font-weight: 800;
 }
 .App {
   text-align: center;

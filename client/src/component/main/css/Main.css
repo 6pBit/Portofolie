@@ -1,29 +1,35 @@
 .main {
     
-    display:flex;
-    flex-direction:column;
-    flex:1;
+  display:flex;
+  flex-direction:column;
+  flex:1;
 
-    /* Hide scrollbar for IE, Edge and Firefox */
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: thin;  /* Firefox */
-    scrollbar-color: slategray rgba(0,0,0,0);
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: thin;  /* Firefox */
+  scrollbar-color: slategray rgba(0,0,0,0);
 
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 
-    padding:10px;
-    overflow: auto;
+  
+  overflow: auto;
 }
- /* Hide scrollbar for Chrome, Safari and Opera */
- .main::-webkit-scrollbar {
-    width: 0.5em;
-  }
-  .main::-webkit-scrollbar-track {
-      display: none;
-  }
-  .main::-webkit-scrollbar-thumb {
-    background-color: slategray;
-    width: 0.5em;
-    border-radius: 5px;
-  }
+.main h1 {
+  font-size: 5em;
+}
+.main p {
+  font-size: 2em;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.main::-webkit-scrollbar {
+  width: 0.5em;
+}
+.main::-webkit-scrollbar-track {
+    display: none;
+}
+.main::-webkit-scrollbar-thumb {
+  background-color: slategray;
+  width: 0.5em;
+  border-radius: 5px;
+}
   

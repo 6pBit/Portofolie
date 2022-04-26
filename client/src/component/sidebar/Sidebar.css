@@ -14,16 +14,25 @@
     flex-direction: column;
     justify-content: center;
 }
-
+/* ----- Header ----- */
 .sidebar-logo {
-    font-size: 16px;
+    font-size: 2em;
+    padding-top: 20px;
 }
 .sidebar-header {
     display: flex;
-    align-items: center;    
-    padding: 16px;
-    height: 10vh;
+    justify-content: center; 
+    align-items: center;
+    flex-direction: column;  
+    padding: 30px 16px;
 }
+.sidebar-header img {
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+/* ---- Navigations ----- */
 .sidebar-items {
     display: flex;
     align-items: center;
@@ -57,14 +66,26 @@
 .Sidebar .footer {
     position: fixed;
     width: 300px;
-    height: 700px;
+    height: auto;
     bottom: 0;
+    display: flex;
+    flex-direction: column;
 }
-.footer a{
-    color:floralwhite
+
+.footer svg{
+    color:floralwhite;
+    right: 0;
+    justify-self:flex-end;
 }
-.footer a:hover{
+.footer svg:hover{
     color:lightgray
+}
+.login {
+    padding: 20px;
+}
+.footer p {
+    font-weight: 200;
+    font-size: 0.8em;
 }
 
 /* --- Collapsed Sidebar menu --- */

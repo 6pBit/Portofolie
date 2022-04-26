@@ -1,5 +1,7 @@
 .projectContainer {
+    background-color: #fae596;
     min-height: 100%;
+    height: fit-content;
     display: flex;
     flex-direction: column;
     flex: 1 1 100vh;
