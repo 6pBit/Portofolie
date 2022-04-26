@@ -48,15 +48,7 @@ app.use("/auth",auth )
 
 console.log(app.path()+"hei")
 // All other GET requests not handled before will return our React app
-app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
-});
-app.get("/public/images/:resource", (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/images', req.params.resource));
-});
-app.get("/public/files/:resource", (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/files', req.params.resource));
-});
+
 
 app.listen(PORT, () => {
   dbo.connectToServer(function (err) {
