@@ -56,7 +56,7 @@ export default function EditTabProject(props) {
             insertImage()
 
             //updateOrInsert()
-
+            
           } else {}
 
           //Oppdaterer lista med prosjekter.
