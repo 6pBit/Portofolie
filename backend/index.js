@@ -51,6 +51,12 @@ console.log(app.path()+"hei")
 app.get("/", (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
+app.get("/public/images/:resource", (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../public/images', req.params.resource));
+});
+app.get("/public/files/:resource", (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../public/files', req.params.resource));
+});
 
 app.listen(PORT, () => {
   dbo.connectToServer(function (err) {

@@ -18,7 +18,7 @@ export default function Main() {
         //console.log(sectionsArr)
         for(let i = 0; i < sectionsArr.length; i++) {
             const sectionHeight = sectionsArr[i].offsetHeight
-            const sectionTop = sectionsArr[i].offsetTop - 200
+            const sectionTop = sectionsArr[i].offsetTop - 500
             const sectionId = sectionsArr[i].getAttribute('id')
             //console.log('onscroll forloop kjører ' + sectionHeight+" "+sectionTop)
             if (

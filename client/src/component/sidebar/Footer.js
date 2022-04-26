@@ -1,15 +1,17 @@
 import React from 'react'
-import {BsGearFill} from 'react-icons/bs'
+import {BsGearFill, BsXSquareFill} from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './Sidebar.css'
+import { Form } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 
 
 
 export default function Footer(props) {
-    localStorage.removeItem('login-open')
+    //localStorage.removeItem('login-open')
     const loginOpen = localStorage.getItem('login-open')
-    const [isLoginVisible, setIsLoginVisible] = React.useState(loginOpen? true : false)
+    const [isLoginVisible, setIsLoginVisible] = React.useState(false)
 
     
     const [username, setUsername] = React.useState();
@@ -41,27 +43,41 @@ export default function Footer(props) {
     };
     
     React.useEffect(() => {
+        localStorage.removeItem('login-open')
         readCookie();
     }, []);
 
     return(
         <div className='footer'>
-            <h3>Footer</h3>
+            
             <div className="login">
                 {props.screen === 'auth' ?
                     <div className="loginForm">
                         {isLoginVisible?
-                            <div>
-                            <label>Username: </label>
-                            <br/>
-                            <input type="text" onChange={e => setUsername(e.target.value)} />
-                            <br/>
-                            <label>Password: </label>
-                            <br/>
-                            <input type="password" onChange={e => setPassword(e.target.value)} />
-                            <br/>
-                            <Link to="/admin" ><button onClick={auth}>Login</button></Link>
-                            </div>
+                            <>
+                                <BsXSquareFill onClick={() => setIsLoginVisible(false)}/>
+                                <Form>
+                                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                                        <Form.Label>Brukernavn</Form.Label>
+                                        <Form.Control type="text" placeholder="Brukernavn" onChange={e => setUsername(e.target.value)} value={username} />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formBasicPassword">
+                                        <Form.Label>Passord</Form.Label>
+                                        <Form.Control type="password" placeholder="Passord" onChange={e => setPassword(e.target.value)} value={password} />
+                                    </Form.Group>                                
+                                    <Link to="/admin" >
+                                        <Button 
+                                            variant="primary"  
+                                            type="button" 
+                                            onClick={() => {
+                                                setIsLoginVisible(false)
+                                                auth()
+                                            }}
+                                        >Login</Button>
+                                    </Link>
+                                </Form>
+                                
+                            </>
                             :<BsGearFill 
                                 onClick={() => {
                                     setIsLoginVisible(true)
@@ -74,7 +90,7 @@ export default function Footer(props) {
                     :<Link to="/admin" ><BsGearFill /></Link>
                 }
             </div>
-            
+            <p>&copy; UnicodUnicoders. All rights reserved.</p>
             
         </div>
     )

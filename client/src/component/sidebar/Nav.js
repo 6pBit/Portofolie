@@ -1,7 +1,5 @@
 import React from "react";
 import './Sidebar.css'
-import { Link } from 'react-router-dom'
-import { propTypes } from "react-bootstrap/esm/Image";
 
 export default function Nav() {
 
@@ -14,7 +12,7 @@ export default function Nav() {
             behavior: 'smooth'
         })
     }
-
+    
     return (
         <ul className="sidebar-items">
             <div id="sidebarlanding" className="item" onClick={(e) => handleClick(e, '#landing')} >

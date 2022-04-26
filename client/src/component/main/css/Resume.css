@@ -1,4 +1,5 @@
 .resumeContainer {
+    background-color: #3fb0ac;
     min-height: 100%;
     display: flex;
     flex-direction: column;
