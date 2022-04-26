@@ -6,75 +6,31 @@ import Main from "./component/main/Main"
 import Edit from "./component/edit/Edit"
 
 function App() {
-  localStorage.removeItem('sidebar-collapsed')
-  const [data, setData] = React.useState([]);
+  //localStorage.removeItem('sidebar-collapsed')
+  
   const sidebarCollapsed = localStorage.getItem('sidebar-collapsed')
   const [isVisible, setIsVisible] = React.useState(sidebarCollapsed? false : true)
+  const [screen, setScreen] = React.useState('auth');
 
   function handleMenuVisibility() {
       if (isVisible) {
           setIsVisible(false)
           localStorage.setItem('sidebar-collapsed', true)
-          return
+          return <Edit handleMenuVisibility={handleMenuVisibility} screen={screen} setScreen={setScreen}/>
       }
       setIsVisible(true)
       localStorage.removeItem('sidebar-collapsed')
   }
-  /*
-  const landingRef = React.useRef()
-  const projectRef = React.useRef()
-  const resumeRef = React.useRef()
-  const contactRef = React.useRef()
-  const navRefList = [
-    {navRef: landingRef},
-    {navRef: projectRef},
-    {navRef: resumeRef},
-    {navRef: contactRef},
-    
-  ]
-  */
-  React.useEffect(() => {
-    
-    /*
-    const requestNewSite = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        name: "side-fra-frontend",
-        title: "halla balla",
-        introductionTxt: "Tabulator ftw"
-      })
-    }
-    fetch("/sites/Landing", requestNewSite )
-      .then( response => {
-        console.log("fetch resultat "+response.json())
-        setData(JSON.stringify(response.json()))
-        
-      })
-    */
-  },[])
-  
-   /*
-    fetch("/user")
-      .then((res) => res.json())
-      .then((data) => setData(data.message))
-
-    <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>{!data ? "Loading..." : data}</p>
-          <p>"halla"</p>
-        </header>
-    */
   
 
   return (
     
     <div className="body">
       <div className="App">
-      <Sidebar handleMenuVisibility={handleMenuVisibility} isVisible={isVisible}/>
+      <Sidebar  isVisible={isVisible} screen={screen} setScreen={setScreen}/>
         <Routes>          
           <Route index element={<Main />} />                
-          <Route path="/admin" element={<Edit handleMenuVisibility={handleMenuVisibility}/>} />
+          <Route path="/admin" element={screen === 'auth'?<Main />:<Edit screen={screen} setScreen={setScreen}/>} />
         </Routes>     
         
       </div>

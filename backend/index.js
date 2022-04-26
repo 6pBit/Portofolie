@@ -1,8 +1,9 @@
 // server/index.js
 const path = require('path');
 const express = require("express");
-const bodyParser = require('body-parser')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
+
 const apiExample = require('./routes/apiExample.js')
 const sites = require('./routes/sites.js')
 const user = require('./routes/user.js')
@@ -10,6 +11,7 @@ const edit = require('./routes/edit.js')
 const projects = require('./routes/projects.js')
 const email = require('./routes/email.js')
 const fileUpload = require('./routes/fileUpload.js')
+const auth = require('./routes/auth')
 
 const db = require('./db');
 const dbo = require("./db/index.js");
@@ -17,12 +19,14 @@ const dbo = require("./db/index.js");
 const PORT = process.env.PORT || 3001;
 
 const app = express();
-const sitesApp = express();
-const userApp = express();
+
+
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
+app.use(cookieParser('82e4e438a0705fabf61f9854e3b575af'))
+
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 app.get("/public/images/:resource", (req, res) => {
@@ -40,9 +44,9 @@ app.use("/api", apiExample);
 app.use("/edit", edit)
 app.use("/email", email)
 app.use("/fileUpload", fileUpload)
+app.use("/auth",auth )
+
 console.log(app.path()+"hei")
-console.log(sitesApp.path()+"hei")
-console.log(userApp.path()+"hei")
 // All other GET requests not handled before will return our React app
 app.get("/", (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));

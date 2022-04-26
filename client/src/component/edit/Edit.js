@@ -7,6 +7,7 @@ import EditTabProject from "./EditTabProject"
 import EditTabResume from "./EditTabResume"
 import EditTabContact from "./EditTabContact"
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 import './Edit.css'
 /*
 if (process.env.NODE_ENV !== 'production') {
@@ -209,12 +210,22 @@ export default function Edit(props) {
         isMounted.current = true
       }
     }, [oldData])
-
+    const deleteCookie = async () => {
+      localStorage.removeItem('login-open')
+      try {
+        await axios.get('/auth/clear-cookie');
+        props.setScreen('auth');
+        console.log("Vellykket cookie sletting")
+      } catch (e) {
+        console.log(e);
+      }
+    };
     return (
         <Container className="editContainer">
           <header>
             <h2>Admin </h2>
-            <Link to='/' onClick={props.handleMenuVisibility}>Tilbake</Link>
+            <Link to='/' >Tilbake</Link>
+            <Link to='/' ><button onClick={deleteCookie} >Tilbake</button></Link>
           </header>
           <Tabs defaultActiveKey="user" id="uncontrolled-tab-example" className="mb-3">
 

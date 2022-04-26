@@ -27,7 +27,7 @@ export default function Project() {
         .then(data => {
             setProjectsArrContent(data)
         })
-        console.log("Prosjecter på frontend "+JSON.stringify(projectsArrContent))
+        //console.log("Prosjecter på frontend "+JSON.stringify(projectsArrContent))
     },[])
 
     return (
@@ -35,8 +35,9 @@ export default function Project() {
             <h1>{projectSiteContent.title}</h1>
             <div className="projectCardContainer" >
                 {projectsArrContent.map(project => {
-                    console.log("Prosjecter på frontend inne i map"+JSON.stringify(projectsArrContent))
-                    return(<ProjectCard             
+                    //console.log("Prosjecter på frontend inne i map"+JSON.stringify(projectsArrContent))
+                    return(<ProjectCard 
+                        id={project.id}            
                         title={project.title}
                         image={project.image}
                         altText={project.altText}

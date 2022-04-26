@@ -51,13 +51,13 @@
     background-color: rgba(255,255,255,0.05)
 }
 .activeSidebarlink {
-    background-color:red
+    border-bottom: 5px ridge rgb(85, 181, 152);
 }
 /*----- Footer -----*/
 .Sidebar .footer {
     position: fixed;
     width: 300px;
-    height: 100px;
+    height: 700px;
     bottom: 0;
 }
 .footer a{
