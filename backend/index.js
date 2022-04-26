@@ -29,6 +29,9 @@ app.use(cookieParser('82e4e438a0705fabf61f9854e3b575af'))
 
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, '../client/build')));
+app.get("/", (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+});
 app.get("/public/images/:resource", (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/images', req.params.resource))
 })
@@ -48,15 +51,7 @@ app.use("/auth",auth )
 
 console.log(app.path()+"hei")
 // All other GET requests not handled before will return our React app
-app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
-});
-app.get("/public/images/:resource", (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/images', req.params.resource));
-});
-app.get("/public/files/:resource", (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/files', req.params.resource));
-});
+
 
 app.listen(PORT, () => {
   dbo.connectToServer(function (err) {
