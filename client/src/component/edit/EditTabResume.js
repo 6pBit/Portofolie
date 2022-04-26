@@ -97,7 +97,7 @@ export default function EditTabResume(props){
     return(
         <Container>
 
-            <embed src={resumeData.resume} width="800px" height="2100px"/>
+            <embed src={resumeData.resume} width="800px" height="1500px"/>
 
             <Form.Group as={Col} controlId="formGroupTitle">
                 <Form.Label column sm={2}>Bilde</Form.Label>
