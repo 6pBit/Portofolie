@@ -21,10 +21,12 @@
     "express-basic-auth": "^1.2.1",
     "mongodb": "^4.5.0",
     "mongoose": "^6.2.10",
+    "multer": "^1.4.4",
     "nodemailer": "^6.7.3",
     "nodemon": "^2.0.15",
     "react-bootstrap": "^2.2.3",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.3.0",
+    "uuid": "^8.3.2"
   },
   "engines": {
     "node": "16.14.0"

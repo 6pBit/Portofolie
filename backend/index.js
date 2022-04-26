@@ -10,6 +10,7 @@ const user = require('./routes/user.js')
 const edit = require('./routes/edit.js')
 const projects = require('./routes/projects.js')
 const email = require('./routes/email.js')
+const fileUpload = require('./routes/fileUpload.js')
 const auth = require('./routes/auth')
 
 const db = require('./db');
@@ -28,7 +29,12 @@ app.use(cookieParser('82e4e438a0705fabf61f9854e3b575af'))
 
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, '../client/build')));
-
+app.get("/public/images/:resource", (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../public/images', req.params.resource))
+})
+app.get("/public/files/:resource", (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../public/files', req.params.resource))
+})
 // Handle GET requests to /api route
 
 app.use("/sites", sites)
@@ -37,6 +43,7 @@ app.use("/projects", projects)
 app.use("/api", apiExample);
 app.use("/edit", edit)
 app.use("/email", email)
+app.use("/fileUpload", fileUpload)
 app.use("/auth",auth )
 
 console.log(app.path()+"hei")

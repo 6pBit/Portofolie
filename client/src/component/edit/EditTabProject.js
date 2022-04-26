@@ -1,6 +1,8 @@
 import React from "react"
+import { Form } from "react-bootstrap"
+import { FormGroup } from "react-bootstrap"
 import { ToggleButtonGroup, ToggleButton } from "react-bootstrap"
-import {Container, DropdownButton, ListGroup, Button} from "react-bootstrap"
+import {Container, DropdownButton, ListGroup, Button, Col, Row} from "react-bootstrap"
 
 export default function EditTabProject(props) {
 
@@ -20,6 +22,10 @@ export default function EditTabProject(props) {
 
     const [currentProject, setCurrentProject] = React.useState({
         title: ""
+    })
+
+    const [currentFile, setCurrentFile] = React.useState({
+        
     })
  
     const [formData, setFormData] = React.useState({
@@ -43,22 +49,23 @@ export default function EditTabProject(props) {
     ])
 
     //Document blir noen ganger ikke oppdatert om man ikke også oppdaterer title på prosjektet
-    React.useEffect(() => {
+    React.useEffect(async () => {
 
         if(isMounted.current) {
-            const requestForDatabase = {
-              method: 'POST',
-              headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify(
-                siteData
-              )
-            }
+
+            insertImage()
+
+            //updateOrInsert()
             
+<<<<<<< HEAD
             fetch(`/${collection}/${currentOperation.operation === "insert" ? "insert" : "update/" + currentProject.title}`, requestForDatabase )
             .then( response => {
             //console.log("fetch resultat etter post fra Editproject.js " + response.json())
             })
           } else {}
+=======
+        } else {}
+>>>>>>> a3f4d22c8ae4f79a108d19bd96dd8b0552253044
 
           //Oppdaterer lista med prosjekter.
           updateList() 
@@ -66,7 +73,7 @@ export default function EditTabProject(props) {
     }, [wishToUpdate])
 
     React.useEffect(() => {
-        if(isMounted.current) {
+        if(isMounted.current && currentProject.title !== "") {
             fetch(`/projects/${currentProject.title}`)
             .then(response => response.json())
             .then(data => (
@@ -101,7 +108,14 @@ export default function EditTabProject(props) {
 
             fetch(`/${collection}/delete/${currentProject.title}`, requestForDatabase )
             .then( response => {
+<<<<<<< HEAD
                 //console.log("resultat etter sletting fra Editproject.js " + response.json())
+=======
+                console.log("resultat etter sletting fra Editproject.js " + response.json())
+                clean("formData")
+                clean("siteData")
+                clean("currentProject")
+>>>>>>> a3f4d22c8ae4f79a108d19bd96dd8b0552253044
                 updateList()
             }) 
         } else {
@@ -118,6 +132,7 @@ export default function EditTabProject(props) {
         ))
     }
 
+<<<<<<< HEAD
     function handleChange(event) {
         //console.log(event.target.value)
   
@@ -125,8 +140,84 @@ export default function EditTabProject(props) {
           return {
             ...prevFormData,
             [event.target.name]: event.target.value
+=======
+    function insertImage() {
+        if(currentFile !== "" && currentFile !== null) {
+
+            const imageData = new FormData()
+            imageData.append("image", currentFile)
+
+            const requestForLocalStorage = {
+                method: 'POST',
+                body: imageData
+            }
+
+            let requestForDatabase = {}
+
+            fetch("/fileUpload/image", requestForLocalStorage)
+            .then(response => response.json())
+            .then(data => (
+                console.log(data.image + " dette skal være bilde urlen"),
+               
+                requestForDatabase = {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(
+                        {
+                            ...siteData,
+                            image: data.image
+                        }
+                    )
+                  },
+                  
+                  fetch(`/${collection}/${currentOperation.operation === "insert" ? "insert" : "update/" + currentProject.title}`, requestForDatabase )
+                      .then( response => {
+                      console.log("fetch resultat etter post fra Editproject.js " + response.json())
+                  })
+            ))
+
+            
+        } else {
+            updateOrInsert()
+        }
+    }
+
+
+    function updateOrInsert() {
+        console.log("Updateorinsert ble kjørt")
+        const requestForDatabase = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(
+              siteData
+            )
+>>>>>>> a3f4d22c8ae4f79a108d19bd96dd8b0552253044
           }
-        })
+          
+          fetch(`/${collection}/${currentOperation.operation === "insert" ? "insert" : "update/" + currentProject.title}`, requestForDatabase )
+              .then( response => {
+              console.log("fetch resultat etter post fra Editproject.js " + response.json())
+          })
+    }
+
+    function handleChange(event) {
+        //console.log(event.target.value)
+       
+        if(event.target.name !== "image") {
+            setFormData(prevFormData => {
+                return({
+                    ...prevFormData,
+                    [event.target.name]: event.target.value
+                })
+            })
+        } else {
+            setCurrentFile(() => {
+                if((currentFile !== "" || currentFile !== null) && event.target.files[0] !== null) {
+                    return (event.target.files[0]) //fjerna return her  && event.target.files[0] !== null
+                }
+            })
+        }
+
     }
 
     function handleSubmit(event){
@@ -135,6 +226,7 @@ export default function EditTabProject(props) {
             setSiteData( {
                 ...formData
             })
+            //insertImage()
             setWishToUpdate(!wishToUpdate)
             updateList()
         } 
@@ -148,8 +240,8 @@ export default function EditTabProject(props) {
                                 //bør renske currentProject men noe rart med den
                                 //Om den ikke fjernes blir man spurt om man vil slette den samme på nytt
                                 //Uten param blir standard route (/) brukt
-                                clean("formData")
-                                clean("siteData")
+                                
+                                updateList()
                                 
         } else {
             console.log("Sletting avbrutt")
@@ -199,6 +291,10 @@ export default function EditTabProject(props) {
             })
         }
 
+        if(dataToClean === "currentFile") {
+            setCurrentFile({})
+        }
+
 
     } 
 
@@ -244,45 +340,26 @@ export default function EditTabProject(props) {
             }
                 
             {!(currentOperation.operation === "delete" || currentOperation.operation === "") &&
-                <Container className="input-container">
-                    <input 
-                        type="text"
-                        placeholder="Title for Project"
-                        name="title"
-                        onChange={handleChange}
-                        value={formData.title}
-                    />
-                    <textarea 
-                        type="text"
-                        placeholder="Description Text"
-                        name="description"
-                        onChange={handleChange}
-                        value={formData.description}
-                    />
-                        
-                    <input
-                        type="text"
-                        placeholder="Alterativt tekst for bilde"
-                        name="altText"
-                        onChange={handleChange}
-                        value={formData.altText}
-                    />
 
-                    <input 
-                        type="text"
-                        placeholder="Bilde URL"
-                        name="image"
-                        onChange={handleChange}
-                        value={formData.image}
-                    />
-
-                    <input
-                        type="button"
-                        name="siteSubmit"
-                        value={currentOperation.operation}
-                        onClick={handleSubmit}
-                    />
-                </Container>
+                <Form className="mb-3">
+                        <Form.Group as={Col} controlId="formGroupTitle">
+                            <Form.Label column sm={2}>Tittel</Form.Label>
+                            <Form.Control type="text" value={formData.title} name="title" onChange={handleChange} placeholder="Tittel for prosjektet"/>
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="formGroupTitle">
+                            <Form.Label column sm={2}>Beskrivelse</Form.Label>
+                            <Form.Control type="textarea" value={formData.description} name="description" onChange={handleChange} placeholder="Beskrivelse av prosjektet"/>
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="formGroupTitle">
+                            <Form.Label column sm={2}>Alternativ tekst for bilde</Form.Label>
+                            <Form.Control type="text" value={formData.altText} name="altText" onChange={handleChange} placeholder="Alternativ tekst for bilde"/>
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="formGroupTitle">
+                            <Form.Label column sm={2}>Bilde</Form.Label>
+                            <Form.Control id="fileInput" type="file" accept=".pdf, .jpg, .jpeg" name="image" onChange={handleChange} placeholder="Bilde"/>
+                        </Form.Group>
+                        <Button key="5" variant="primary" name="siteSubmit" value={currentOperation.operation} onClick={handleSubmit}>{currentOperation.operation}</Button>
+                    </Form>
             }
 
             {currentOperation.operation === "delete" && 
