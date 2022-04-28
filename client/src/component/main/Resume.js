@@ -5,7 +5,7 @@ import './css/Resume.css'
 export default function Resume() {
 
 
-    fetch()
+    
 
     return (
         

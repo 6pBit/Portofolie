@@ -24,22 +24,22 @@ export default function EditTabProject(props) {
         title: ""
     })
 
-    const [currentFile, setCurrentFile] = React.useState({
-        
-    })
+    const [currentFile, setCurrentFile] = React.useState(null)
  
     const [formData, setFormData] = React.useState({
         title: "",
         description: "",
         altText: "",
-        image: ""
+        imageUrl: ""
+        
     })
     
     const [siteData, setSiteData] = React.useState({
         title: "",
         description: "",
         altText: "",
-        image: ""
+        imageUrl: ""
+        
     })
 
     const [listArray, setListArray] = React.useState([
@@ -51,6 +51,7 @@ export default function EditTabProject(props) {
     //Document blir noen ganger ikke oppdatert om man ikke også oppdaterer title på prosjektet
     React.useEffect(async () => {
 
+        console.log("1 tabproject useffect ble kjørt")
         if(isMounted.current) {
 
             insertImage()
@@ -65,8 +66,9 @@ export default function EditTabProject(props) {
     }, [wishToUpdate])
 
     React.useEffect(() => {
+        console.log("2 tabproject useffect ble kjørt")
         if(isMounted.current && currentProject.title !== "") {
-            fetch(`/projects/${currentProject.title}`)
+            fetch(`/projects/specific/${currentProject.title}`)
             .then(response => response.json())
             .then(data => (
 
@@ -74,14 +76,14 @@ export default function EditTabProject(props) {
                     title: data.title,
                     description: data.description,
                     altText: data.altText,
-                    image: data.image
+                    imageUrl: data.imageUrl
                 }),
 
                 setFormData({
                     title: data.title,
                     description: data.description,
                     altText: data.altText,
-                    image: data.image
+                    imageUrl: data.imageUrl
                 }) 
 
             ))
@@ -90,13 +92,16 @@ export default function EditTabProject(props) {
     }, [currentProject.title])
     
     React.useEffect(() => {
+        console.log("3 tabproject useffect ble kjørt")
         if(isMounted.current && !(currentProject.title === "")) {
 
             const requestForDatabase = {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({})
-            }  
+            }
+
+            fetch(`/fileUpload/delete/image/${siteData.imageUrl}`)
 
             fetch(`/${collection}/delete/${currentProject.title}`, requestForDatabase )
             .then( response => {
@@ -113,7 +118,7 @@ export default function EditTabProject(props) {
     }, [wishToDelete])
 
     function updateList() {
-        fetch("/projects")
+        fetch("/projects/titles")
         .then(response => response.json())
         .then(data => (
            //console.log(data + " data fra fetch editprojectstab"),
@@ -137,7 +142,7 @@ export default function EditTabProject(props) {
             fetch("/fileUpload/image", requestForLocalStorage)
             .then(response => response.json())
             .then(data => (
-                console.log(data.image + " dette skal være bilde urlen"),
+                console.log(data.imageUrl + " dette skal være bilde urlen"),
                
                 requestForDatabase = {
                     method: 'POST',
@@ -145,17 +150,28 @@ export default function EditTabProject(props) {
                     body: JSON.stringify(
                         {
                             ...siteData,
-                            image: data.image
+                            imageUrl: data.imageUrl
                         }
                     )
                   },
                   
                   fetch(`/${collection}/${currentOperation.operation === "insert" ? "insert" : "update/" + currentProject.title}`, requestForDatabase )
-                      .then( response => {
-                      console.log("fetch resultat etter post fra Editproject.js " + response.json())
-                  })
+                    .then( response => {
+                        console.log("fetch resultat etter post fra Editproject.js " + response.json())
+                        
+                        if(currentOperation.operation === "insert") {
+                            clean("formData")
+                            clean("siteData")
+                            clean("currentProject")
+                            clean("currentFile")
+                        }
+                        clean("currentFile")
+                        updateList()
+                    })
             ))
 
+            clean("currentFile")
+            updateList()
             
         } else {
             updateOrInsert()
@@ -175,14 +191,22 @@ export default function EditTabProject(props) {
           
           fetch(`/${collection}/${currentOperation.operation === "insert" ? "insert" : "update/" + currentProject.title}`, requestForDatabase )
               .then( response => {
-              console.log("fetch resultat etter post fra Editproject.js " + response.json())
+                console.log("fetch resultat etter post fra Editproject.js " + response.json())
+                if(currentOperation.operation === "insert") {
+                    clean("formData")
+                    clean("siteData")
+                    clean("currentProject")
+                    clean("currentFile")
+                }
+                clean("currentFile")
+                updateList()
           })
     }
 
     function handleChange(event) {
         //console.log(event.target.value)
        
-        if(event.target.name !== "image") {
+        if(event.target.name !== "imageFile") {
             setFormData(prevFormData => {
                 return({
                     ...prevFormData,
@@ -251,7 +275,7 @@ export default function EditTabProject(props) {
                 title: "",
                 description: "",
                 altText: "",
-                image: ""
+                imageUrl: ""
             })
         }
 
@@ -260,7 +284,7 @@ export default function EditTabProject(props) {
                 title: "",
                 description: "",
                 altText: "",
-                image: ""
+                imageUrl: ""
             })
         }
 
@@ -271,9 +295,8 @@ export default function EditTabProject(props) {
         }
 
         if(dataToClean === "currentFile") {
-            setCurrentFile({})
+            setCurrentFile("")
         }
-
 
     } 
 
@@ -297,7 +320,7 @@ export default function EditTabProject(props) {
                             <p>Current Description Text: {siteData.description}</p>
                             <p>Current altText: {siteData.altText}</p>
                             <img 
-                                src={siteData.image}
+                                src={siteData.imageUrl}
                                 alt={siteData.altText}
                             />
                         </article>
@@ -313,7 +336,7 @@ export default function EditTabProject(props) {
                             action onClick={helper}
                             name={project.title}
                             value={project.title}
-                        >{project.title}</ListGroup.Item>)}
+                        >{project.title}</ListGroup.Item>)} 
                     </ListGroup>
                 </Container>
             }
@@ -333,9 +356,13 @@ export default function EditTabProject(props) {
                             <Form.Label column sm={2}>Alternativ tekst for bilde</Form.Label>
                             <Form.Control type="text" value={formData.altText} name="altText" onChange={handleChange} placeholder="Alternativ tekst for bilde"/>
                         </Form.Group>
+                        <FormGroup as={Col} controlId="formGroupTitle">
+                            <Form.Label column sm={2} ></Form.Label>
+                            <Form.Control value={formData.imageUrl} name="imageUrl" onChange={handleChange} placeholder="Bildelenke"/>
+                        </FormGroup>
                         <Form.Group as={Col} controlId="formGroupTitle">
                             <Form.Label column sm={2}>Bilde</Form.Label>
-                            <Form.Control id="fileInput" type="file" accept=".pdf, .jpg, .jpeg" name="image" onChange={handleChange} placeholder="Bilde"/>
+                            <Form.Control id="fileInput" type="file" accept=".pdf, .jpg, .jpeg" name="imageFile" onChange={handleChange} placeholder="Bilde"/>
                         </Form.Group>
                         <Button key="5" variant="primary" name="siteSubmit" value={currentOperation.operation} onClick={handleSubmit}>{currentOperation.operation}</Button>
                     </Form>
@@ -346,4 +373,5 @@ export default function EditTabProject(props) {
         
         </Container>
     )
+ 
 }

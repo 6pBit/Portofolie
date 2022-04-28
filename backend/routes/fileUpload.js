@@ -5,7 +5,7 @@ const dbo = require("../db/index.js");
 const router = express.Router()
 const multer = require('multer')
 const { v4: uuidv4 } = require('uuid')
-
+const fs = require('fs')
 
 const dir_name = './public'
 // Kilde: https://morioh.com/p/5c99be0fb5aa
@@ -57,6 +57,11 @@ router.post("/image", uploadImage.single('image'), (req, res) => {
     console.log(imageToUpload.imageurl + " imageurl inne i imagetoupload i route")
 
     res.json({image: image_url + '/public/images/' + req.file.filename})
+})
+
+router.post("/delete/image/:filepath", (req, res) => {
+    fs.unlinkSync(req.body.filepath)
+    res.json("Sletting vellykket!")
 })
 
 router.post("/file", uploadFile.single('file'), (req, res) => {

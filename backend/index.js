@@ -4,6 +4,19 @@ const express = require("express");
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 
+//livereload
+/*
+const livereload = require('livereload')
+const liveRealoadServer = livereload.createServer()
+const connectLiveReload = require('connect-livereload')
+liveRealoadServer.watch(path.resolve(__dirname, '../client/build'))
+liveRealoadServer.server.once("connection", () => {
+  setTimeout(() => {
+    liveRealoadServer.refresh("../client/build/index.html")
+  }, 100)
+  
+})
+*/
 const apiExample = require('./routes/apiExample.js')
 const sites = require('./routes/sites.js')
 const user = require('./routes/user.js')
@@ -28,9 +41,10 @@ app.use(cors())
 app.use(cookieParser('82e4e438a0705fabf61f9854e3b575af'))
 
 // Have Node serve the files for our built React app
-app.use(express.static(path.resolve(__dirname, '../client/build')));
+//app.use(connectLiveReload())//livereload
+app.use(express.static(path.resolve(__dirname, '../client/build')));// 
 app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html')); // 
 });
 app.get("/public/images/:resource", (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/images', req.params.resource))

@@ -1,6 +1,7 @@
 const { response } = require('express');
 const express = require('express');
 const { route } = require('express/lib/application');
+const db = require('../db/index.js');
 const dbo = require("../db/index.js");
 const router = express.Router()
 
@@ -21,11 +22,11 @@ router.get("/", (req, res) => {
 })
 */
 router.get("/", (req, res) => {
-    console.log(req.baseUrl + " projects route uten param")
+    //console.log(req.baseUrl + " projects route uten param")
     let db_connect = dbo.getDb()
     db_connect
     .collection("projects")
-    .find({})
+    .find({}) // bestemmer hva du ønsker å hente fra databasen
     .toArray(function(err, result) {
         //console.log(JSON.stringify(result) + " sender resultat array fra project get projects.js")
         if(err) throw err
@@ -33,17 +34,29 @@ router.get("/", (req, res) => {
     })
 })
 
-router.get("/:title", (req, res) => {
+router.get("/specific/:title", (req, res) => {
     console.log("her er parameter title: " + req.params.title)
     let db_connect = dbo.getDb();
     db_connect
         .collection("projects")
         .findOne({title: `${req.params.title}`}, function(err, result) {
         if(err) throw err
-        console.log("get fra project collection spesifikk project sites.js")
-        console.log(result + " her er det som sendes fra project")
+        //console.log("get fra project collection spesifikk project sites.js")
+        //console.log(result + " her er det som sendes fra project")
         res.json(result)
     })
+})
+
+router.get("/titles", (req, res) => {
+    console.log("henter kun titles")
+    let db_connect = dbo.getDb()
+    db_connect
+        .collection("projects")
+        .find({}, {title: 1})
+        .toArray(function(err, result) {
+                if(err) throw err
+                res.json(result)
+        })
 })
 
 router.post("/update/:title", (req, res) => {
@@ -58,7 +71,7 @@ router.post("/update/:title", (req, res) => {
     .collection("projects")
     .updateOne(myquery, newvalues, (err, result) => {
         if(err) throw err
-        console.log(" oppdaterte ett prosjekt med title: " + `${req.params.title}`)
+        //console.log(" oppdaterte ett prosjekt med title: " + `${req.params.title}`)
         res.json(result)
     })
 })
