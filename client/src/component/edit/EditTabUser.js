@@ -1,6 +1,6 @@
 import React from "react"
-import {Container} from "react-bootstrap"
 import { validate } from "react-email-validator"
+import {Container, DropdownButton, ListGroup, Button, Col, Row} from "react-bootstrap"
 
 export default function EditTab(props) {
 
@@ -32,7 +32,7 @@ export default function EditTab(props) {
 
     function handleChange(event) {
         //console.log(event.target.value)
-  
+
         setFormData(prevFormData => {
           return {
             ...prevFormData,
@@ -166,6 +166,7 @@ export default function EditTab(props) {
             />
 
           </form>
+
 
         </Container>
 

@@ -145,7 +145,7 @@ export default function Project() {
                     return(<ProjectCard 
                         id={project.id}            
                         title={project.title}
-                        image={project.image}
+                        image={project.imageUrl}
                         altText={project.altText}
                         description={project.description}
                     />)

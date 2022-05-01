@@ -97,10 +97,10 @@ export default function EditTabResume(props){
     return(
         <Container>
 
-            <embed src={resumeData.resume} width="800px" height="2100px"/>
+            <embed src={resumeData.resume} width="800px" height="1000px"/>
 
             <Form.Group as={Col} controlId="formGroupTitle">
-                <Form.Label column sm={2}>Bilde</Form.Label>
+                <Form.Label column sm={2}>CV fil</Form.Label>
                 <Form.Control id="fileInput" type="file" accept=".pdf, .jpg, .jpeg" name="file" onChange={handleChange} placeholder="File"/>
             </Form.Group>
             <Button key="1" variant="primary" name="siteSubmit" value="Edit" onClick={handleSubmit}>Edit</Button>
