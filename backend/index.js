@@ -20,8 +20,6 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 
-
-
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
@@ -29,6 +27,10 @@ app.use(cookieParser('82e4e438a0705fabf61f9854e3b575af'))
 
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, '../client/build')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'))
+})
 app.get("/public/images/:resource", (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/images', req.params.resource))
 })

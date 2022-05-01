@@ -8,10 +8,7 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: thin;  /* Firefox */
   scrollbar-color: slategray rgba(0,0,0,0);
-
-  scroll-behavior: smooth;
-
-  
+  scroll-behavior: smooth;  
   overflow: auto;
 }
 .main h1 {
@@ -25,7 +22,9 @@
   width: 0.5em;
 }
 .main::-webkit-scrollbar-track {
+    visibility: hidden;
     display: none;
+    background: rgba(0,0,0,0.2);
 }
 .main::-webkit-scrollbar-thumb {
   background-color: slategray;
