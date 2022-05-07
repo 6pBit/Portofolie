@@ -131,6 +131,16 @@ export default function EditTabResume(props){
         setNumPages(numPages);
     }
 
+    function handleClick(event) {
+        if(event.target.name === "next-page" && !(pageNumber+1 > numPages)) {
+            console.log("Neste side ")
+            setPageNumber(prev => (prev + 1))
+            console.log("Sidenummer " + pageNumber)
+        } else if(event.target.name === "prev-page" && !(pageNumber-1 < 1)){
+            setPageNumber(prev => (prev - 1))
+        }
+    }
+
     return(
         <Container>
 
@@ -139,16 +149,16 @@ export default function EditTabResume(props){
                     key="5" 
                     variant="primary" 
                     name="prev-page" 
-                    
+                    onClick={handleClick}
                 >Previous</Button>
                 <Button
                     key="5" 
                     variant="primary" 
                     name="next-page" 
-                    
+                    onClick={handleClick}
                 >Next</Button>
                 <span className="page-info">
-                    Page<span id="page-sum"></span> of <span id="page-count"></span>
+                    Page <span>{pageNumber}</span> of <span>{numPages}</span>
                 </span>
             </Row>
 
@@ -156,11 +166,8 @@ export default function EditTabResume(props){
             
             <Document file={resumeData.resume}
                         onLoadSuccess={onDocumentLoadSuccess}>
-                <Page pageNumber={numPages} />
+                <Page pageNumber={pageNumber} />
             </Document>
-
-            
-            
 
             <Form.Group as={Col} controlId="formGroupTitle">
                 <Form.Label column sm={2}>CV fil</Form.Label>
