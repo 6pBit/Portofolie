@@ -16,7 +16,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.post("/:id", (req, res) => {
+router.post("/editUser/:id", (req, res) => {
 
   console.log(req.params.id + " id fra params route user")
 

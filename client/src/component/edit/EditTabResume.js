@@ -1,5 +1,7 @@
 import React from "react"
-import { Container, Form, Button, Col } from "react-bootstrap"
+import { Container, Form, Button, Col, Row } from "react-bootstrap"
+import { Document, Page, pdfjs } from 'react-pdf/dist/esm/entry.webpack';
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 export default function EditTabResume(props){
 
@@ -16,26 +18,34 @@ export default function EditTabResume(props){
     })
 
     const [wishToUpdate, setWishToUpdate] = React.useState(false)
+    const [wishToRefresh, setWishToRefresh] = React.useState(false)
 
 
     React.useEffect(() => {
-        fetch("/sites/resume")
-        .then(response => response.json())
-        .then(data => (
-            setResumeData( {
-                title: "",
-                resume: data.file
-            })
-        ))
-    }, [])
+        getResume()
+    }, [wishToRefresh])
 
     React.useEffect(() => {
         if(isMounted.current) {
+            deleteFile()
             insertFile()
         } else {
             isMounted.current = true
         }
     }, [wishToUpdate])
+
+    function getResume() {
+       
+        fetch("/sites/resume")
+        .then(response => response.json())
+        .then(data => (
+            
+            setResumeData( {
+                title: "",
+                resume: data.file
+            })
+        ))
+    }
 
 
     function insertFile() {
@@ -44,15 +54,13 @@ export default function EditTabResume(props){
             const fileData = new FormData()
             fileData.append("file", currentFile)
 
-            const requestForLocalStorage = {
+            let requestForDatabase = {
                 method: 'POST',
                 body: fileData
             }
 
-            let requestForDatabase = {}
-
-            fetch("/fileUpload/file", requestForLocalStorage)
-            .then(response => response.json())
+            fetch("/fileUpload/file", requestForDatabase)
+            .then(response => response.json()) 
             .then(data => (
                 console.log(data.file + " dette skal være fil urlen"),
                
@@ -61,14 +69,15 @@ export default function EditTabResume(props){
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(
                         {
-                            file: data.file
+                            file: data.fileUrl
                         }
                     )
                   },
                   
                   fetch(`/${collection}/resume`, requestForDatabase )
                       .then( response => {
-                      console.log("fetch resultat etter post fra Editproject.js " + response.json())
+                        console.log("fetch resultat etter post fra Editproject.js " + response.json())
+                        setWishToRefresh(!wishToRefresh)
                   })
             ))
 
@@ -77,16 +86,36 @@ export default function EditTabResume(props){
         }
     }
 
+    function deleteFile() {
+
+        let requestForDatabase = {}
+
+        fetch("/sites/resume")
+        .then(response => response.json())
+        .then(data => (
+            requestForDatabase = {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(
+                    {
+                        filePaths: [data.file]
+                    }
+                )
+            },
+            fetch(`/fileUpload/delete/fromAws`, requestForDatabase )
+            .then(response => {
+                console.log("fetch resultat etter post fra Editproject.js " + response.json())
+            })
+        ))
+    }
+
 
     function handleChange(event) {
-        //console.log(event.target.value)
-        
         setCurrentFile(() => {
             if((currentFile !== "" || currentFile !== null) && event.target.files[0] !== null) {
                 return (event.target.files[0]) //fjerna return her  && event.target.files[0] !== null
             }
         })
-        
     }
 
     function handleSubmit(event){
@@ -94,10 +123,44 @@ export default function EditTabResume(props){
         setWishToUpdate(!wishToUpdate)
     }
 
+    //kopiert
+    const [numPages, setNumPages] = React.useState(null);
+    const [pageNumber, setPageNumber] = React.useState(1);
+
+    function onDocumentLoadSuccess({ numPages }) {
+        setNumPages(numPages);
+    }
+
     return(
         <Container>
 
-            <embed src={resumeData.resume} width="800px" height="1000px"/>
+            <Row>
+                <Button
+                    key="5" 
+                    variant="primary" 
+                    name="prev-page" 
+                    
+                >Previous</Button>
+                <Button
+                    key="5" 
+                    variant="primary" 
+                    name="next-page" 
+                    
+                >Next</Button>
+                <span className="page-info">
+                    Page<span id="page-sum"></span> of <span id="page-count"></span>
+                </span>
+            </Row>
+
+           
+            
+            <Document file={resumeData.resume}
+                        onLoadSuccess={onDocumentLoadSuccess}>
+                <Page pageNumber={numPages} />
+            </Document>
+
+            
+            
 
             <Form.Group as={Col} controlId="formGroupTitle">
                 <Form.Label column sm={2}>CV fil</Form.Label>
@@ -109,3 +172,5 @@ export default function EditTabResume(props){
     )
 
 }
+
+//  <embed src={resumeData.resume} width="800px" height="1000px"/>

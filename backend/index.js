@@ -3,7 +3,6 @@ const path = require('path');
 const express = require("express");
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-
 //livereload
 /*
 const livereload = require('livereload')
@@ -32,8 +31,6 @@ const dbo = require("./db/index.js");
 const PORT = process.env.PORT || 3001;
 
 const app = express();
-
-
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
@@ -66,6 +63,8 @@ app.use("/auth",auth )
 console.log(app.path()+"hei")
 // All other GET requests not handled before will return our React app
 
+//Lagt til i forbindelse med AWS og S3 bucket. Får se om den er nødvendig
+app.engine('html', require('ejs').renderFile)
 
 app.listen(PORT, () => {
   dbo.connectToServer(function (err) {
