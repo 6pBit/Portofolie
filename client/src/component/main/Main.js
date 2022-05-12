@@ -4,10 +4,11 @@ import Project from './Project'
 import Resume from "./Resume"
 import Contact from './Contact'
 import Edit from '../edit/Edit'
+import {MdDehaze as BurgerIkon} from 'react-icons/md'
 import './css/Main.css'
 import '../sidebar/Sidebar.css'
 
-export default function Main() {
+export default function Main(props) {
 
     const [sectionsArr, setSectionsArr] = React.useState([])
     //let sectionsArr
@@ -40,7 +41,7 @@ export default function Main() {
 
 
     return (
-        <div id="mainContainer" className="main" onScroll={navHighlighter}>
+        <div id="mainContainer" className="main" onScroll={navHighlighter}>            
             <Landing />
             <Project />
             <Resume />

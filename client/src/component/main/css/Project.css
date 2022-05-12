@@ -1,14 +1,22 @@
 .projectContainer {
+    display:flex;
     background-color: #fae596;
-    min-height: 100%;
-    height: fit-content;
-    display: flex;
+    flex: 1 0 100vh;
     flex-direction: column;
-    flex: 1 1 100vh;
     padding-top: 50px;
 }
 .projectCardContainer {
     display: flex;
+    flex: 0 0 auto;
     justify-content: space-around;
     flex-wrap: wrap;
+}
+@media screen and (max-width: 600px) {
+    .projectCardContainer {
+        
+        flex-direction: column;
+        flex: 1 0 auto;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
 }

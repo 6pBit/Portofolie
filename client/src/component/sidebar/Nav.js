@@ -1,7 +1,7 @@
 import React from "react";
 import './Sidebar.css'
 
-export default function Nav() {
+export default function Nav(props) {
 
     function handleClick(e, target) {
         e.preventDefault();
@@ -11,6 +11,16 @@ export default function Nav() {
             top: location.offsetTop,
             behavior: 'smooth'
         })
+        console.log(`Nav.js før setvisible ${props.sidebarVisible}`)
+        props.setSidebarVisible(!props.sidebarVisible)
+        console.log(`Nav.js etter setvisible ${props.sidebarVisible}`)
+        /*
+        if(props.sidebarVisible) {
+            document.getElementById('Sidebar').style.transform = 'translateY(0%)'                       
+        } else {
+            document.getElementById('Sidebar').style.transform = 'translateY(-100%)'
+        }
+        */
     }
     
     return (

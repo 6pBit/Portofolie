@@ -5,20 +5,36 @@ import Sidebar from "./component/sidebar/Sidebar.js"
 import Main from "./component/main/Main"
 import Edit from "./component/edit/Edit"
 
-function App() {
+import {MdDehaze as BurgerIkon} from 'react-icons/md'
+import {MdClear as Cross} from 'react-icons/md'
 
+function App() {
+  //localStorage.removeItem('sidebar-open')
   const [screen, setScreen] = React.useState('auth'); 
+  const sidebarOpen = localStorage.getItem('sidebar-open')
+  const [isSidebarVisible, setIsSidebarVisible] = React.useState(false)
+
+  
 
   return (
     
     <div className="body">
       <div className="App">
-      <Sidebar screen={screen} setScreen={setScreen}/>
-        <Routes>          
-          <Route index element={<Main />} />                
-          <Route path="/admin" element={screen === 'auth'?<Main />:<Edit screen={screen} setScreen={setScreen}/>} />
-        </Routes>     
-        
+        <div className="navBar">
+            <h1 id="navBarTitle">Portefølje</h1>
+            {isSidebarVisible
+              ? <Cross onClick={() => {setIsSidebarVisible(!isSidebarVisible)}}/>
+              : <BurgerIkon id="BurgerIconButton" aria-controls="Sidebar" aria-expanded="false" onClick={() => {setIsSidebarVisible(!isSidebarVisible)}} />
+              
+            }
+        </div>
+        <div className="underNavbar">
+          <Sidebar screen={screen} setScreen={setScreen} sidebarVisible={isSidebarVisible} setSidebarVisible={setIsSidebarVisible} />
+          <Routes>          
+            <Route index element={<Main sidebarVisible={isSidebarVisible} setSidebarVisible={setIsSidebarVisible} />} />                
+            <Route path="/admin" element={screen === 'auth'?<Main />:<Edit screen={screen} setScreen={setScreen}/>} />
+          </Routes>     
+        </div>
       </div>
     </div>
     
