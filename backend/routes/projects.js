@@ -100,6 +100,53 @@ router.post("/delete/:title", (req, res) => {
     })
 })
 
+router.get("/imagesToDelete/:titles", (req, res) => {
+    let db_connect = dbo.getDb()
+    let temp = req.params.titles.split('+')
+    /*
+    for(let i=0; i<req.params.length; i++) {
+        console.log(req.params.titles[i] + " dette legges inn i temp fra params")
+        temp.push(req.params.titles[i])
+    }*/
+    console.log(JSON.stringify(temp) + " temp i imagesToDelete")
+    let myQuery = {
+        title: {$in: temp}
+    }
+    db_connect
+        .collection("projects")
+        .find(myQuery, {imageUrl: 1, _id: 0, title: 0, altText: 0, description: 0}) //vil ikke kun gi imageUrl, så bruker hele documentet
+        .toArray(function(err, result) {
+                if(err) throw err
+                console.log(JSON.stringify(result) + " dette er filepaths som skal slettes")
+                // får feilmeldinger om man får inn tom verdi eller en faktisk lenke her.
+                let final = result.map(project => {
+                    return(
+                        project.imageUrl
+                    ) 
+                })
+                
+                console.log(JSON.stringify(final) + " dette er filepaths som skal slettes etter final")
+                res.json(final)
+        })
+})
 
-
+router.post("/deleteSeveral", (req, res) => {
+    console.log("Her er req.body i deleteSeveral" + JSON.stringify(req.body.titles))
+    let db_connect = dbo.getDb()
+    let myQuery = {
+        title: {$in: req.body.titles}
+    }
+    db_connect
+    .collection("projects")
+    .deleteMany(myQuery, (err, result) => {
+        if(err) throw err
+        res.json(result)
+    })
+})
+/*
+).deleteMany(myQuery, (err, result) => {
+    if(err) throw err
+    res.json("Det gikk gitt")
+})
+*/
 module.exports = router;

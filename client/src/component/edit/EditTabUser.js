@@ -1,6 +1,7 @@
 import React from "react"
 import { validate } from "react-email-validator"
-import {Container, DropdownButton, ListGroup, Button, Col, Row} from "react-bootstrap"
+import {Container, FormGroup, Form, Button, Col, Row, Modal} from "react-bootstrap"
+import Bootstrap from "bootstrap"
 
 export default function EditTab(props) {
 
@@ -10,166 +11,223 @@ export default function EditTab(props) {
   const collection = "user"
   const dbFilter = "6254341b8acb5f014cfe0800"
 
-    const [formData, setFormData] = React.useState({
-        fornavn: "",
-        etternavn: "",
-        tlfNummer: "",
-        epost: "",
-        bildelenke: "",
-        bildeAltTekst: ""
-         // får se om det blir en lenke eller ikke.
-    })
-  
-    const [oldData, setOldData] = React.useState({
-        fornavn: "",
-        etternavn: "",
-        tlfNummer: "",
-        epost: "",
-        bildelenke: "",
-        bildeAltTekst: ""
-         // får se om det blir en lenke eller ikke.
-    })
+  const [currentFile, setCurrentFile] = React.useState(null)
+  const [activateEdit, setActivateEdit] = React.useState(false)
+  const [requestReload, setRequestReload] = React.useState(false)
+  const [requestUpdate, setRequestUpdate] = React.useState(false)
 
-    function handleChange(event) {
-        //console.log(event.target.value)
+  const [formData, setFormData] = React.useState({
+      fornavn: "",
+      etternavn: "",
+      tlfNummer: "",
+      epost: "",
+      imageUrl: "",
+      altText: ""
+  })
 
-        setFormData(prevFormData => {
-          return {
-            ...prevFormData,
-            [event.target.name]: event.target.value
-          }
-        })
-    }
+  const [siteData, setSiteData] = React.useState({
+      fornavn: "",
+      etternavn: "",
+      tlfNummer: "",
+      epost: "",
+      imageUrl: "",
+      altText: ""
+  })
 
-    function handleSubmit(event){
-        event.preventDefault();
-        
-        if(validate(formData.epost) && formData.tlfNummer.length === 8) /* hardkoda :( */ {
-          setOldData( {
-            ...formData
-          })
-        } else {
-          alert("Eposten eller telefonnummeret er ikke gyldig!")
+  function handleClick() {
+    setActivateEdit(!activateEdit)
+  }
+
+  function handleChange(event) {
+    if(event.target.name !== "imageFile") {
+      setFormData(prevFormData => {
+        return {
+          ...prevFormData,
+          [event.target.name]: event.target.value
         }
+      })
+    } else {
+      setCurrentFile(() => {
+        if((currentFile == "" || currentFile == null) && event.target.files[event.target.files.length-1] !== null && event.target.files[event.target.files.length-1] !== "") {
+            console.log("currentfile oppdatert")
+            return (event.target.files[0]) //fjerna return her  && event.target.files[0] !== null
+        }
+      })
+    }
+  }
+
+  function handleSubmit(event){
+      event.preventDefault();
       
-    }
-
-    React.useEffect(() => {
-      fetch(`/user/6254341b8acb5f014cfe0800`) 
-      .then(response => response.json()) 
-      .then(data => (
-        //console.log(data + " type objekt useEffect som getter bruker EditTabUser.js"),
-        idHelper.current = data._id,
-        setOldData( {
-          fornavn: data.fornavn,
-          etternavn: data.etternavn,
-          tlfNummer: data.tlfNummer,
-          epost: data.epost,
-          bildelenke: data.bildelenke, 
-          bildeAltTekst: data.bildeAltTekst
-        }, () => console.log(" Setstate kjørt Edittabuser.js")),
-        setFormData({
-          fornavn: data.fornavn,
-          etternavn: data.etternavn,
-          tlfNummer: data.tlfNummer,
-          epost: data.epost,
-          bildelenke: data.bildelenke, 
-          bildeAltTekst: data.bildeAltTekst
+      if(validate(formData.epost) && formData.tlfNummer.length === 8) /* hardkoda :( */ {
+        setSiteData( {
+          ...formData
         })
-        )
-      )
-    }, [])
-
-    React.useEffect(() => {
-      if(isMounted.current) {
-        const requestForDatabase = {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(
-            oldData
-          )
-        }
-        fetch(`/${collection}/${dbFilter}`, requestForDatabase )
-          .then( response => {
-            //console.log("fetch resultat etter post fra EditTabUser.js " + response.json())
-            //setCurrentData(JSON.stringify(response.json()))
-        })
+        setRequestUpdate(!requestUpdate)
       } else {
-        isMounted.current = true
+        alert("Eposten eller telefonnummeret er ikke gyldig!")
       }
-    }, [oldData])
+        console.log(JSON.stringify(currentFile) + " dette er current file on submit")
+  }
 
-    return (
+  function updateWithImageFile() {
+    if(currentFile !== "" && currentFile !== null) {
+       
+        const imageData = new FormData()
+        imageData.append("image", currentFile)
 
-        <Container>
+        const requestForLocalStorage = {
+            method: 'POST',
+            body: imageData
+        }
 
-            <div className="current_info">
-                <article>
-                    <p>Current firstname: {oldData.fornavn}</p>
-                    <p>Current lastname: {oldData.etternavn}</p>
-                    <p>Current tlfNumber: {oldData.tlfNummer}</p>
-                    <p>Current email: {oldData.epost}</p>
-                    <img src={oldData.bildelenke}
-                        alt={oldData.bildeAltTekst}/>
-                    <p>Current alttekst: {oldData.bildeAltTekst}</p>
-                </article>
-            </div>
+        let requestForDatabase = {}
 
-          <form>
-            <input 
-              type="text" 
-              placeholder="Fornavn"
-              onChange={handleChange}
-              name="fornavn"
-              value={formData.fornavn}
-            />
-            <input
-              type="text"
-              placeholder="Etternavn"
-              onChange={handleChange}
-              name="etternavn"
-              value={formData.etternavn}
-            />
-            <input
-              type="text"
-              placeholder="Telefonnummer"
-              onChange={handleChange}
-              name="tlfNummer"
-              value={formData.tlfNummer}
-            />
-            <input
-              type="email"
-              placeholder="Epost"
-              onChange={handleChange}
-              name="epost"
-              value={formData.epost}
-            />
-            <input
-              type="text"
-              placeholder="Bildelenke"
-              onChange={handleChange}
-              name="bildelenke"
-              value={formData.bildelenke}
-            />
-            <input
-              type="text"
-              placeholder="Bilde alt tekst"
-              onChange={handleChange}
-              name="bildeAltTekst"
-              value={formData.bildeAltTekst}
-            />
+        fetch("/fileUpload/image", requestForLocalStorage)
+        .then(response => response.json())
+        .then(data => (
+            console.log(data.imageUrl + " dette skal være bilde urlen"),
+           
+            requestForDatabase = {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(
+                    {
+                        ...siteData,
+                        bildelenke: data.imageUrl
+                    }
+                )
+              },
+              
+              fetch(`/${collection}/editUser/${dbFilter}`, requestForDatabase)
+              .then( response => {
+                setCurrentFile(null)
+                document.getElementById('fileInput').value = null
+                setRequestReload(!requestReload)
+              })
+                
+        ))
+    } 
+  }
 
-            <input
-              type="button"
-              name="userSubmit"
-              onClick={handleSubmit}
-            />
+  function updateUser() {
+    const requestForDatabase = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(
+        siteData
+      )
+    }
+    fetch(`/${collection}/editUser/${dbFilter}`, requestForDatabase )
+      .then( response => {
+        //console.log("fetch resultat etter post fra EditTabUser.js " + response.json())
+        //setCurrentData(JSON.stringify(response.json()))
+    })
+  }
 
-          </form>
+  function setData() {
+    fetch(`/user/6254341b8acb5f014cfe0800`) // ikke ha hardkodet brukerid her.
+    .then(response => response.json()) 
+    .then(data => (
+      //console.log(data + " type objekt useEffect som getter bruker EditTabUser.js"),
+      idHelper.current = data._id,
+      setSiteData( {
+        fornavn: data.fornavn,
+        etternavn: data.etternavn,
+        tlfNummer: data.tlfNummer,
+        epost: data.epost,
+        imageUrl: data.bildelenke, 
+        altText: data.bildeAltTekst
+      }),
+      setFormData({
+        fornavn: data.fornavn,
+        etternavn: data.etternavn,
+        tlfNummer: data.tlfNummer,
+        epost: data.epost,
+        imageUrl: data.bildelenke, 
+        altText: data.bildeAltTekst
+      })
+    ))}
 
+  React.useEffect(() => {
+      setData()
+  }, [requestReload])
 
-        </Container>
+  React.useEffect(() => {
+    if(isMounted.current) {
 
+      if(currentFile !== null) {
+        updateWithImageFile()
+      }else {
+        updateUser()
+      }
+      setActivateEdit(!activateEdit)
+      //setRequestReload(!requestReload)
+    } else {
+      isMounted.current = true
+    }
+  }, [requestUpdate])
+
+  return (
+
+      <Container>
+
+          <div className="current_info">
+              <article>
+                  <p>Current firstname: {siteData.fornavn}</p>
+                  <p>Current lastname: {siteData.etternavn}</p>
+                  <p>Current tlfNumber: {siteData.tlfNummer}</p>
+                  <p>Current email: {siteData.epost}</p>
+                  <img src={siteData.imageUrl}
+                      alt={siteData.altText}/>
+                  <p>Current alttekst: {siteData.altText}</p>
+              </article>
+          </div>
+        <div class="d-flex justify-content-end">
+          <Button
+              key="69" 
+              variant="primary" 
+              name="edit"
+              onClick={handleClick}
+          >Activate Editing</Button>
+        </div>
+        <Form className="mb-3">
+            <Form.Group as={Col} controlId="formGroupTitle">
+                <Form.Label column sm={2}>Fornavn</Form.Label>
+                <Form.Control type="text" value={formData.fornavn} name="fornavn" onChange={handleChange} placeholder="Tittel for prosjektet" disabled={!activateEdit}/>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formGroupTitle">
+                <Form.Label column sm={2}>Etternavn</Form.Label>
+                <Form.Control as="textarea" rows={3} type="text" value={formData.etternavn} name="etternavn" onChange={handleChange} placeholder="Beskrivelse av prosjektet" disabled={!activateEdit}/>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formGroupTitle">
+                <Form.Label column sm={2}>Telefonnummer</Form.Label>
+                <Form.Control as="textarea" rows={3} type="text" value={formData.tlfNummer} name="tlfNummer" onChange={handleChange} placeholder="Beskrivelse av prosjektet" disabled={!activateEdit}/>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formGroupTitle">
+                <Form.Label column sm={2}>Epost</Form.Label>
+                <Form.Control rows={3} type="email" value={formData.epost} name="epost" onChange={handleChange} placeholder="Beskrivelse av prosjektet" disabled={!activateEdit}/>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formGroupTitle">
+                <Form.Label column sm={2}>Alternativ tekst for bilde</Form.Label>
+                <Form.Control type="text" value={formData.altText} name="altText" onChange={handleChange} placeholder="Alternativ tekst for bilde" disabled={!activateEdit}/>
+            </Form.Group>
+            <FormGroup as={Col} controlId="formGroupTitle">
+                <Form.Label column sm={2}>Bildelenke</Form.Label>
+                <Form.Control value={formData.imageUrl} name="imageUrl" onChange={handleChange} placeholder="Bildelenke" disabled={!activateEdit}/>
+            </FormGroup>
+            {activateEdit && 
+              <Form.Group as={Col} controlId="formGroupTitle">
+                  <Form.Label column sm={2}>Bilde</Form.Label>
+                  <Form.Control id="fileInput" type="file" accept=".png, .jpg, .jpeg" name="imageFile" onChange={handleChange} placeholder="Bilde"/>
+              </Form.Group>
+            }
+            {activateEdit && <Button key="5" variant="primary" name="userSubmit" value={"Edit"} onClick={handleSubmit}>Edit</Button>}
+                
+              
+        </Form>
+
+      </Container>
 
     )
 }
