@@ -1,3 +1,32 @@
 .resumeContainer {
+    background-color: #3fb0ac;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 1 100vh;
+    padding-top: 50px;
+}
+.cvContainer {
+    width: auto;
+    max-width: 1000px;
     height: 100vh;
+}
+.cvContainer > button {
+    width:100px;
+    height: 30px;
+    margin: 50px 20px;
+    border: none;
+    box-shadow: 3px 5px darkslategray;
+    transition: all 0.3s ease-in-out;
+}
+.cvContainer > button:hover {
+    background-color: #fae596;
+    width:105px;
+    height: 35px;
+    margin-top: 49px;
+    box-shadow: 5px 10px darkslategray;
+    transition: all 0.3s ease-in-out;
+}
+.documentContainer {
+    box-shadow: 5px 10px darkslategray;
 }

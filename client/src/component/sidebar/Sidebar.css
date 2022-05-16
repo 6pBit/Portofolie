@@ -1,29 +1,39 @@
-.Sidebar {
+.sidebar {
     display: flex;
     flex-direction: column;
-    flex: 1 0 20vw;
+    flex: 0 0 300px;
     background-color: darkslategray;
     color: #ffffff;
 }
 .sidebar-fixed-wrapper {
 
     top: 0;
-    left: 0;
-    bottom: 0;  
+    right: 0;
+    bottom: 0; 
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background-color: transparent;
 }
-
+/* ----- Header ----- */
 .sidebar-logo {
-    font-size: 16px;
+    font-size: 2em;
+    padding-top: 20px;
 }
 .sidebar-header {
     display: flex;
-    align-items: center;    
-    padding: 16px;
-    height: 10vh;
+    justify-content: center; 
+    align-items: center;
+    flex-direction: column;  
+    padding: 30px 16px;
 }
+.sidebar-header img {
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+/* ---- Navigations ----- */
 .sidebar-items {
     display: flex;
     align-items: center;
@@ -33,20 +43,84 @@
 .sidebar-items .item {
     display: flex;
     justify-content: center;
-    width: 100%;
+    width: 80%;
     padding: 16px 8px;
-    border-radius: 5px;
+    margin-top: 16px;
+    box-shadow: 5px 10px hsl(180 25% 15% / 50% );
     transition: background-color 0.2s;
+    background-color: rgba(255,255,255,0.05);
     cursor: pointer;
 }
-.sidebar-items > .active {
-    border-bottom: 1px solid #333;
-}
-
-.sidebar-items .item .active {
-    border-bottom: 1px solid rgb(238, 234, 234);
-}
-
 .sidebar-items .item:hover {
-    background-color: rgba(255,255,255,0.05)
+    background-color: rgb(85, 181, 152)
+}
+.activeSidebarlink {
+    border: 3px solid rgb(85, 181, 152);
+}
+/*----- Footer -----*/
+.sidebar .footer {
+    position: fixed;
+    width: 300px;
+    height: auto;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer svg{
+    color:floralwhite;
+    right: 0;
+    justify-self:flex-end;
+}
+.footer svg:hover{
+    color:lightgray
+}
+.login {
+    padding: 20px;
+}
+.footer p {
+    font-weight: 200;
+    font-size: 0.8em;
+}
+
+/* --- Collapsed Sidebar menu --- */
+.sidebar.collapsed {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    #Sidebar {
+        transform: translateY(0%);
+        transition: transform 0.2s ease-out;
+    }
+    .sidebar{
+        z-index:1000;
+        background-color: hsl(180 50% 10% / 0.85);
+        position: absolute;
+        width: 100vw;
+        height: 100%;
+        overflow: hidden;
+    }
+    @supports (backdrop-filter: blur(1rem)) {
+        .sidebar{
+            background: hsl(180 50% 10% / 0.85);
+            backdrop-filter: blur(1rem);
+        }
+    }
+    .sidebar.collapsed {
+        display: flex;
+    }
+    
+    .sidebar-header img {
+        display: none;
+    }
+    .sidebar .footer {
+        width: 100%;
+        margin-top: auto;
+        flex: 1 0 30px;
+    }
+    .login {
+        display: none;
+    }
+    
 }
