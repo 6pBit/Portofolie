@@ -72,7 +72,7 @@ router.post("/image", uploadImageS3.single('image'), (req, res) => {
         url: req.protocol + '://' + req.get('host') + req.file.filename
     }
     */
-    res.json({imageUrl: req.protocol + '://' + process.env.S3_BUCKET_NAME + '.s3.amazonaws.com/' + fileHelper})
+    res.json({imageUrl: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${fileHelper}`})
 })
 
 router.post("/delete/fromAws", (req, res) => {
@@ -102,7 +102,7 @@ router.post("/file", uploadFileS3.single('file'), (req, res) => {
         url: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${req.file}`
     };
 
-    res.json({fileUrl: req.protocol + '://' + process.env.S3_BUCKET_NAME + '.s3.amazonaws.com/' + fileHelper})
+    res.json({fileUrl: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${fileHelper}`})
 })
 
 module.exports = router
