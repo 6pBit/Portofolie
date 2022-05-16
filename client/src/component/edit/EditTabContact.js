@@ -1,209 +1,111 @@
 import React from "react"
-import {Container, Button, Modal} from "react-bootstrap"
+import {Container, Button, Modal, DropdownButton, Dropdown, ButtonGroup, Col, Row} from "react-bootstrap"
 import Bootstrap from "bootstrap"
+import { Form } from "react-bootstrap"
 
 
 export default function EditTabContact(props) {
 
-
+    let keyForItems = 0
     const isMounted = React.useRef(false)
-
-
-    const [showPopup, setShowPopup] = React.useState(false)
-
-    const [tableContent, setTableContent] = React.useState([{
-        title: ""
-    }])
-    const [requestUpdate, setRequestUpdate] = React.useState(false)
+    const [tableContent, setTableContent] = React.useState([{name: ""}])
     const [stateShowCheckboxes, setStateShowCheckboxes] = React.useState(false)
-    const [deleteArray, setDeleteArray] = React.useState([])
-    
+    const [currentOperation, setCurrentOperation] = React.useState({operation: ""})
+    const [currentMedia, setCurrentMedia] = React.useState({name: ""})
+    const [supportedSome, setSupportedSome] = React.useState([
+        "facebook", "snapchat", "instagram", "twitter", "linkedin", "tiktok", "wechat"
+    ])
+    const [chosenSome, setChosenSome] = React.useState("")
+    const [formData, setFormData] = React.useState({
+        someName: "", 
+        connectionUrl: ""
+    })
+    const [siteData, setSiteData] = React.useState({
+        someName: "", 
+        connectionUrl: ""
+    })
+
     React.useEffect(() => {
-        console.log("kun første render effect")
-        getAllProjectTitles()
+        fetch("/user/someLinks")
+        .then(response => response.json())
+        .then(data => (
+            setTableContent(data)
+        ))
     }, [])
 
     React.useEffect(() => {
-        if(isMounted.current) {
-            console.log("1 tabcontact useffect ble kjørt")
-            getAllProjectTitles()
-        } else {
-            isMounted.current = true
-        }
+        //console.log("2 tabproject useffect ble kjørt")
         
-    }, [requestUpdate])
-    
+    }, [currentMedia.name])
 
-    
-    function getAllProjectTitles() {
+    //Oppdaterer state som holder på alle prosjekter fra databasen.
+    function updateList() {
         fetch("/projects/titles")
         .then(response => response.json())
         .then(data => (
-           //console.log(data + " data fra fetch tabContact"),
-           setTableContent(data)
+            //console.log(data + " data fra fetch editprojectstab"),
+            setTableContent(data)
         ))
     }
 
-    function handleDelete(event) {
-        /*
-        [...document.querySelectorAll('input[type=checkbox]:checked')].map(box => setDeleteArray((prev) => {
-            console.log("Dette er box.value: " + box.value)
-            return({
-                ...prev,
-                title: box.value
-            })
-        }))
-        */
-        //fiks løsning
-        const all = document.querySelectorAll('input[type=checkbox]:checked')
-        let tempList = []
-        for(let i=0; i<all.length; i++) {// kanskje legge til en forEach her istedenfor
-            tempList.push(all[i].value)
-        }
-        setDeleteArray(tempList)
-        //console.log("Her er alle titlene fra bokser som var valgt ved sletting")
-        
-        setShowPopup(!showPopup)
-               
-        deleteArray.map(item => console.log("Tittel fra deleteArray:" + item.title))
-        console.log("Delete button pressed")
+    function handleSubmit(event) {
+
     }
 
-    function showCheckboxes() {
-        //console.log("marker for sletting pressed")
-        setStateShowCheckboxes(!stateShowCheckboxes)
-    }
-
-    function handleClose() {
-        setDeleteArray([])
-        setShowPopup(!showPopup)
+    function handleChange(event) {
         
     }
 
-    function deleteProjects() {
-
-       let temp = deleteArray.map((title) => {
-           return(
-               title + ""
-           )
-       })
-
-        let inputString = temp.toString().replaceAll(',', '+')
-        let requestForDatabase = {}
-        console.log(inputString + " før den blir send til imagestodelete")
-        fetch(`/projects/imagesToDelete/${inputString}`)
-        .then(response => response.json())
-        .then(data => {
-            //temp = data
-            //console.log(JSON.stringify(data + " data fra imagesToDelete og puttes inn i fileopload delete images"))
-            requestForDatabase = {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({filePaths: [data]})
-            }
-            
-            //console.log(JSON.stringify(tempArray + " tempArray fra imagesToDelete og puttes inn i fileopload delete images"))
-            fetch("/fileUpload/delete/images", requestForDatabase)
-            .then(response => response.json())
-            .then(data => {
-               console.log("Ferdig med lokal bildesletting")
-    
-                console.log(" data etter lokal sletting av bilder")
-                //flytt alt under ut, så virker sletting.
-               
-            })
-
-            //console.log("Her er delteArray på clientsiden: " + JSON.stringify(deleteArray))
-            requestForDatabase = {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({titles: deleteArray})
-            }
-
-            fetch("/projects/deleteSeveral", requestForDatabase)
-            .then(response => response.json())
-            .then(data => {
-                //data.map(project => console.log(project.title + " ble slettet fra databasen"))
-                setDeleteArray([])
-                setShowPopup(!showPopup)
-                showCheckboxes()
-            })
-
+     //helper funksjon som setter nåværende valgt prosjekt.
+     function helper(event) {
+        //console.log(event.target.name)
+        setCurrentMedia({
+            name: event.target.name
         })
+        setCurrentMedia({
+            operation: "view"
+        })   
+    }
 
-        
+    function handleItemClick(event) {
+        setChosenSome(event.target.name)
+        console.log("Valgt sosialt media: " + chosenSome)
+    }
+
+    function operationHelper(event) {
+        if(event.target.name === "insert") {
+           
+        }
+        setCurrentOperation({
+            operation: event.target.name
+        })
     }
 
 
     return (
         <Container>
 
-            {deleteArray != null && 
-                <Modal
-                    show={showPopup}
-                    onHide={handleClose}
-                    backdrop="static"
-                    keyboard={false}
-                >
-                    <Modal.Header>
-                        <Modal.Title>Du er iferd med å slette følgende prosjekter:</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        Her kommer noe tekst evt en state
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>Lukk</Button>
-                        <Button variant="primary" onClick={deleteProjects}>Slett</Button>
-                    </Modal.Footer>
-                </Modal>
-            }
-
-            <Button
-                key="5" 
-                variant="primary" 
-                name="siteSubmit" 
-                onClick={getAllProjectTitles}
-            >Load projects</Button>
-
-            
-                <h2>Sletting av prosjekter</h2>
-                <div>
-                    <Button
-                        key="5" 
-                        variant="primary" 
-                        name="siteSubmit" 
-                        onClick={showCheckboxes}
-                    >Marker for sletting</Button>
-                    <Button
-                        key="6" 
-                        variant="danger" 
-                        name="siteDelete" 
-                        disabled={!stateShowCheckboxes}
-                        onClick={handleDelete}
-                    >Slett</Button>
-                </div>
-            
-            
             <table class="table table-sm table-hover caption-top table-bordered">
-                <caption>Alle prosjekter</caption>
+                
                 <thead class="table-light">
-                    <th scope="col">Prosjektnavn</th>
+                    <th scope="col">Sosiale medie-tilkoblinger</th>
                 </thead>
                 <tbody>
-                    {tableContent.map((project) => 
+                    {tableContent.map((media) => 
+                        
                         <tr>
-                            <td scope="row">{project.title}</td>
+                            <td scope="row">{media.someName}</td>
                             <td class="mr-0">
                                 {<Button
                                     key="69" 
                                     variant="primary" 
-                                    name="visProsjekt" 
-                                    //onClick={}
-                                >Vis prosjekt</Button>}
+                                    name={media.someName} 
+                                    onClick={helper}
+                                >Vis sosialt medie</Button>}
                             </td>
                             {stateShowCheckboxes &&
                                 <td class="ml-1">
-                                    <input class="form-check-input" type="checkbox" value={project.title} id="flexCheckDefault"/>
+                                    <input class="form-check-input" type="checkbox" id="flexCheckDefault"/>
                                 </td>
                             }
                         </tr>
@@ -211,6 +113,58 @@ export default function EditTabContact(props) {
                 </tbody>
                 <tfooter></tfooter>
             </table>
+
+            <Row>
+                <Col>
+                    <Form>
+                        <Form.Group as={Row} controlId="formGroupTitle">
+                                <Form.Label row sm={2}> {siteData.someName}</Form.Label>
+                                <Form.Control type="text" value={formData.someName} name="someName" onChange={handleChange} placeholder="Tilkoblings-URL" disabled={currentOperation.operation === "view"}/>
+                        </Form.Group>
+                    </Form>
+                </Col>
+                <Col>
+                    <DropdownButton
+                        as={ButtonGroup}
+                        key={keyForItems+1}
+                        id="dropdownBtn"
+                        variant="primary"
+                        title={chosenSome === "" ? "Choose social media" : chosenSome}
+                    >
+                        {supportedSome.map((some) => 
+                            <Dropdown.Item eventKey={keyForItems+1} name={some} onClick={handleItemClick}>{some}</Dropdown.Item>
+                        )}
+                    </DropdownButton>
+                </Col>
+                
+            </Row>
+
+            
+
+           
+                <Container>
+                    {currentOperation.operation !== "insert" &&
+                        <Row>
+                            <Button
+                                key="69" 
+                                variant="primary" 
+                                name="edit"
+                                onClick={operationHelper}
+                            >Activate Editing</Button>
+                        </Row>
+                    }
+                    
+                    <Form className="mb-3">
+                            <Form.Group as={Col} controlId="formGroupTitle">
+                                <Form.Label row sm={2}>Tittel</Form.Label>
+                                <Form.Control type="text" value={formData.someName} name="someName" onChange={handleChange} placeholder="Tolkoblings-URL" disabled={!(currentOperation.operation === "edit" || currentOperation.operation === "insert")}/>
+                            </Form.Group>
+                            {(currentOperation.operation === "edit" || currentOperation.operation === "insert") &&
+                                <Button key="5" variant="primary" name="siteSubmit" value={currentOperation.operation} onClick={handleSubmit}>{currentOperation.operation}</Button>
+                            }
+                    </Form>
+                </Container>
+            
 
         </Container>
     )

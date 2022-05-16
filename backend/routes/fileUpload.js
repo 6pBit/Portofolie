@@ -9,7 +9,6 @@ const aws = require('aws-sdk')
 const { v4: uuidv4 } = require('uuid')
 const fs = require('fs')
 const path = require('path');
-const { CloseButton } = require('react-bootstrap');
 const filepath = path.join(__dirname, '..', '..', 'public', 'images', '/')
 let fileHelper = ""
 aws.config.region = 'us-east-1'

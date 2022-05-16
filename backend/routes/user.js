@@ -6,7 +6,7 @@ const ObjectId = require("mongodb").ObjectId;
 
 // Eksisterer kun en bruker. Så holder å 
 
-router.get("/:id", (req, res) => {
+router.get("/withId/:id", (req, res) => {
   let db_connect = dbo.getDb();
   db_connect
     .collection("user")
@@ -69,4 +69,23 @@ router.post("/", (req, res) => {
     })
 })
 
+router.get("/someLinks", (req, res) => {
+  let db_connect = dbo.getDb()
+
+  let myQuery = {
+    someName: "facebook"
+  }
+
+  db_connect
+  .collection("user")
+  .find({myQuery})
+  .toArray(function(err, result) {
+    if(err) throw err
+    console.log("Hei jeg ble kjørt")
+    res.json(result)
+  })
+})
+
 module.exports = router;
+
+//$in["facebook", "snapchat", "instagram", "twitter", "linkedin", "tiktok", "wechat"]

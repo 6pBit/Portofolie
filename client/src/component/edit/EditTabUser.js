@@ -48,7 +48,7 @@ export default function EditTab(props) {
       })
     } else {
       setCurrentFile(() => {
-        if((currentFile == "" || currentFile == null) && event.target.files[event.target.files.length-1] !== null && event.target.files[event.target.files.length-1] !== "") {
+        if((currentFile === "" || currentFile === null) && event.target.files[event.target.files.length-1] !== null && event.target.files[event.target.files.length-1] !== "") {
             console.log("currentfile oppdatert")
             return (event.target.files[0]) //fjerna return her  && event.target.files[0] !== null
         }
@@ -126,7 +126,7 @@ export default function EditTab(props) {
   }
 
   function setData() {
-    fetch(`/user/6254341b8acb5f014cfe0800`) // ikke ha hardkodet brukerid her.
+    fetch(`/user/withId/6254341b8acb5f014cfe0800`) // ikke ha hardkodet brukerid her.
     .then(response => response.json()) 
     .then(data => (
       //console.log(data + " type objekt useEffect som getter bruker EditTabUser.js"),
@@ -178,8 +178,10 @@ export default function EditTab(props) {
                   <p>Current lastname: {siteData.etternavn}</p>
                   <p>Current tlfNumber: {siteData.tlfNummer}</p>
                   <p>Current email: {siteData.epost}</p>
-                  <img src={siteData.imageUrl}
-                      alt={siteData.altText}/>
+                  <img id="userImage"
+                      src={siteData.imageUrl}
+                      alt={siteData.altText}
+                      />
                   <p>Current alttekst: {siteData.altText}</p>
               </article>
           </div>
