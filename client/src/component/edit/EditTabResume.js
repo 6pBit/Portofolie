@@ -164,8 +164,9 @@ export default function EditTabResume(props){
 
            
             
-            <Document file={resumeData.resume}
-                        onLoadSuccess={onDocumentLoadSuccess}>
+            <Document file={resumeData.resume} 
+                      onLoadSuccess={onDocumentLoadSuccess}
+            >
                 <Page pageNumber={pageNumber} />
             </Document>
 

@@ -12,33 +12,32 @@ export default function Footer(props) {
     //localStorage.removeItem('login-open')
     const loginOpen = localStorage.getItem('login-open')
     const [isLoginVisible, setIsLoginVisible] = React.useState(false)
-
     
     const [username, setUsername] = React.useState();
     const [password, setPassword] = React.useState();
 
     const auth = async () => {
         try {
-          const res = await axios.get('/auth/authenticate', { auth: { username, password } });
-    
-          if (res.data.screen !== undefined) {            
-            props.setScreen(res.data.screen);            
-            console.log("Axios get bra "+props.screen)
-          }
+            const res = await axios.get('/auth/authenticate', { auth: { username, password } });
+        
+            if (res.data.screen !== undefined) {            
+                props.setScreen(res.data.screen);            
+                console.log("Axios get bra "+props.screen)
+            }
         } catch (e) {
-          console.log("Axios get feil "+e);
+            console.log("Axios get feil "+e);
         }
     };
     const readCookie = async () => {
         try {
-          const res = await axios.get('/auth/read-cookie');
-          
-          if (res.data.screen !== undefined) {
-            props.setScreen(res.data.screen);
-          }
+            const res = await axios.get('/auth/read-cookie');
+            
+            if (res.data.screen !== undefined) {
+                props.setScreen(res.data.screen);
+            }
         } catch (e) {
-          props.setScreen('auth');
-          console.log(e);
+            props.setScreen('auth');
+            console.log(e);
         }
     };
     
@@ -90,7 +89,7 @@ export default function Footer(props) {
                     :<Link to="/admin" ><BsGearFill /></Link>
                 }
             </div>
-            <p>&copy; UnicodUnicoders. All rights reserved.</p>
+            <p>&copy; UnicornUnicoders. All rights reserved.</p>
             
         </div>
     )

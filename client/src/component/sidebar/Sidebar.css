@@ -43,25 +43,19 @@
 .sidebar-items .item {
     display: flex;
     justify-content: center;
-    width: 100%;
+    width: 80%;
     padding: 16px 8px;
-    border-radius: 5px;
+    margin-top: 16px;
+    box-shadow: 5px 10px hsl(180 25% 15% / 50% );
     transition: background-color 0.2s;
+    background-color: rgba(255,255,255,0.05);
     cursor: pointer;
 }
-.sidebar-items > .active {
-    border-bottom: 1px solid #333;
-}
-
-.sidebar-items .item .active {
-    border-bottom: 1px solid rgb(238, 234, 234);
-}
-
 .sidebar-items .item:hover {
-    background-color: rgba(255,255,255,0.05)
+    background-color: rgb(85, 181, 152)
 }
 .activeSidebarlink {
-    border-bottom: 5px ridge rgb(85, 181, 152);
+    border: 3px solid rgb(85, 181, 152);
 }
 /*----- Footer -----*/
 .sidebar .footer {

@@ -1,9 +1,10 @@
 .projectContainer {
     display:flex;
-    background-color: #fae596;
+    background-color: hsl(47, 91%, 78%);
     flex: 1 0 100vh;
     flex-direction: column;
     padding-top: 50px;
+    padding-bottom:20px;
 }
 .projectCardContainer {
     display: flex;
@@ -12,8 +13,7 @@
     flex-wrap: wrap;
 }
 @media screen and (max-width: 600px) {
-    .projectCardContainer {
-        
+    .projectCardContainer {        
         flex-direction: column;
         flex: 1 0 auto;
         align-items: center;

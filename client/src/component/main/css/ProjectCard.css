@@ -1,16 +1,23 @@
-.project_card {
+.project_card  {
     margin: 20px 5px;
+    border:  black solid 2px !important;
+    border-radius: 0 !important; 
+    box-shadow: 10px 20px hsl(47, 91%, 30%)
 }
+
 .project_card:hover .card_description {
     visibility: visible;
+    font-size: 1.3em;
 }
 
 .project_card:hover {
-    box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+    box-shadow: 10px 20px hsl(47, 91%, 30%);
 }
-
 .card_description {
     visibility: hidden;
+}
+.card-text {
+    font-size: 2px;
 }
 .card_img {
     transition: all 1s ease;
