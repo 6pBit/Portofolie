@@ -3,7 +3,7 @@
   overflow: hidden;
   height: 100vh;
 }
-.body p {
+.body h2 {
   font-weight: 400;
 }
 .body p {
@@ -12,22 +12,58 @@
 .App {
   text-align: center;
   display:flex;
-  flex-direction: row-reverse;
-  justify-content:stretch;
-  height: 100%;
-  width: 100vw;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 }
-
+.underNavbar {
+  text-align: center;
+  display:flex;
+  flex-flow: row-reverse;
+  flex: 0 1 100%;
+  width: 100vw;
+  overflow: hidden;
+}
+.navBar {
+  display: none;
+  flex-direction: row;
+  flex: 0 0 70px;
+  justify-content:center;
+  align-items: center;
+  background-color:darkslategrey;
+}
+.navBar #navBarTitle {
+  font-size: 2em;
+  width:50%;
+}
+.navBar svg {
+  height: 50px;
+  width: 60px;
+  margin: 10px 10px 10px auto;
+}
+@media screen and (max-width:600px) {
+  .app {
+    overflow: hidden;
+  }
+  .underNavbar {
+    
+  }
+  .navBar {
+    display:flex;
+    z-index: 9999;
+    right:0;
+    left:0;
+  }
+  #BurgerIconButton {
+    z-index: 9999;
+  }
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
-
-
-
 
 @keyframes App-logo-spin {
   from {
