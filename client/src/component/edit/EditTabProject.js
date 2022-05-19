@@ -433,19 +433,23 @@ export default function EditTabProject(props) {
             <div class="options d-flex justify-content-end">
 
                 <div class="mr-0 d-flex justify-content-between">
-                    <Button
-                        key="5" 
-                        variant="primary" 
-                        name="insert" 
-                        onClick={operationHelper}
-                    >Add new project</Button>
+                    <div class="me-1">
+                        <Button
+                            
+                            key="5" 
+                            variant="primary" 
+                            name="insert" 
+                            onClick={operationHelper}
+                        >Add new project</Button>
+                    </div>
                     <Button
                         key="5" 
                         variant="primary" 
                         name="mark" 
                         onClick={showCheckboxes}
                     >Mark</Button>
-                    {stateShowCheckboxes && 
+                    {stateShowCheckboxes &&
+                        <div class="ms-1"> 
                         <Button
                             key="6" 
                             variant="danger" 
@@ -453,6 +457,7 @@ export default function EditTabProject(props) {
                             disabled={!stateShowCheckboxes}
                             onClick={handleDelete}
                         >Delete</Button>
+                        </div>
                     }
                     
                 </div>

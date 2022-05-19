@@ -38,6 +38,7 @@ router.post("/editUser/:id", (req, res) => {
     })
 })
 
+/*
 router.get("/", (req, res) => {
     let db_connect = dbo.getDb();
     db_connect
@@ -48,6 +49,7 @@ router.get("/", (req, res) => {
         res.json({ message: `${JSON.stringify(result)}`})  
       });
 });
+*/
 
 router.post("/", (req, res) => {
   let db_connect = dbo.getDb();
@@ -73,16 +75,82 @@ router.get("/someLinks", (req, res) => {
   let db_connect = dbo.getDb()
 
   let myQuery = {
-    someName: "facebook"
+    someName: {$in:["facebook", "snapchat", "instagram", "twitter", "linkedin", "tiktok", "wechat"]}
   }
 
   db_connect
   .collection("user")
-  .find({myQuery})
+  .find(myQuery)
   .toArray(function(err, result) {
     if(err) throw err
     console.log("Hei jeg ble kjørt")
+    let final = result.map(media => {
+      return(media.someName)
+    })
+    final.forEach(media => console.log(media + " media"))
     res.json(result)
+  })
+})
+
+router.get("/spesificSome/:someName", (req, res) => {
+  let db_connect = dbo.getDb();
+
+  let myQuery = { someName: req.params.someName };  
+
+  db_connect
+  .collection("user")
+  .findOne(myQuery, (err, result) => {
+      if(err) throw err
+      //console.log(" oppdaterte ett prosjekt med title: " + `${req.params.title}`)
+      res.json(result)
+  })
+})
+
+router.post("/update/:someName", (req, res) => {
+  let db_connect = dbo.getDb();
+
+  let myquery = { someName: req.params.someName };  
+  let newValues = {    
+      $set: req.body
+  }
+
+  db_connect
+  .collection("user")
+  .updateOne(myquery, newValues, (err, result) => {
+      if(err) throw err
+      //console.log(" oppdaterte ett prosjekt med title: " + `${req.params.title}`)
+      res.json(result)
+  })
+})
+
+router.post("/insertSome", (req, res) => {
+  let db_connect = dbo.getDb();
+
+  let newObject = {
+    someName: req.body.someName,
+    connectionUrl: req.body.connectionUrl
+  }
+
+  db_connect
+  .collection("user")
+  .insertOne(newObject, (err, result) => {
+      if(err) throw err
+      //console.log(" oppdaterte ett prosjekt med title: " + `${req.params.title}`)
+      res.json(result)
+  })
+})
+
+router.post("/deleteSeveral", (req, res) => {
+  console.log("Her er req.body i deleteSeveral" + JSON.stringify(req.body.someNames))
+  let db_connect = dbo.getDb()
+  let myQuery = {
+      someName: {$in: req.body.someNames}
+  }
+  db_connect
+  .collection("user")
+  .deleteMany(myQuery, (err, result) => {
+      if(err) throw err
+      res.json(result)
   })
 })
 
