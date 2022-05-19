@@ -38,6 +38,8 @@ export default function EditTabProject(props) {
     const [tableContent, setTableContent] = React.useState([{title: ""}])
     const [currentOperation, setCurrentOperation] = React.useState({operation: ""})
     const [deleteArray, setDeleteArray] = React.useState([])
+    const [showAlert, setShowAlert] = React.useState(false)
+    const [alertContent, setAlertContent] = React.useState("")
     //-------------------------------------------------------------------
     //Document blir noen ganger ikke oppdatert om man ikke også oppdaterer title på prosjektet
     React.useEffect(() => { //fjernet async her
@@ -82,7 +84,7 @@ export default function EditTabProject(props) {
                 }) 
 
             ))
-        } else {}
+        }
 
     }, [currentProject.title, triggerReRender])
     
@@ -376,6 +378,18 @@ export default function EditTabProject(props) {
         }
     }
 
+    function handleAlert(content) {
+        console.log("heiiiiiii")
+        setAlertContent(content)
+        setShowAlert(true)
+        setTimeout(() => {
+          setAlertContent("")
+          setShowAlert(false)
+          //setRequestReload(!requestReload)
+          
+        }, 3000)
+      }
+
     //Hjelpefunksjon som rensker valgt state for innhold.
     function clean(dataToClean) {
         if(dataToClean === "formData") {
@@ -435,6 +449,19 @@ export default function EditTabProject(props) {
                     </Modal.Footer>
                 </Modal>
             }
+
+        {showAlert &&
+            <Modal 
+            show={showAlert}
+            backdrop="static"
+            keyboard={false}>
+            <Modal.Header>Tilbakemelding</Modal.Header>
+            <Modal.Body>
+                <p className="mb-0">{alertContent}</p>
+                <hr/>
+            </Modal.Body>
+            </Modal>
+        }
 
             <div class="options d-flex justify-content-end">
 

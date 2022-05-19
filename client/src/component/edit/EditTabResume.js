@@ -1,5 +1,5 @@
 import React from "react"
-import { Container, Form, Button, Col, Row } from "react-bootstrap"
+import { Container, Form, Button, Col, Row , Modal} from "react-bootstrap"
 import { Document, Page, pdfjs } from 'react-pdf/dist/esm/entry.webpack';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -19,6 +19,9 @@ export default function EditTabResume(props){
 
     const [wishToUpdate, setWishToUpdate] = React.useState(false)
     const [wishToRefresh, setWishToRefresh] = React.useState(false)
+
+    const [showAlert, setShowAlert] = React.useState(false)
+    const [alertContent, setAlertContent] = React.useState("")
 
 
     React.useEffect(() => {
@@ -141,8 +144,33 @@ export default function EditTabResume(props){
         }
     }
 
+    function handleAlert(content) {
+        console.log("heiiiiiii")
+        setAlertContent(content)
+        setShowAlert(true)
+        setTimeout(() => {
+          setAlertContent("")
+          setShowAlert(false)
+          //setRequestReload(!requestReload)
+          
+        }, 3000)
+      }
+
     return(
         <Container>
+
+        {showAlert &&
+            <Modal 
+                show={showAlert}
+                backdrop="static"
+                keyboard={false}>
+            <Modal.Header>Tilbakemelding</Modal.Header>
+            <Modal.Body>
+                <p className="mb-0">{alertContent}</p>
+                <hr/>
+            </Modal.Body>
+            </Modal>
+        }
 
             <Row>
                 <Button

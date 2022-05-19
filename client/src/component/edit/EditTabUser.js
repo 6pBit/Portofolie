@@ -1,7 +1,6 @@
 import React from "react"
 import { validate } from "react-email-validator"
 import {Container, FormGroup, Form, Button, Col, Row, Modal, Alert} from "react-bootstrap"
-//import {Alert} from "bootstrap"
 
 export default function EditTab(props) {
 
@@ -185,22 +184,13 @@ export default function EditTab(props) {
     }, 3000)
   }
 
-  function hebelebe() {
-
-  }
-
   return (
 
       <Container>
 
-        <Modal>
-
-        </Modal>
-
         {showAlert &&
           <Modal 
           show={showAlert}
-          onHide={hebelebe}
           backdrop="static"
           keyboard={false}>
             <Modal.Header>Tilbakemelding</Modal.Header>
@@ -208,8 +198,6 @@ export default function EditTab(props) {
               <p className="mb-0">{alertContent}</p>
               <hr/>
             </Modal.Body>
-            
-
           </Modal>
         }
           <div className="current_info">
