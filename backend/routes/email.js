@@ -50,8 +50,8 @@ router.post('/send', (req, res, next) => {
       transporter.sendMail({
         from: process.env.EMAIL,
         to: email,
-        subject: "Submission was successful",
-        text: `Thank you for contacting us!\n\nForm details\nName: ${name}\n Email: ${email}\n Message: ${message}`
+        subject: "Melding var vellykket",
+        text: `Takk for at du kontaktet meg!\n\nMelding detaljer\nNavn: ${name}\n Epost: ${email}\n Melding: ${message}`
       }, function(error, info){
         if(error) {
           console.log(error);

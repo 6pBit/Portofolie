@@ -3,8 +3,7 @@ import {BsGearFill, BsXSquareFill} from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './Sidebar.css'
-import { Form } from 'react-bootstrap'
-import { Button } from 'react-bootstrap'
+import { Form, Button, Popover, Overlay, Toast } from 'react-bootstrap'
 
 
 
@@ -16,6 +15,8 @@ export default function Footer(props) {
     const [username, setUsername] = React.useState();
     const [password, setPassword] = React.useState();
 
+    const [show, setShow] = React.useState(false);
+
     const auth = async () => {
         try {
             const res = await axios.get('/auth/authenticate', { auth: { username, password } });
@@ -26,7 +27,8 @@ export default function Footer(props) {
             }
         } catch (e) {
             console.log("Axios get feil "+e);
-            alert("Feil brukernavn/passord")
+            //alert("Feil brukernavn/passord")
+            setShow(true)
         }
     };
     const readCookie = async () => {
@@ -41,6 +43,12 @@ export default function Footer(props) {
             console.log(e);
         }
     };
+    const wrongPasswordMsg = (
+        <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide={true}>
+            <Toast.Header>Feil</Toast.Header>
+            <Toast.Body>Feil passord/brukernavn</Toast.Body>
+        </Toast>
+    )
     
     React.useEffect(() => {
         localStorage.removeItem('login-open')
@@ -49,12 +57,14 @@ export default function Footer(props) {
 
     return(
         <div className='footer'>
-            
+            <Overlay></Overlay>
             <div className="login">
                 {props.screen === 'auth' ?
                     <div className="loginForm">
+                        
                         {isLoginVisible?
                             <>
+                                {wrongPasswordMsg}
                                 <BsXSquareFill onClick={() => setIsLoginVisible(false)}/>
                                 <Form>
                                     <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -69,8 +79,7 @@ export default function Footer(props) {
                                         <Button 
                                             variant="primary"  
                                             type="button" 
-                                            onClick={() => {
-                                                setIsLoginVisible(false)                                                
+                                            onClick={() => {                                                                                              
                                                 auth()
                                             }}
                                         >Login</Button>
