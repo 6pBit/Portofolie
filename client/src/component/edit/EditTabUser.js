@@ -1,7 +1,7 @@
 import React from "react"
 import { validate } from "react-email-validator"
-import {Container, FormGroup, Form, Button, Col, Row, Modal} from "react-bootstrap"
-import Bootstrap from "bootstrap"
+import {Container, FormGroup, Form, Button, Col, Row, Modal, Alert} from "react-bootstrap"
+//import {Alert} from "bootstrap"
 
 export default function EditTab(props) {
 
@@ -15,6 +15,8 @@ export default function EditTab(props) {
   const [activateEdit, setActivateEdit] = React.useState(false)
   const [requestReload, setRequestReload] = React.useState(false)
   const [requestUpdate, setRequestUpdate] = React.useState(false)
+  const [showAlert, setShowAlert] = React.useState(false)
+  const [alertContent, setAlertContent] = React.useState("")
 
   const [formData, setFormData] = React.useState({
       fornavn: "",
@@ -48,7 +50,7 @@ export default function EditTab(props) {
       })
     } else {
       setCurrentFile(() => {
-        if((currentFile == "" || currentFile == null) && event.target.files[event.target.files.length-1] !== null && event.target.files[event.target.files.length-1] !== "") {
+        if((currentFile === "" || currentFile === null) && event.target.files[event.target.files.length-1] !== null && event.target.files[event.target.files.length-1] !== "") {
             console.log("currentfile oppdatert")
             return (event.target.files[0]) //fjerna return her  && event.target.files[0] !== null
         }
@@ -104,6 +106,7 @@ export default function EditTab(props) {
                 setCurrentFile(null)
                 document.getElementById('fileInput').value = null
                 setRequestReload(!requestReload)
+                handleAlert(response.json().data.stringify())
               })
                 
         ))
@@ -126,7 +129,7 @@ export default function EditTab(props) {
   }
 
   function setData() {
-    fetch(`/user/6254341b8acb5f014cfe0800`) // ikke ha hardkodet brukerid her.
+    fetch(`/user/withId/6254341b8acb5f014cfe0800`) // ikke ha hardkodet brukerid her.
     .then(response => response.json()) 
     .then(data => (
       //console.log(data + " type objekt useEffect som getter bruker EditTabUser.js"),
@@ -158,7 +161,7 @@ export default function EditTab(props) {
 
       if(currentFile !== null) {
         updateWithImageFile()
-      }else {
+      } else {
         updateUser()
       }
       setActivateEdit(!activateEdit)
@@ -168,19 +171,33 @@ export default function EditTab(props) {
     }
   }, [requestUpdate])
 
+  function handleAlert(content) {
+    setAlertContent(content)
+    setShowAlert(!showAlert)
+    setTimeout(() => {
+      setShowAlert(!showAlert)
+      setAlertContent("")
+    }, 3000)
+  }
+
   return (
 
       <Container>
 
+        <Modal>
+
+        </Modal>
+
+        <Alert show={showAlert} variant="success" dismissable>
+          {alertContent}
+        </Alert>
+
           <div className="current_info">
               <article>
-                  <p>Current firstname: {siteData.fornavn}</p>
-                  <p>Current lastname: {siteData.etternavn}</p>
-                  <p>Current tlfNumber: {siteData.tlfNummer}</p>
-                  <p>Current email: {siteData.epost}</p>
-                  <img src={siteData.imageUrl}
-                      alt={siteData.altText}/>
-                  <p>Current alttekst: {siteData.altText}</p>
+                  <img id="userImage"
+                      src={siteData.imageUrl}
+                      alt={siteData.altText}
+                      />
               </article>
           </div>
         <div class="d-flex justify-content-end">

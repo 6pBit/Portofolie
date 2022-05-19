@@ -1,5 +1,6 @@
 import React from "react"
-import { Container } from "react-bootstrap"
+import { Form } from "react-bootstrap"
+import { Container, Col, Button} from "react-bootstrap"
 
 export default function EditTabLanding(props) {
 
@@ -11,7 +12,7 @@ export default function EditTabLanding(props) {
         title: "",
         introductionTxt: ""
     })
-    const [oldSiteData, setOldSiteData] = React.useState({
+    const [formData, setFormData] = React.useState({
         title: "",
         introductionTxt: ""
     }) 
@@ -19,9 +20,9 @@ export default function EditTabLanding(props) {
     function handleChange(event) {
         console.log(event.target.value)
   
-        setSiteData(prevSiteData => {
+        setFormData(prevFormData => {
           return {
-            ...prevSiteData,
+            ...prevFormData,
             [event.target.name]: event.target.value
           }
         })
@@ -29,8 +30,8 @@ export default function EditTabLanding(props) {
 
     function handleSubmit(event){
         event.preventDefault();
-        setOldSiteData( {
-         ...siteData
+        setSiteData( {
+         ...formData
         })
     }
 
@@ -38,7 +39,7 @@ export default function EditTabLanding(props) {
         fetch("/sites/landing")
         .then(response => response.json())
         .then(data => (
-            setOldSiteData( {
+            setFormData( {
                 title: data.title,
                 introductionTxt: data.introductionTxt
             }),
@@ -55,7 +56,7 @@ export default function EditTabLanding(props) {
               method: 'POST',
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify(
-                oldSiteData
+                siteData
               )
             }
             fetch(`/${collection}/${dbFilter}`, requestForDatabase )
@@ -66,7 +67,7 @@ export default function EditTabLanding(props) {
           } else {
             isMounted.current = true
           }
-    }, [oldSiteData])
+    }, [siteData])
 
 
 
@@ -74,34 +75,18 @@ export default function EditTabLanding(props) {
     return(
         <Container>
             
-            <div className="current_info">
-                <article>
-                    <p>Current Title: {oldSiteData.title}</p>
-                    <p>Current Introduciton Text: {oldSiteData.introductionTxt}</p>
-                </article>
-            </div>
+            <Form>
+                <Form.Group as={Col} controlId="formGroupTitle">
+                    <Form.Label>Overskrift</Form.Label>
+                    <Form.Control type="text" name="title" placeholder="Denne teksten vises på toppen av siden" value={formData.title} onChange={handleChange}></Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGroupTitle">
+                    <Form.Label>Introduksjonstekst</Form.Label>
+                    <Form.Control as="textarea" rows={8} type="text" name="introductionTxt" placeholder="Introduksjonstekst for siden" value={formData.introductionTxt} onChange={handleChange}></Form.Control>
+                </Form.Group>
+            </Form>
 
-            <input 
-                type="text"
-                placeholder="Title for Landing"
-                name="title"
-                onChange={handleChange}
-                value={siteData.title}
-            />
-            <input 
-                type="textarea"
-                placeholder="Introduction Text"
-                name="introductionTxt"
-                onChange={handleChange}
-                value={siteData.introductionTxt}
-            />
-
-            <input
-                type="button"
-                name="siteSubmit"
-                value="Submit Changes"
-                onClick={handleSubmit}
-            />
+            <Button onClick={handleSubmit}>Edit</Button>
             
         </Container>
     )
