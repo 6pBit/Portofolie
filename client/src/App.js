@@ -36,7 +36,7 @@ function App() {
           <Sidebar screen={screen} setScreen={setScreen} sidebarVisible={isSidebarVisible} setSidebarVisible={setIsSidebarVisible} />
           <Routes>          
             <Route index element={<Main isSidebarVisible={isSidebarVisible} setIsSidebarVisible={setIsSidebarVisible} />} />                
-            <Route path="/admin" element={screen === 'auth'?<Main />:<Edit screen={screen} setScreen={setScreen}/>} />
+            <Route path="/admin" element={screen === 'auth'?<Main />:<Edit screen={screen} setScreen={setScreen} setIsSidebarVisible={setIsSidebarVisible} />} />
           </Routes>     
         </div>
       </div>

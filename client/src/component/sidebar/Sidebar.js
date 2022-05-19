@@ -35,7 +35,7 @@ export default function Sidebar(props) {
             <div className="sidebar-fixed-wrapper">
                 <Header />
                 <Nav sidebarVisible={props.sidebarVisible} setSidebarVisible={props.setSidebarVisible} />
-                <Footer screen={props.screen} setScreen={props.setScreen}/>
+                <Footer screen={props.screen} setScreen={props.setScreen} />
             </div>
         </div>
     )

@@ -70,8 +70,7 @@ export default function Footer(props) {
                                             variant="primary"  
                                             type="button" 
                                             onClick={() => {
-                                                setIsLoginVisible(false)
-                                                
+                                                setIsLoginVisible(false)                                                
                                                 auth()
                                             }}
                                         >Login</Button>

@@ -221,8 +221,8 @@ export default function Edit(props) {
       }
     };
     React.useEffect(() => {
-      localStorage.removeItem('sidebar-open')
-    })
+      props.setIsSidebarVisible(false)
+    },[])
     return (
         <Container className="editContainer">
           <header>
