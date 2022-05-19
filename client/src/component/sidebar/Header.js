@@ -10,6 +10,7 @@ export default function Header() {
         fetch('/user')
         .then(response => response.json())
         .then(data => {
+            console.log(data)
             setUser(JSON.parse(data.message))
         })
         

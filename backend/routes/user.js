@@ -38,7 +38,7 @@ router.post("/editUser/:id", (req, res) => {
     })
 })
 
-/*
+
 router.get("/", (req, res) => {
     let db_connect = dbo.getDb();
     db_connect
@@ -49,7 +49,7 @@ router.get("/", (req, res) => {
         res.json({ message: `${JSON.stringify(result)}`})  
       });
 });
-*/
+
 
 router.post("/", (req, res) => {
   let db_connect = dbo.getDb();
@@ -75,7 +75,7 @@ router.get("/someLinks", (req, res) => {
   let db_connect = dbo.getDb()
 
   let myQuery = {
-    someName: {$in:["facebook", "snapchat", "instagram", "twitter", "linkedin", "tiktok", "wechat"]}
+    someName: {$in:["facebook", "snapchat", "instagram", "twitter", "linkedin", "tiktok", "wechat", "github"]}
   }
 
   db_connect

@@ -10,6 +10,7 @@ export default function Contact() {
         message:''
     })
     const [user, setUser] = React.useState({})
+    const [soMe, setSoMe] = React.useState([])
 
     React.useEffect(() => {
         fetch('/user')
@@ -17,7 +18,12 @@ export default function Contact() {
         .then(data => {
             setUser(JSON.parse(data.message))
         })
-        
+        fetch('/user/someLinks')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            setSoMe(data)
+        })
     },[])
     function resetForm(){
         setEmail({name: '', email: '', message: ''})
@@ -51,6 +57,15 @@ export default function Contact() {
                 }
             })
     }
+    function giveSoMeLink(name) {       
+        soMe.forEach(some => {
+            console.log(some.someName+" "+ name)
+            if(some.someName === name) {
+                window.open(some.connectionUrl)
+                return some.connectionUrl;
+            }
+        });       
+    } 
 
     return (
         <section className="contactContainer" id='contact'>
@@ -77,10 +92,10 @@ export default function Contact() {
                     <p>{ `Phone: ${user.tlfNummer}` ||"Phone loading"}</p>
                     <div className="someIconContainer" >
                         <IconContext.Provider value={{size: "1.5ems", className: "someIcons"}} >
-                            <BsFacebook  />
-                            <BsInstagram />
-                            <BsGithub />
-                            <BsLinkedin />
+                            <div onClick={(e) => giveSoMeLink('facebook')} ><BsFacebook /></div>
+                            <div onClick={(e) => giveSoMeLink('instagram')}> <BsInstagram /></div>
+                            <div onClick={(e) => giveSoMeLink('github')} ><BsGithub /></div>
+                            <div onClick={(e) => giveSoMeLink('linkedin')} ><BsLinkedin  /></div>
                         </IconContext.Provider>
                     </div>
                 </div>
