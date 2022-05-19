@@ -47,7 +47,7 @@ export default function Resume() {
         
             <section id="resume" className="resumeContainer">
                 <h1>Resume</h1>
-                <p>Page {pageNumber} of {numPages}</p>
+                <p>Side {pageNumber} av {numPages}</p>
                 <div className="cvContainer">
                     <div className="documentContainer">
                         <Document file={resumeData.resume} 

@@ -12,15 +12,8 @@ export default function Nav(props) {
             behavior: 'smooth'
         })
         console.log(`Nav.js før setvisible ${props.sidebarVisible}`)
-        props.setSidebarVisible(!props.sidebarVisible)
-        console.log(`Nav.js etter setvisible ${props.sidebarVisible}`)
-        /*
-        if(props.sidebarVisible) {
-            document.getElementById('Sidebar').style.transform = 'translateY(0%)'                       
-        } else {
-            document.getElementById('Sidebar').style.transform = 'translateY(-100%)'
-        }
-        */
+        props.setSidebarVisible(!props.sidebarVisible)        
+        console.log(`Nav.js etter setvisible ${props.sidebarVisible}`)        
     }
     
     return (

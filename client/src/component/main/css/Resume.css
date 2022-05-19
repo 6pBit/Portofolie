@@ -30,3 +30,10 @@
 .documentContainer {
     box-shadow: 5px 10px darkslategray;
 }
+.react-pdf__Page__canvas {
+    margin: 0 auto;
+    max-width: 1000px;
+    max-height: 80vh;
+    width: auto !important;
+    height: auto !important;
+}

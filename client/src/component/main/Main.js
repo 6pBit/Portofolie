@@ -9,7 +9,7 @@ import './css/Main.css'
 import '../sidebar/Sidebar.css'
 
 export default function Main(props) {
-
+    
     const [sectionsArr, setSectionsArr] = React.useState([])
     //let sectionsArr
     //console.log('sections on render '+Array.from(document.querySelectorAll("section")))
@@ -35,6 +35,11 @@ export default function Main(props) {
         
     }
     React.useEffect(() => {
+        if(window.innerWidth < 600) {
+            props.setIsSidebarVisible(false)
+        } else {
+            props.setIsSidebarVisible(true)
+        }
         setSectionsArr(Array.from(document.querySelectorAll("section")))
     },[])
     //const navRefList = props.navRefList ref={navRefList[0].landingRef}
@@ -45,8 +50,7 @@ export default function Main(props) {
             <Landing />
             <Project />
             <Resume />
-            <Contact />
-            
+            <Contact />            
         </div>
     )
 }

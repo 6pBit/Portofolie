@@ -1,4 +1,6 @@
 import React from 'react'
+import {BsGithub, BsFacebook, BsLinkedin, BsInstagram} from 'react-icons/bs'
+import { IconContext } from "react-icons";
 import './css/Contact.css'
 
 export default function Contact() {
@@ -7,6 +9,22 @@ export default function Contact() {
         email:'',
         message:''
     })
+    const [user, setUser] = React.useState({})
+    const [soMe, setSoMe] = React.useState([])
+
+    React.useEffect(() => {
+        fetch('/user')
+        .then(response => response.json())
+        .then(data => {
+            setUser(JSON.parse(data.message))
+        })
+        fetch('/user/someLinks')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            setSoMe(data)
+        })
+    },[])
     function resetForm(){
         setEmail({name: '', email: '', message: ''})
       }
@@ -39,6 +57,15 @@ export default function Contact() {
                 }
             })
     }
+    function giveSoMeLink(name) {       
+        soMe.forEach(some => {
+            console.log(some.someName+" "+ name)
+            if(some.someName === name) {
+                window.open(some.connectionUrl)
+                return some.connectionUrl;
+            }
+        });       
+    } 
 
     return (
         <section className="contactContainer" id='contact'>
@@ -57,8 +84,21 @@ export default function Contact() {
                         <label htmlFor="message">Message</label>
                         <textarea name="message" className="form-control" rows="5" value={email.message} onChange={handleChange}></textarea>
                     </div>
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="submit" className="submitBtn">Send melding</button>
                 </form>
+                <div className="contactInfoContainer" >
+                    <p>{ `${user.fornavn} ${user.etternavn}` ||"Name loading"}</p>
+                    <p>{ `Email: ${user.epost}` ||"Email loading"}</p>
+                    <p>{ `Phone: ${user.tlfNummer}` ||"Phone loading"}</p>
+                    <div className="someIconContainer" >
+                        <IconContext.Provider value={{size: "1.5ems", className: "someIcons"}} >
+                            <div onClick={(e) => giveSoMeLink('facebook')} ><BsFacebook /></div>
+                            <div onClick={(e) => giveSoMeLink('instagram')}> <BsInstagram /></div>
+                            <div onClick={(e) => giveSoMeLink('github')} ><BsGithub /></div>
+                            <div onClick={(e) => giveSoMeLink('linkedin')} ><BsLinkedin  /></div>
+                        </IconContext.Provider>
+                    </div>
+                </div>
             </div>
         </section>
     )
