@@ -1,3 +1,7 @@
+/**
+ * Hooks up the server to the database
+ */
+
 const { MongoClient } = require("mongodb");
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();

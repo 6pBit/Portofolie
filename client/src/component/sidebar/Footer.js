@@ -3,31 +3,32 @@ import {BsGearFill, BsXSquareFill} from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './Sidebar.css'
-import { Form, Button, Popover, Overlay, Toast } from 'react-bootstrap'
+import { Form, Button, Toast } from 'react-bootstrap'
 
-
+/**
+ * Main consern is login functionality. Uses cookies for sessions and localstorage to make the login area behave consistent
+ * Refrence: https://blog.logrocket.com/how-to-secure-react-app-login-authentication/
+ * @param {*} props 
+ * @returns Footer Component
+ */
 
 export default function Footer(props) {
-    //localStorage.removeItem('login-open')
-    const loginOpen = localStorage.getItem('login-open')
-    const [isLoginVisible, setIsLoginVisible] = React.useState(loginOpen)
     
+    const loginOpen = localStorage.getItem('login-open')
+    const [isLoginVisible, setIsLoginVisible] = React.useState(loginOpen)    
     const [username, setUsername] = React.useState();
     const [password, setPassword] = React.useState();
-
     const [show, setShow] = React.useState(false);
 
     const auth = async () => {
         try {
-            const res = await axios.get('/auth/authenticate', { auth: { username, password } });
-        
+            const res = await axios.get('/auth/authenticate', { auth: { username, password } });        
             if (res.data.screen !== undefined) {            
                 props.setScreen(res.data.screen);            
                 console.log("Axios get bra "+props.screen)
             }
         } catch (e) {
             console.log("Axios get feil "+e);
-            //alert("Feil brukernavn/passord")
             setShow(true)
         }
     };
@@ -38,8 +39,7 @@ export default function Footer(props) {
             if (res.data.screen !== undefined) {
                 props.setScreen(res.data.screen);
             }
-        } catch (e) {
-            
+        } catch (e) {            
             console.log(e);
         }
     };
@@ -48,8 +48,7 @@ export default function Footer(props) {
             <Toast.Header>Feil</Toast.Header>
             <Toast.Body>Feil passord/brukernavn</Toast.Body>
         </Toast>
-    )
-    
+    )    
     React.useEffect(() => {
         localStorage.removeItem('login-open')
         readCookie();
@@ -57,11 +56,9 @@ export default function Footer(props) {
 
     return(
         <div className='footer'>
-            <Overlay></Overlay>
             <div className="login">
                 {props.screen === 'auth' ?
-                    <div className="loginForm">
-                        
+                    <div className="loginForm">                        
                         {isLoginVisible?
                             <>
                                 {wrongPasswordMsg}
@@ -84,8 +81,7 @@ export default function Footer(props) {
                                             }}
                                         >Login</Button>
                                     </Link>
-                                </Form>
-                                
+                                </Form>                                
                             </>
                             :<BsGearFill 
                                 onClick={() => {

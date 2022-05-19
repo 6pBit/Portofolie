@@ -4,6 +4,11 @@ import { IconContext } from "react-icons";
 import { Toast } from 'react-bootstrap'
 import './css/Contact.css'
 
+/**
+ * Builds up the contact functionality with email sevice, user checks and displays the owner information
+ * Refrence: https://mailtrap.io/blog/react-contact-form/#Script-for-Expressjs-Nodejs-auto-reply-email
+ * @returns Contact Compnent
+ */
 export default function Contact() {
     const [email, setEmail] = React.useState({
         name:'',
@@ -93,10 +98,9 @@ export default function Contact() {
     }
     function getSoMeLink(name) {       
         soMe.forEach(some => {
-            console.log(some.someName+" "+ name)
             if(some.someName === name) {
                 window.open(some.connectionUrl)
-                return some.connectionUrl;
+                return 
             }
         });       
     } 
