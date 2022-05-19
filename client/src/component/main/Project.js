@@ -148,6 +148,7 @@ export default function Project() {
                         image={project.imageUrl}
                         altText={project.altText}
                         description={project.description}
+                        projectUrl={project.projectUrl}
                     />)
                 })}  
             </div>

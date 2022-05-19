@@ -11,10 +11,16 @@ export default function ProjectCard(props) {
     }
     */
 
+    function handleClick() {
+        console.log("klikket!!!!")
+        if(props.projectUrl !== "" || props.projectUrl !== null)
+            window.open(props.projectUrl)
+    }
+
     return (
 
-        <Card className="project_card bg-dark text-white" style={{ width: '18rem' }} >            
-            <Card.Img id={props.id} src={props.image} alt={props.altText} className="card_img " />            
+        <Card className="project_card bg-dark text-white" style={{ width: '18rem', cursor: "pointer" }} onClick={handleClick}>            
+            <Card.Img id={props.id} src={props.image} alt={props.altText} className="card_img "  />            
             <Card.ImgOverlay>
                 <Card.Title>{props.title}</Card.Title>
                 <Card.Text className="card_description">

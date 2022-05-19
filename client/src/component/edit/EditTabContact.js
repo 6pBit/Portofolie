@@ -16,7 +16,7 @@ export default function EditTabContact(props) {
     const [currentOperation, setCurrentOperation] = React.useState({operation: ""})
     const [currentMedia, setCurrentMedia] = React.useState({name: ""})
     const [supportedSome, setSupportedSome] = React.useState([
-        "facebook", "snapchat", "instagram", "twitter", "linkedin", "tiktok", "wechat"
+        "facebook", "snapchat", "instagram", "twitter", "linkedin", "tiktok", "wechat", "github"
     ])
     const [chosenSome, setChosenSome] = React.useState("")
     const [formData, setFormData] = React.useState({
