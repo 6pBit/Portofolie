@@ -13,7 +13,7 @@ export default function ProjectCard(props) {
 
     function handleClick() {
         console.log("klikket!!!!")
-        if(props.projectUrl !== "" || props.projectUrl !== null)
+        if(props.projectUrl !== "" && props.projectUrl !== null)
             window.open(props.projectUrl)
     }
 

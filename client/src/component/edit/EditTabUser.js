@@ -1,7 +1,6 @@
 import React from "react"
 import { validate } from "react-email-validator"
 import {Container, FormGroup, Form, Button, Col, Row, Modal, Alert} from "react-bootstrap"
-//import {Alert} from "bootstrap"
 
 export default function EditTab(props) {
 
@@ -122,10 +121,12 @@ export default function EditTab(props) {
       )
     }
     fetch(`/${collection}/editUser/${dbFilter}`, requestForDatabase )
-      .then( response => {
+      .then(response => response.json())
+      .then(data => {
         //console.log("fetch resultat etter post fra EditTabUser.js " + response.json())
-        //setCurrentData(JSON.stringify(response.json()))
-    })
+        //setCurrentData(JSON.stringify(response.json()))response.json().data.stringify()
+        handleAlert("Dette gikk bra!")
+      })
   }
 
   function setData() {
@@ -172,11 +173,14 @@ export default function EditTab(props) {
   }, [requestUpdate])
 
   function handleAlert(content) {
+    console.log("heiiiiiii")
     setAlertContent(content)
-    setShowAlert(!showAlert)
+    setShowAlert(true)
     setTimeout(() => {
-      setShowAlert(!showAlert)
       setAlertContent("")
+      setShowAlert(false)
+      //setRequestReload(!requestReload)
+      
     }, 3000)
   }
 
@@ -184,14 +188,18 @@ export default function EditTab(props) {
 
       <Container>
 
-        <Modal>
-
-        </Modal>
-
-        <Alert show={showAlert} variant="success" dismissable>
-          {alertContent}
-        </Alert>
-
+        {showAlert &&
+          <Modal 
+          show={showAlert}
+          backdrop="static"
+          keyboard={false}>
+            <Modal.Header>Tilbakemelding</Modal.Header>
+            <Modal.Body>
+              <p className="mb-0">{alertContent}</p>
+              <hr/>
+            </Modal.Body>
+          </Modal>
+        }
           <div className="current_info">
               <article>
                   <img id="userImage"

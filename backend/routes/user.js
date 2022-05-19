@@ -35,6 +35,7 @@ router.post("/editUser/:id", (req, res) => {
     .updateOne(myQuery, newObj, function(err, result) {
       if(err) throw err;
       console.log(JSON.stringify(result))
+      res.json(result)
     })
 })
 

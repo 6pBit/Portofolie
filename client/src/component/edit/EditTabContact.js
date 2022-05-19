@@ -34,6 +34,9 @@ export default function EditTabContact(props) {
     const [wishToDelete, setWishToDelete] = React.useState(false)
     const [activateEdit, setActivateEdit] = React.useState(false)
 
+    const [showAlert, setShowAlert] = React.useState(false)
+    const [alertContent, setAlertContent] = React.useState("")
+
     React.useEffect(() => {
         updateList()
     }, [refresh])
@@ -261,6 +264,18 @@ export default function EditTabContact(props) {
         setShowPopup(!showPopup)
     }
 
+    function handleAlert(content) {
+        console.log("heiiiiiii")
+        setAlertContent(content)
+        setShowAlert(true)
+        setTimeout(() => {
+          setAlertContent("")
+          setShowAlert(false)
+          //setRequestReload(!requestReload)
+          
+        }, 3000)
+      }
+
 
     return (
         <Container>
@@ -276,7 +291,7 @@ export default function EditTabContact(props) {
                         <Modal.Title>Sletting</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <h2>Du er iferd med å slette følgende prosjekter:</h2>
+                        <h2>Du er iferd med å slette følgende medier:</h2>
                         {deleteArray.map(project => {
                             <p>{project.title}</p>
                         })}
@@ -287,6 +302,19 @@ export default function EditTabContact(props) {
                     </Modal.Footer>
                 </Modal>
             }
+
+        {showAlert &&
+            <Modal 
+            show={showAlert}
+            backdrop="static"
+            keyboard={false}>
+            <Modal.Header>Tilbakemelding</Modal.Header>
+            <Modal.Body>
+            <p className="mb-0">{alertContent}</p>
+            <hr/>
+            </Modal.Body>
+            </Modal>
+        }
 
             <div class="options d-flex justify-content-end">
 

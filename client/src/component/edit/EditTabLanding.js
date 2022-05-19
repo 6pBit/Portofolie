@@ -1,12 +1,14 @@
 import React from "react"
-import { Form } from "react-bootstrap"
-import { Container, Col, Button} from "react-bootstrap"
+import { Container, Col, Button, Modal, Form} from "react-bootstrap"
 
 export default function EditTabLanding(props) {
 
     const collection = "sites"
     const dbFilter = "landing"
     const isMounted = React.useRef(false)
+    const [showAlert, setShowAlert] = React.useState(false)
+    const [alertContent, setAlertContent] = React.useState("")
+    const [refresh, setRefresh] = React.useState(false);
  
     const [siteData, setSiteData] = React.useState({
         title: "",
@@ -15,7 +17,16 @@ export default function EditTabLanding(props) {
     const [formData, setFormData] = React.useState({
         title: "",
         introductionTxt: ""
-    }) 
+    })
+    
+    function handleAlert(content) {
+        console.log("heiiiiiii")
+        setAlertContent(content)
+        setShowAlert(true)
+        setTimeout(() => {
+          setAlertContent("")
+          setShowAlert(false)
+    }, 3000)}
 
     function handleChange(event) {
         console.log(event.target.value)
@@ -33,6 +44,7 @@ export default function EditTabLanding(props) {
         setSiteData( {
          ...formData
         })
+        setRefresh(!refresh)
     }
 
     React.useEffect(() => {
@@ -63,17 +75,31 @@ export default function EditTabLanding(props) {
               .then( response => {
                 //console.log("fetch resultat etter post fra Editlanding.js " + response.json())
                 //setCurrentData(JSON.stringify(response.json()))
+                handleAlert("Dette gikk bra gitt")
             })
           } else {
             isMounted.current = true
           }
-    }, [siteData])
+    }, [refresh])
 
 
 
 
     return(
         <Container>
+
+            {showAlert &&
+                <Modal 
+                    show={showAlert}
+                    backdrop="static"
+                    keyboard={false}>
+                    <Modal.Header>Tilbakemelding</Modal.Header>
+                    <Modal.Body>
+                    <p className="mb-0">{alertContent}</p>
+                    <hr/>
+                    </Modal.Body>
+                </Modal>
+            }
             
             <Form>
                 <Form.Group as={Col} controlId="formGroupTitle">
@@ -92,35 +118,3 @@ export default function EditTabLanding(props) {
     )
 
 }
-
-/*
-
-<form>
-                <input 
-                    type="text" 
-                    placeholder="Title"
-                    onChange={handleChange} //må endres
-                    name="title"
-                    value={siteData.title}
-                />
-                <input
-                    type="text"
-                    placeholder="Inctroduction Text"
-                    onChange={props.handleChange}
-                    name="introductionTxt"
-                    value={props.siteData.introductionTxt}
-                />
-                <input
-                    type="file"
-                    onChange={props.handleChange}
-                    name="fileUpload"
-                />
-                <input
-                    type="button"
-                    onClick={props.handleSubmit}
-
-                />
-            </form>
-
-
-*/
