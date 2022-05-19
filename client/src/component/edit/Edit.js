@@ -220,6 +220,9 @@ export default function Edit(props) {
         console.log(e);
       }
     };
+    React.useEffect(() => {
+      localStorage.removeItem('sidebar-open')
+    })
     return (
         <Container className="editContainer">
           <header>

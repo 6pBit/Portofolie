@@ -11,7 +11,7 @@ import { Button } from 'react-bootstrap'
 export default function Footer(props) {
     //localStorage.removeItem('login-open')
     const loginOpen = localStorage.getItem('login-open')
-    const [isLoginVisible, setIsLoginVisible] = React.useState(false)
+    const [isLoginVisible, setIsLoginVisible] = React.useState(loginOpen)
     
     const [username, setUsername] = React.useState();
     const [password, setPassword] = React.useState();
@@ -26,6 +26,7 @@ export default function Footer(props) {
             }
         } catch (e) {
             console.log("Axios get feil "+e);
+            alert("Feil brukernavn/passord")
         }
     };
     const readCookie = async () => {
@@ -36,7 +37,7 @@ export default function Footer(props) {
                 props.setScreen(res.data.screen);
             }
         } catch (e) {
-            props.setScreen('auth');
+            
             console.log(e);
         }
     };
@@ -70,6 +71,7 @@ export default function Footer(props) {
                                             type="button" 
                                             onClick={() => {
                                                 setIsLoginVisible(false)
+                                                
                                                 auth()
                                             }}
                                         >Login</Button>
@@ -80,7 +82,7 @@ export default function Footer(props) {
                             :<BsGearFill 
                                 onClick={() => {
                                     setIsLoginVisible(true)
-                                    localStorage.setItem('login-open', true)
+                                    
                                     }
                                 }
                             />

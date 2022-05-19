@@ -12,8 +12,12 @@ function App() {
   //localStorage.removeItem('sidebar-open')
   const [screen, setScreen] = React.useState('auth'); 
   const sidebarOpen = localStorage.getItem('sidebar-open')
-  const [isSidebarVisible, setIsSidebarVisible] = React.useState(false)
-
+  const [isSidebarVisible, setIsSidebarVisible] = React.useState(
+    localStorage.getItem('sidebar-open') === 'true'
+  )
+  React.useEffect(() => {
+    localStorage.setItem('sidebar-open', isSidebarVisible)
+  },[isSidebarVisible])
   
 
   return (
@@ -31,7 +35,7 @@ function App() {
         <div className="underNavbar">
           <Sidebar screen={screen} setScreen={setScreen} sidebarVisible={isSidebarVisible} setSidebarVisible={setIsSidebarVisible} />
           <Routes>          
-            <Route index element={<Main sidebarVisible={isSidebarVisible} setSidebarVisible={setIsSidebarVisible} />} />                
+            <Route index element={<Main isSidebarVisible={isSidebarVisible} setIsSidebarVisible={setIsSidebarVisible} />} />                
             <Route path="/admin" element={screen === 'auth'?<Main />:<Edit screen={screen} setScreen={setScreen}/>} />
           </Routes>     
         </div>
