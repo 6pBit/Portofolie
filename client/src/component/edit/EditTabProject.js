@@ -24,12 +24,14 @@ export default function EditTabProject(props) {
     const [formData, setFormData] = React.useState({
         title: "",
         description: "",
+        projectUrl: "",
         altText: "",
         imageUrl: ""
     })
     const [siteData, setSiteData] = React.useState({
         title: "",
         description: "",
+        projectUrl: "",
         altText: "",
         imageUrl: ""
     })
@@ -66,6 +68,7 @@ export default function EditTabProject(props) {
                 setSiteData( {
                     title: data.title,
                     description: data.description,
+                    projectUrl: data.projectUrl,
                     altText: data.altText,
                     imageUrl: data.imageUrl
                 }),
@@ -73,6 +76,7 @@ export default function EditTabProject(props) {
                 setFormData({
                     title: data.title,
                     description: data.description,
+                    projectUrl: data.projectUrl,
                     altText: data.altText,
                     imageUrl: data.imageUrl
                 }) 
@@ -378,6 +382,7 @@ export default function EditTabProject(props) {
             setFormData({
                 title: "",
                 description: "",
+                projectUrl: "",
                 altText: "",
                 imageUrl: ""
             })
@@ -387,6 +392,7 @@ export default function EditTabProject(props) {
             setSiteData({
                 title: "",
                 description: "",
+                projectUrl: "",
                 altText: "",
                 imageUrl: ""
             })
@@ -504,6 +510,7 @@ export default function EditTabProject(props) {
                                 image={siteData.imageUrl}
                                 altText={siteData.altText}
                                 description={siteData.description}
+                                projectUrl={siteData.projectUrl}
                             />
                         </Row>
                     </Col>
@@ -532,8 +539,12 @@ export default function EditTabProject(props) {
                                 <Form.Label column sm={2}>Beskrivelse</Form.Label>
                                 <Form.Control as="textarea" rows={3} type="text" value={formData.description} name="description" onChange={handleChange} placeholder="Beskrivelse av prosjektet" disabled={currentOperation.operation === "view"}/>
                             </Form.Group>
+                            <Form.Group as={Col} controlId="formGroupTitle"> 
+                                <Form.Label row sm={2}>Lenke til eksternt prosjekt</Form.Label>
+                                <Form.Control type="text" value={formData.projectUrl} name="projectUrl" onChange={handleChange} placeholder="Lenke til eksternt prosjekt" disabled={currentOperation.operation === "view"}/>
+                            </Form.Group>
                             <Form.Group as={Col} controlId="formGroupTitle">
-                                <Form.Label column sm={2}>Alternativ tekst for bilde</Form.Label>
+                                <Form.Label row sm={2}>Alternativ tekst for bilde</Form.Label>
                                 <Form.Control type="text" value={formData.altText} name="altText" onChange={handleChange} placeholder="Alternativ tekst for bilde" disabled={currentOperation.operation === "view"}/>
                             </Form.Group>
                             <FormGroup as={Col} controlId="formGroupTitle">
