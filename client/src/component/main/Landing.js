@@ -7,15 +7,21 @@ export default function Landing() {
         fetch('/sites/landing')
         .then(response => response.json())
         .then(data => {
-            setLandingContent(data)
+            setLandingContent(data )
         })
+        console.log(landingContent)
+        return () => () => console.log("callback "+landingContent)
     },[])
     
 
     return (
         <section className="landingContainer" id='landing'>
-            <h1 >{landingContent.title || "Velkommen"}</h1>
-            <p >{landingContent.introductionTxt || "En introduksjonstekst"}</p>
+            <div className="animatedContainer" >
+                <h1 >{landingContent.title || "Velkommen"}</h1>
+                <div className="introductionTxtContainer">
+                    <p >{landingContent.introductionTxt || "En introduksjonstekst"}</p>
+                </div>
+            </div>
         </section>
     )
 }
