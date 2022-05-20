@@ -2,6 +2,10 @@ import React from 'react'
 import ProjectCard from "./ProjectCard"
 import './css/Project.css'
 
+/**
+ * Puts together projectcards. Has a list of dummy info as backup
+ * @returns Project Component
+ */
 export default function Project() {
     
     const [projectSiteContent, setProjectSiteContent] = React.useState({})
@@ -61,63 +65,7 @@ export default function Project() {
             image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
             altText: "sommerfugl",
             description: "Kort beskrivelse av prosjektet"
-        },
-        {
-            id:"987654321",
-            title: "Prosjekt tittel",
-            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
-            altText: "sommerfugl",
-            description: "Kort beskrivelse av prosjektet"
-        },
-        {
-            id:"987654321",
-            title: "Prosjekt tittel",
-            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
-            altText: "sommerfugl",
-            description: "Kort beskrivelse av prosjektet"
-        },
-        {
-            id:"987654321",
-            title: "Prosjekt tittel",
-            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
-            altText: "sommerfugl",
-            description: "Kort beskrivelse av prosjektet"
-        },
-        {
-            id:"987654321",
-            title: "Prosjekt tittel",
-            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
-            altText: "sommerfugl",
-            description: "Kort beskrivelse av prosjektet"
-        },
-        {
-            id:"987654321",
-            title: "Prosjekt tittel",
-            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
-            altText: "sommerfugl",
-            description: "Kort beskrivelse av prosjektet"
-        },
-        {
-            id:"987654321",
-            title: "Prosjekt tittel",
-            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
-            altText: "sommerfugl",
-            description: "Kort beskrivelse av prosjektet"
-        },
-        {
-            id:"987654321",
-            title: "Prosjekt tittel",
-            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
-            altText: "sommerfugl",
-            description: "Kort beskrivelse av prosjektet"
-        },
-        {
-            id:"987654321",
-            title: "Prosjekt tittel",
-            image: "https://www.gardeningknowhow.com/wp-content/uploads/2020/02/butterfly-400x300.jpg",
-            altText: "sommerfugl",
-            description: "Kort beskrivelse av prosjektet"
-        },
+        }
     ])
 
     React.useEffect(() => {
@@ -133,7 +81,6 @@ export default function Project() {
         .then(data => {
             setProjectsArrContent(data)
         })
-        //console.log("Prosjecter på frontend "+JSON.stringify(projectsArrContent))
     },[])
 
     return (
@@ -141,13 +88,13 @@ export default function Project() {
             <h1>{projectSiteContent.title || "Mine Prosjekter"}</h1>
             <div className="projectCardContainer" >
                 {projectsArrContent.map(project => {
-                    //console.log("Prosjecter på frontend inne i map"+JSON.stringify(projectsArrContent))
                     return(<ProjectCard 
                         id={project.id}            
                         title={project.title}
                         image={project.imageUrl}
                         altText={project.altText}
                         description={project.description}
+                        projectUrl={project.projectUrl}
                     />)
                 })}  
             </div>

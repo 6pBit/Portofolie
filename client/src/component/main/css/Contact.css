@@ -1,10 +1,9 @@
 .contactContainer {
-    background-color: #173e43;
+    background-color: hsl(187, 49%, 18%);
     color: white;
-    min-height: 100%;
     display: flex;
     flex-direction: column;
-    flex: 1 1 100vh;
+    flex: 1 0 100vh;
     align-items: center;
     padding: 50px 30px 0 30px;
     
@@ -12,4 +11,44 @@
 .emailContainer {
     max-width:1000px;
     width: 100%
+}
+.form-group {
+    margin-top: 15px;
+}
+.form-control {
+    border-radius: 0 !important;
+    box-shadow: 5px 10px hsl(187 25% 15% );
+}
+.submitBtn {
+    margin-top: 20px;
+    border-radius: 0;
+    background-color: darkslategray;
+    padding: 10px 20px;
+    color: white;
+    box-shadow: 5px 10px hsl(187 25% 15% );
+}
+.submitBtn:hover {
+    background-color: hsl(180, 25%, 35%);
+}
+.contactInfoContainer {
+    margin-top: 50px;
+    padding-top: 50px;
+    border-top: 2px solid hsl(187 25% 15% );
+}
+.contactInfoContainer > p {
+    font-size: 1.3em !important;
+}
+.someIconContainer {
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+.someIcons {
+    margin: 0px 20px 30px 20px;
+    height: 1.5em;
+    width: 1.5em;  
+}
+.someIcons:hover {
+    color:hsl(180, 25%, 35%);
+    cursor:pointer ;
 }

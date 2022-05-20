@@ -19,6 +19,11 @@
 .card-text {
     font-size: 2px;
 }
+.card-title {
+    background: hsl(0 0% 0% / 0.60);
+    padding: 5px ;
+    border: 1px solid white;
+}
 .card_img {
     transition: all 1s ease;
     -webkit-filter: blur(0px); /* Chrome, Safari, Opera */
@@ -30,8 +35,9 @@
 
 .card:hover > *:not(.card-img-overlay) {
     transition: all 0.5s ease;
-    -webkit-filter: blur(5px); /* Chrome, Safari, Opera */
-    filter: blur(5px);
+    -webkit-filter: blur(0.8em); /* Chrome, Safari, Opera */
+    filter: blur(0.8em);
+    background-color: hsl(0 0% 0% / 0.60) !important;
 }
 
 

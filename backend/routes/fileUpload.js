@@ -1,23 +1,20 @@
-const { response } = require('express');
-const express = require('express');
-const { route } = require('express/lib/application');
-const dbo = require("../db/index.js");
+const express = require('express')
 const router = express.Router()
 const multer = require('multer')
 const multerS3 = require('multer-s3')
 const aws = require('aws-sdk')
 const { v4: uuidv4 } = require('uuid')
 const fs = require('fs')
-const path = require('path');
-const { CloseButton } = require('react-bootstrap');
-const filepath = path.join(__dirname, '..', '..', 'public', 'images', '/')
 let fileHelper = ""
-aws.config.region = 'us-east-1'
+aws.config.region = 'us-east-1' // settes i heroku config variabel
 
 const dir_name = './public'
 // Kilde: https://morioh.com/p/5c99be0fb5aa
 
 //Fungerer både for bilder og andre filer.
+/**
+ * Storage spesifications based on multerS3 for storage to aws S3 database
+ */
 const storageForAwsS3 = multerS3({
     s3: s3 = new aws.S3(), 
     bucket: process.env.S3_BUCKET_NAME,
@@ -31,13 +28,22 @@ const storageForAwsS3 = multerS3({
     }
 })
 
-//veldig fix løsning https://stackoverflow.com/questions/10183291/how-to-get-the-full-url-in-express
+//solution https://stackoverflow.com/questions/10183291/how-to-get-the-full-url-in-express
+/**
+ * Sets and returns filename so it can be sent back to the client for storage in mongodb
+ * @param {*} filename 
+ * @returns filename
+ */
 function helper(filename) {
     let fixedFilename = uuidv4()+ '-' + filename.toLocaleLowerCase().split(' ').join('-')
     fileHelper = fixedFilename
     return  fixedFilename
 }
 
+/**
+ * Specifies storage to be used and a file filter for images
+ * Based on multer
+ */
 const uploadImageS3 = multer({
     storage: storageForAwsS3,
     fileFilter: (req, file, cb) => {
@@ -50,6 +56,10 @@ const uploadImageS3 = multer({
     }
 })
 
+/**
+ * Specifies storage to be used and a file filter for files
+ * Based on multer
+ */
 const uploadFileS3 = multer({
     storage: storageForAwsS3,
     fileFilter: (req, file, cb) => {
@@ -62,20 +72,22 @@ const uploadFileS3 = multer({
     }
 })
 
+/**
+ * Uploads an image to aws s3 database
+ */
 router.post("/image", uploadImageS3.single('image'), (req, res) => {
     
     const returnData = {
         url: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${req.file}`
     };
 
-    /* kan fungere ved heroku host
-    const returnData = {
-        url: req.protocol + '://' + req.get('host') + req.file.filename
-    }
-    */
-    res.json({imageUrl: req.protocol + '://' + process.env.S3_BUCKET_NAME + '.s3.amazonaws.com/' + fileHelper})
+    res.json({imageUrl: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${fileHelper}`})
 })
 
+/**
+ * Delets spesified objects from the aws s3 database
+ * by using the aws.sdk
+ */
 router.post("/delete/fromAws", (req, res) => {
     let s3 = new aws.S3({
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -88,7 +100,6 @@ router.post("/delete/fromAws", (req, res) => {
             if(temp !== "") {
                 s3.deleteObject({Bucket: process.env.S3_BUCKET_NAME, Key: temp}, (err, data) => {
                     if(err) throw err
-                    console.log(data + " slettet")
                 })
                 
             }
@@ -96,99 +107,15 @@ router.post("/delete/fromAws", (req, res) => {
     })
 })
 
-
+/**
+ * Uploads a file to aws s3 database
+ */
 router.post("/file", uploadFileS3.single('file'), (req, res) => {
-    //evt ekstra retur data
     const returnData = {
         url: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${req.file}`
     };
 
-    res.json({fileUrl: req.protocol + '://' + process.env.S3_BUCKET_NAME + '.s3.amazonaws.com/' + fileHelper})
+    res.json({fileUrl: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${fileHelper}`})
 })
 
 module.exports = router
-
-//Gammel kode for lokal lagring.
-
-/*
-const storageImage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, dir_name + '/images')
-    },
-    filename: (req, file, cb) => {
-        const fileName = file.originalname.toLocaleLowerCase().split(' ').join('-')
-        cb(null, uuidv4() + '-' + 'image-' + fileName)
-    }
-})
-
-const storageFile = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, dir_name + "/files")
-    },
-    filename: (req, file, cb) => {
-        const fileName = file.originalname.toLocaleLowerCase().split(' ').join('-')
-        cb(null, uuidv4() + '-' + "file-" + fileName)
-    }
-})
-
-
-const uploadImage = multer({
-    storage: storageImage,
-    fileFilter: (req, file, cb) => {
-        if(file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" || file.mimetype == "image/png") {
-            cb(null, true)
-        } else {
-            cb(null, false) 
-            return cb(new Error("Vennligst benytt en av følgende filetyper: PNG, JPG, JPEG"))
-        }
-    }
-})
-
-*/
-/*
-router.post("/delete/images", (req, res) => {
-    //må finne lengden på body.filePaths
-    console.log(req.body.filePaths + " filepaths fra body i delete/images")
-    req.body.filePaths.forEach(element => {
-        if(element !== "") { //fiks?
-            console.log(element.toString().split('images/').pop())
-            let temp = element.toString().split('images/').pop()
-            if(temp !== "") {
-                fs.unlinkSync(`${filepath}${temp}`, (err) => { //fjernet /public/images/ før temp
-                    if(err) console.log("Fant ikke filen") // får eror her, men trenger ikke håndtere den kanskje? heheheheh
-                    console.log("Slettet: " + temp)
-                })
-            }
-        }
-    })
-    //fs.unlinkSync(req.body.filepath)
-    //res.json("Sletting vellykket!")
-    console.log("Nå slettet jeg bilder lokalt")
-})
-*/
-
-/*
-router.post("/file", uploadFile.single('file'), (req, res) => {
-    const file_url = req.protocol + '://' + req.get('host')
-    const fileToUpload = {
-        fileurl: file_url + '/public/files/' + req.file.filename
-    }
-    console.log(fileToUpload.fileurl + " dette sendes som filepath for pdf filen")
-    res.json({file: file_url + '/public/files/' + req.file.filename})
-})
-*/
-
-/*
-router.post("/image", uploadImage.single('image'), (req, res) => {
-    //console.log(req.baseUrl + " fileUpload route image")
-    const image_url = req.protocol + '://' + req.get('host')
-    const imageToUpload = {
-       imageurl: image_url + '/public/images/' + req.file.filename
-    }
-
-    console.log(image_url + " kun url fra route")
-    console.log(imageToUpload.imageurl + " imageurl inne i imagetoupload i route")
-
-    res.json({imageUrl: image_url + '/public/images/' + req.file.filename})
-})
-*/

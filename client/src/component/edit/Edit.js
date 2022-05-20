@@ -220,6 +220,9 @@ export default function Edit(props) {
         console.log(e);
       }
     };
+    React.useEffect(() => {
+      props.setIsSidebarVisible(false)
+    },[])
     return (
         <Container className="editContainer">
           <header>

@@ -5,15 +5,20 @@ import Nav from './Nav'
 import Footer from './Footer'
 import './Sidebar.css'
 
+/**
+ * Puts together the Sidebar and figures out whether it should stay visible or collapse
+ * Refrence: https://juchazari.medium.com/persisting-a-sidebars-expanded-collapsed-state-with-react-and-local-storage-69e9d6feb52b
+ * @param {*} props 
+ * @returns Sidebar Component
+ */
+
 export default function Sidebar(props) {
 
     const location = useLocation() 
-    const [sidebarClassname, setSidebarClassname] = React.useState("Sidebar")
-    
+    const [sidebarClassname, setSidebarClassname] = React.useState("Sidebar")    
 
-    React.useEffect(() => {        
-            console.log(`You changed the page to: ${location.pathname} and changed sidebarVisible ${props.sidebarVisible}`)  
-            setSidebarClassname(() => {                
+    React.useEffect(() => { 
+            setSidebarClassname(() => {  // uses screen size, sucsesful login and routing to figure out whether it should stay open or not              
                 let sidebarClass = ((window.innerWidth > 600 ? location.pathname === '/admin' && props.screen !== 'auth' : !props.sidebarVisible)
                     ? "sidebar collapsed"
                     : "sidebar"
@@ -24,8 +29,7 @@ export default function Sidebar(props) {
                     } else {
                         document.getElementById('Sidebar').style.transform = 'translateY(-100%)'
                     }
-                }
-                console.log(`setSidebarClassname: ${sidebarClassname} ${sidebarClass} `)  
+                } 
                 return sidebarClass
             })
     },[location,props.sidebarVisible])
@@ -35,7 +39,7 @@ export default function Sidebar(props) {
             <div className="sidebar-fixed-wrapper">
                 <Header />
                 <Nav sidebarVisible={props.sidebarVisible} setSidebarVisible={props.setSidebarVisible} />
-                <Footer screen={props.screen} setScreen={props.setScreen}/>
+                <Footer screen={props.screen} setScreen={props.setScreen} />
             </div>
         </div>
     )

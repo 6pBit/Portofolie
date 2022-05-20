@@ -1,27 +1,40 @@
 import React from "react"
-import { Container } from "react-bootstrap"
+import { Container, Col, Button, Modal, Form} from "react-bootstrap"
 
-export default function EditTabLanding(props) {
+/**
+ * @returns Container with content for EditTabLanding
+ */
+
+export default function EditTabLanding() {
 
     const collection = "sites"
     const dbFilter = "landing"
     const isMounted = React.useRef(false)
- 
+    const [showAlert, setShowAlert] = React.useState(false)
+    const [alertContent, setAlertContent] = React.useState("")
+    const [refresh, setRefresh] = React.useState(false)
+    const [activateEdit, setActivateEdit] = React.useState(false)
     const [siteData, setSiteData] = React.useState({
         title: "",
         introductionTxt: ""
     })
-    const [oldSiteData, setOldSiteData] = React.useState({
+    const [formData, setFormData] = React.useState({
         title: "",
         introductionTxt: ""
-    }) 
+    })
+    
+    function handleAlert(content) {
+        setAlertContent(content)
+        setShowAlert(true)
+        setTimeout(() => {
+          setAlertContent("")
+          setShowAlert(false)
+    }, 3000)}
 
     function handleChange(event) {
-        console.log(event.target.value)
-  
-        setSiteData(prevSiteData => {
+        setFormData(prevFormData => {
           return {
-            ...prevSiteData,
+            ...prevFormData,
             [event.target.name]: event.target.value
           }
         })
@@ -29,16 +42,22 @@ export default function EditTabLanding(props) {
 
     function handleSubmit(event){
         event.preventDefault();
-        setOldSiteData( {
-         ...siteData
+        setSiteData( {
+         ...formData
         })
+        setRefresh(!refresh)
+        setActivateEdit(!activateEdit)
+    }
+
+    function handleClick() {
+        setActivateEdit(!activateEdit)
     }
 
     React.useEffect(() => {
         fetch("/sites/landing")
         .then(response => response.json())
         .then(data => (
-            setOldSiteData( {
+            setFormData( {
                 title: data.title,
                 introductionTxt: data.introductionTxt
             }),
@@ -55,87 +74,56 @@ export default function EditTabLanding(props) {
               method: 'POST',
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify(
-                oldSiteData
+                siteData
               )
             }
             fetch(`/${collection}/${dbFilter}`, requestForDatabase )
               .then( response => {
-                //console.log("fetch resultat etter post fra Editlanding.js " + response.json())
-                //setCurrentData(JSON.stringify(response.json()))
+                handleAlert("Oppdateringen var vellykket!")
             })
           } else {
             isMounted.current = true
           }
-    }, [oldSiteData])
-
-
-
+    }, [refresh])
 
     return(
         <Container>
-            
-            <div className="current_info">
-                <article>
-                    <p>Current Title: {oldSiteData.title}</p>
-                    <p>Current Introduciton Text: {oldSiteData.introductionTxt}</p>
-                </article>
+
+            {showAlert &&
+                <Modal 
+                    show={showAlert}
+                    backdrop="static"
+                    keyboard={false}>
+                    <Modal.Header>Tilbakemelding</Modal.Header>
+                    <Modal.Body>
+                    <p className="mb-0">{alertContent}</p>
+                    <hr/>
+                    </Modal.Body>
+                </Modal>
+            }
+
+            <div class="d-flex justify-content-end">
+                <Button
+                    key="69" 
+                    variant="primary" 
+                    name="edit"
+                    onClick={handleClick}
+                >Activate Editing</Button>
             </div>
+            
+            <Form className="mb-3">
+                <Form.Group as={Col} controlId="formGroupTitle">
+                    <Form.Label>Overskrift</Form.Label>
+                    <Form.Control type="text" name="title" placeholder="Denne teksten vises på toppen av siden" value={formData.title} onChange={handleChange} disabled={!activateEdit}></Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGroupTitle">
+                    <Form.Label>Introduksjonstekst</Form.Label>
+                    <Form.Control as="textarea" rows={8} type="text" name="introductionTxt" placeholder="Introduksjonstekst for siden" value={formData.introductionTxt} onChange={handleChange} disabled={!activateEdit}></Form.Control>
+                </Form.Group>
+            </Form>
 
-            <input 
-                type="text"
-                placeholder="Title for Landing"
-                name="title"
-                onChange={handleChange}
-                value={siteData.title}
-            />
-            <input 
-                type="textarea"
-                placeholder="Introduction Text"
-                name="introductionTxt"
-                onChange={handleChange}
-                value={siteData.introductionTxt}
-            />
-
-            <input
-                type="button"
-                name="siteSubmit"
-                value="Submit Changes"
-                onClick={handleSubmit}
-            />
+            {activateEdit && <div class="d-flex justify-content-end"><Button onClick={handleSubmit}>Edit</Button> </div>}
             
         </Container>
     )
-
 }
-
-/*
-
-<form>
-                <input 
-                    type="text" 
-                    placeholder="Title"
-                    onChange={handleChange} //må endres
-                    name="title"
-                    value={siteData.title}
-                />
-                <input
-                    type="text"
-                    placeholder="Inctroduction Text"
-                    onChange={props.handleChange}
-                    name="introductionTxt"
-                    value={props.siteData.introductionTxt}
-                />
-                <input
-                    type="file"
-                    onChange={props.handleChange}
-                    name="fileUpload"
-                />
-                <input
-                    type="button"
-                    onClick={props.handleSubmit}
-
-                />
-            </form>
-
-
-*/
