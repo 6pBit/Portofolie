@@ -1,12 +1,15 @@
 import React from "react"
 import {Container, Button, Modal, DropdownButton, Dropdown, ButtonGroup, Col, Row} from "react-bootstrap"
-import Bootstrap from "bootstrap"
 import { Form } from "react-bootstrap"
 import {languages} from "../../strings/stringsEditTabContact.js"
 import {IoLogoFacebook, IoLogoInstagram, IoLogoSnapchat, IoLogoTwitter, IoLogoLinkedin, IoLogoWechat} from "react-icons/io"
 import {SiWechat} from "react-icons/si"
 
-export default function EditTabContact(props) {
+/**
+ * 
+ * @returns Container with content for EditTabContact
+ */
+export default function EditTabContact() {
 
     let keyForItems = 0
     const isMounted = React.useRef(false)
@@ -55,6 +58,7 @@ export default function EditTabContact(props) {
         }
     }, [wishToDelete])
 
+
     function handleGetSpesificSome() {
         fetch(`/user/spesificSome/${currentMedia.name}`)
         .then(response => response.json())
@@ -71,23 +75,21 @@ export default function EditTabContact(props) {
         ))
     }
 
-    //Oppdaterer state som holder på alle prosjekter fra databasen.
+    /**
+     * Updates the lists which holds all some from the database
+     */
     function updateList() {
         fetch("/user/someLinks")
         .then(response => response.json())
         .then(data => (
-            setTableContent(data),
-            test(data)
-        ))
-        console.log(languages.norwegian.descTableContent + " tekst fra fila")
-    }
-
-    function test(data) {
-        data.map(media => (
-            console.log(media.someName + " her skal det være somenavn")
+            setTableContent(data)
         ))
     }
 
+    /**
+     * Handles updating for insert some links to the database
+     * based on currentOpreation state.
+     */
     function handleUpdateorInsert() {
         let requestForDatabase = {
             method: 'POST',
@@ -97,15 +99,14 @@ export default function EditTabContact(props) {
 
         fetch(`/user/${currentOperation.operation === "insert" ? "insertSome" : "update/" + currentMedia.name}`, requestForDatabase )
               .then( response => {
-                console.log("fetch resultat etter post fra Editproject.js " + response.json())
                 if(currentOperation.operation === "insert") {
                     clean("formData")
                     clean("siteData")
                     clean("currentMedia")
                 }
-                //updateList()
                 clean("currentOperation")
                 setRefresh(!refresh)
+                handleAlert("Vellykket innsetting!")
           })
     }
 
@@ -118,7 +119,7 @@ export default function EditTabContact(props) {
             handleUpdateorInsert()
             clean("chosenSome")
             clean("currentOperation")
-            setActivateEdit(!activateEdit)
+            //setActivateEdit(!activateEdit)
         } 
     }
 
@@ -131,7 +132,10 @@ export default function EditTabContact(props) {
         })
     }
 
-    //helper funksjon som setter nåværende valgt prosjekt.
+    /**
+     * Helper function which handles currently chosen media
+     * @param {*} event 
+     */
     function helper(event) {
         setCurrentMedia({
             name: event.target.name
@@ -150,54 +154,53 @@ export default function EditTabContact(props) {
                 someName: event.target.name
             })
         })
-        console.log("Valgt sosialt media: " + chosenSome)
     }
 
+    /**
+     * Helper function that helps clean sitedata for insert,
+     * and setting the currentOpertion state.
+     * @param {*} event 
+     */
     function operationHelper(event) {
         if(event.target.name === "insert") {
            clean("siteData")
            clean("formData")
         }
         setCurrentOperation({operation: event.target.name})
-        setActivateEdit(!activateEdit)
+        if(!activateEdit)
+            setActivateEdit(!activateEdit)
     }
 
-    //Endrer state
     function showCheckboxes() {
-        //console.log("marker for sletting pressed")
         setStateShowCheckboxes(!stateShowCheckboxes)
     }
 
-    //Håndterer og setter igang sletting
+    /**
+     * Handles deletion
+     * @param {*} event 
+     */
     function handleDelete(event) {
         
         if(event.target.name === "modalDelete") {
-            //fiks løsning
             const all = document.querySelectorAll('input[type=checkbox]:checked')
             let tempList = []
-            for(let i=0; i<all.length; i++) {// kanskje legge til en forEach her istedenfor
+            for(let i=0; i<all.length; i++) {
                 tempList.push(all[i].value)
             }
             setDeleteArray(tempList)
-            //console.log("Her er alle titlene fra bokser som var valgt ved sletting")
-            
             setShowPopup(!showPopup)
-                
-            deleteArray.map(item => console.log("SomeNames fra deleteArray:" + item.someName))
-            console.log("Delete button pressed")
             setWishToDelete(!wishToDelete)
             setCurrentOperation({
                 operation: "delete"
             })
         }  else {
             setShowPopup(!showPopup)
-        }
-        
-        //bør renske currentProject men noe rart med den
-        //Om den ikke fjernes blir man spurt om man vil slette den samme på nytt               
-        //updateList()//overflødig?              
+        }              
     }
 
+    /**
+     * Function for deleting from mongodb database.
+     */
     function deleteFromDatabase() {
         let requestForDatabase = {
             method: 'POST',
@@ -207,19 +210,21 @@ export default function EditTabContact(props) {
         fetch("/user/deleteSeveral", requestForDatabase)
             .then(response => response.json())
             .then(data => {
-                //data.map(project => console.log(project.title + " ble slettet fra databasen"))
                 setDeleteArray([])
                 showCheckboxes()
-                //fra gammel delete
                 clean("formData")
                 clean("siteData")
                 clean("currentMedia")
                 updateList()
-
+                handleAlert("Slettingen var vellykket!")
+                setActivateEdit(!activateEdit)
             })
     }
 
-    //Hjelpefunksjon som rensker valgt state for innhold.
+    /**
+     * Helper function tha cleans state based on input.
+     * @param {*} dataToClean 
+     */
     function clean(dataToClean) {
         if(dataToClean === "formData") {
             setFormData({
@@ -246,6 +251,11 @@ export default function EditTabContact(props) {
         }
     }
 
+    /**
+     * Decides what logo to use based on the name of the social media.
+     * @param {*} name 
+     * @returns correct react-icon component
+     */
     function decideSomeLogo(name) {
         let logo = null
 
@@ -258,21 +268,17 @@ export default function EditTabContact(props) {
         return logo
     }
 
-    //Handler for lukking av Modal component
     function handleClose() {
         setDeleteArray([])
         setShowPopup(!showPopup)
     }
 
     function handleAlert(content) {
-        console.log("heiiiiiii")
         setAlertContent(content)
         setShowAlert(true)
         setTimeout(() => {
           setAlertContent("")
           setShowAlert(false)
-          //setRequestReload(!requestReload)
-          
         }, 3000)
       }
 
@@ -291,10 +297,7 @@ export default function EditTabContact(props) {
                         <Modal.Title>Sletting</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <h2>Du er iferd med å slette følgende medier:</h2>
-                        {deleteArray.map(project => {
-                            <p>{project.title}</p>
-                        })}
+                        <h2>Er du sikker på at du ønsker å slette valgte elementer?</h2>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>Lukk</Button>
@@ -305,14 +308,14 @@ export default function EditTabContact(props) {
 
         {showAlert &&
             <Modal 
-            show={showAlert}
-            backdrop="static"
-            keyboard={false}>
-            <Modal.Header>Tilbakemelding</Modal.Header>
-            <Modal.Body>
-            <p className="mb-0">{alertContent}</p>
-            <hr/>
-            </Modal.Body>
+                show={showAlert}
+                backdrop="static"
+                keyboard={false}>
+                <Modal.Header>Tilbakemelding</Modal.Header>
+                <Modal.Body>
+                    <p className="mb-0">{alertContent}</p>
+                    <hr/>
+                </Modal.Body>
             </Modal>
         }
 
@@ -325,28 +328,26 @@ export default function EditTabContact(props) {
                             variant="primary" 
                             name="insert" 
                             onClick={operationHelper}
-                        >Add new SoMe</Button>
+                        >Legg til sosialt media</Button>
                     </div>
                     <Button
                         key="68" 
                         variant="primary" 
                         name="mark" 
                         onClick={showCheckboxes}
-                    >Mark</Button>
+                    >Marker</Button>
                     {stateShowCheckboxes && 
-                    <div class="ms-1">
-                        <Button
-                            key="13" 
-                            variant="danger" 
-                            name="siteDelete" 
-                            disabled={!stateShowCheckboxes}
-                            onClick={handleDelete}
-                        >Delete</Button>
-                    </div>
+                        <div class="ms-1">
+                            <Button
+                                key="13" 
+                                variant="danger" 
+                                name="siteDelete" 
+                                disabled={!stateShowCheckboxes}
+                                onClick={handleDelete}
+                            >Slett</Button>
+                        </div>
                     }
-                    
                 </div>
-
             </div>
 
             <table class="table table-sm table-hover caption-top table-bordered">
@@ -378,6 +379,7 @@ export default function EditTabContact(props) {
             </table>
 
             {currentOperation.operation === "insert" &&
+                <div className="mb-3">
                 <Row>
                     <Col>
                         <Form>
@@ -400,8 +402,8 @@ export default function EditTabContact(props) {
                             )}
                         </DropdownButton>
                     </Col>
-                    
                 </Row>
+                </div>
             }
             {(currentOperation.operation === "view" || currentOperation.operation === "update") && 
                 <Container>
@@ -414,7 +416,7 @@ export default function EditTabContact(props) {
                                     variant="primary" 
                                     name="update"
                                     onClick={operationHelper}
-                                >Activate Editing</Button>
+                                >Aktiver redigering</Button>
                             </Row>
                         </div>
                     }
@@ -432,5 +434,4 @@ export default function EditTabContact(props) {
             }
         </Container>
     )
-
 }
