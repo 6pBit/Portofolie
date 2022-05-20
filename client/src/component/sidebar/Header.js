@@ -2,6 +2,11 @@ import React from "react";
 import './Sidebar.css'
 import profileImg from './profile-icon-png-black.png'
 
+/**
+ * Puts together the image and name, from the database, of the owner and diplays it
+ * @returns Header Component
+ */
+
 export default function Header() {
 
     const [user, setUser] = React.useState({})

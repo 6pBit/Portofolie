@@ -1,6 +1,10 @@
 import React from 'react'
 import './css/Landing.css'
 
+/**
+ * The home page which meets the guest with a welcome message and an introduction
+ * @returns Landing Component
+ */
 export default function Landing() {
     const [landingContent, setLandingContent] = React.useState({})
     React.useEffect(() => {
@@ -9,10 +13,7 @@ export default function Landing() {
         .then(data => {
             setLandingContent(data )
         })
-        console.log(landingContent)
-        return () => () => console.log("callback "+landingContent)
-    },[])
-    
+    },[])   
 
     return (
         <section className="landingContainer" id='landing'>

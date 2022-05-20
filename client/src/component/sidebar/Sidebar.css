@@ -65,8 +65,15 @@
     bottom: 0;
     display: flex;
     flex-direction: column;
+    background: hsl(180 25% 25% / 0.85);
+    border-top: 3px solid hsl(180 25% 25%  )
 }
-
+@supports (backdrop-filter: blur(1rem)) {
+    .sidebar .footer{
+        background: hsl(180 25% 25% / 0.3);
+        backdrop-filter: blur(0.5rem);
+    }
+}
 .footer svg{
     color:floralwhite;
     right: 0;
@@ -82,7 +89,13 @@
     font-weight: 200;
     font-size: 0.8em;
 }
-
+.toast {
+    background: white !important;
+    color: black !important;
+}
+.toast-header > button {
+    display: none !important;
+}
 /* --- Collapsed Sidebar menu --- */
 .sidebar.collapsed {
     display: none;

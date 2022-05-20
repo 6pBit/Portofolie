@@ -3,30 +3,33 @@ import {BsGearFill, BsXSquareFill} from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './Sidebar.css'
-import { Form } from 'react-bootstrap'
-import { Button } from 'react-bootstrap'
+import { Form, Button, Toast } from 'react-bootstrap'
 
-
+/**
+ * Main consern is login functionality. Uses cookies for sessions and localstorage to make the login area behave consistent
+ * Refrence: https://blog.logrocket.com/how-to-secure-react-app-login-authentication/
+ * @param {*} props 
+ * @returns Footer Component
+ */
 
 export default function Footer(props) {
-    //localStorage.removeItem('login-open')
-    const loginOpen = localStorage.getItem('login-open')
-    const [isLoginVisible, setIsLoginVisible] = React.useState(loginOpen)
     
+    const loginOpen = localStorage.getItem('login-open')
+    const [isLoginVisible, setIsLoginVisible] = React.useState(loginOpen)    
     const [username, setUsername] = React.useState();
     const [password, setPassword] = React.useState();
+    const [show, setShow] = React.useState(false);
 
     const auth = async () => {
         try {
-            const res = await axios.get('/auth/authenticate', { auth: { username, password } });
-        
+            const res = await axios.get('/auth/authenticate', { auth: { username, password } });        
             if (res.data.screen !== undefined) {            
                 props.setScreen(res.data.screen);            
                 console.log("Axios get bra "+props.screen)
             }
         } catch (e) {
             console.log("Axios get feil "+e);
-            alert("Feil brukernavn/passord")
+            setShow(true)
         }
     };
     const readCookie = async () => {
@@ -36,12 +39,16 @@ export default function Footer(props) {
             if (res.data.screen !== undefined) {
                 props.setScreen(res.data.screen);
             }
-        } catch (e) {
-            
+        } catch (e) {            
             console.log(e);
         }
     };
-    
+    const wrongPasswordMsg = (
+        <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide={true}>
+            <Toast.Header>Feil</Toast.Header>
+            <Toast.Body>Feil passord/brukernavn</Toast.Body>
+        </Toast>
+    )    
     React.useEffect(() => {
         localStorage.removeItem('login-open')
         readCookie();
@@ -49,12 +56,12 @@ export default function Footer(props) {
 
     return(
         <div className='footer'>
-            
             <div className="login">
                 {props.screen === 'auth' ?
-                    <div className="loginForm">
+                    <div className="loginForm">                        
                         {isLoginVisible?
                             <>
+                                {wrongPasswordMsg}
                                 <BsXSquareFill onClick={() => setIsLoginVisible(false)}/>
                                 <Form>
                                     <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -69,15 +76,12 @@ export default function Footer(props) {
                                         <Button 
                                             variant="primary"  
                                             type="button" 
-                                            onClick={() => {
-                                                setIsLoginVisible(false)
-                                                
+                                            onClick={() => {                                                                                              
                                                 auth()
                                             }}
                                         >Login</Button>
                                     </Link>
-                                </Form>
-                                
+                                </Form>                                
                             </>
                             :<BsGearFill 
                                 onClick={() => {

@@ -5,15 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { BrowserRouter } from "react-router-dom"
-import { IconContext } from 'react-icons'
+
+/**
+ * Rendring the full app to the root element in index.html 
+ */
 
 ReactDOM.render(
   
   <React.StrictMode>
-    <BrowserRouter>
-      
-        <App />
-      
+    <BrowserRouter>      
+        <App />      
     </BrowserRouter>
   </React.StrictMode>
   ,

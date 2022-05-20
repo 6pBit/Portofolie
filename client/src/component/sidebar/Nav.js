@@ -1,8 +1,16 @@
 import React from "react";
 import './Sidebar.css'
 
-export default function Nav(props) {
+/**
+ * Makes the navigation buttons and defines how to behave when they are pressed
+ * @param {*} props 
+ * @returns Nav Component
+ */
 
+export default function Nav(props) {
+    /**
+     * Scrolls up or down to find the corresponding component in mainContainer
+     */
     function handleClick(e, target) {
         e.preventDefault();
         const location = document.querySelector(target)
@@ -11,9 +19,7 @@ export default function Nav(props) {
             top: location.offsetTop,
             behavior: 'smooth'
         })
-        console.log(`Nav.js før setvisible ${props.sidebarVisible}`)
-        props.setSidebarVisible(!props.sidebarVisible)        
-        console.log(`Nav.js etter setvisible ${props.sidebarVisible}`)        
+        props.setSidebarVisible(!props.sidebarVisible)      
     }
     
     return (

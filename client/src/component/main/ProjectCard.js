@@ -1,18 +1,16 @@
 import React from "react"
-
 import {Card} from "react-bootstrap"
 import './css/ProjectCard.css'
 
+/**
+ * Puts together a projectcard
+ * @param {*} props 
+ * @returns Projectcard Component
+ */
+
 export default function ProjectCard(props) {
-    /* Finn ut av dette
-    function handleHover(e) {
-        console.log("hover event "+JSON.stringify(e.target))
-        e.target.querySelector('Card.Img').style.height = '25vh'
-    }
-    */
 
     function handleClick() {
-        console.log("klikket!!!!")
         if(props.projectUrl !== "" && props.projectUrl !== null)
             window.open(props.projectUrl)
     }
