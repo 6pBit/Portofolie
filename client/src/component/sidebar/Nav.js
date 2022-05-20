@@ -24,7 +24,7 @@ export default function Nav(props) {
     
     return (
         <ul className="sidebar-items">
-            <div id="sidebarlanding" className="item" onClick={(e) => handleClick(e, '#landing')} >
+            <div id="sidebarlanding" className="item activeSidebarlink" onClick={(e) => handleClick(e, '#landing')} >
                 <span className="sidebar-text">Hjem</span>
             </div>            
             <div id="sidebarproject" className="item" onClick={(e) => handleClick(e, '#project')}>

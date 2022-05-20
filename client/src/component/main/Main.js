@@ -15,6 +15,7 @@ import '../sidebar/Sidebar.css'
 export default function Main(props) {
     
     const [sectionsArr, setSectionsArr] = React.useState([])
+    
     /**
      * Calculates which component is in frame and gives it a activesidebarlink class.
      */

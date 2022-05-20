@@ -3,7 +3,6 @@ const path = require('path');
 const express = require("express");
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-const apiExample = require('./routes/apiExample.js')
 const sites = require('./routes/sites.js')
 const user = require('./routes/user.js')
 const edit = require('./routes/edit.js')
@@ -14,7 +13,7 @@ const auth = require('./routes/auth')
 const dbo = require("./db/index.js");
 
 /**
- * Sets up and configures the Express server applikation
+ * Sets up and configures the Express server application
  */
 
 const PORT = process.env.PORT || 3001;
@@ -29,8 +28,9 @@ app.use(cookieParser(process.env.COOKIE_SALT))
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, '../client/build')));// 
 app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html')); // 
+  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html')); 
 });
+
 app.get("/public/images/:resource", (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/images', req.params.resource))
 })
@@ -41,7 +41,6 @@ app.get("/public/files/:resource", (req, res) => {
 app.use("/sites", sites)
 app.use("/user", user)
 app.use("/projects", projects)
-app.use("/api", apiExample);
 app.use("/edit", edit)
 app.use("/email", email)
 app.use("/fileUpload", fileUpload)

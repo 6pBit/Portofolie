@@ -24,7 +24,10 @@ export default function Header() {
     return (
         <div className="sidebar-header">
             <img src={ user.bildelenke || profileImg} />
-            <h1 className="sidebar-logo" > { `${user.fornavn} ${user.etternavn}`|| "portefølje" } </h1>
+            <div className="headerTitle" >
+                <h1 className="sidebar-logo" > { user.fornavn || "portefølje" } </h1>
+                <h1 className="sidebar-logo" > {  user.etternavn || "" } </h1>
+            </div>
         </div>
     )
 }
