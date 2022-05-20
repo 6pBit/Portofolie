@@ -7,7 +7,6 @@ const ObjectId = require("mongodb").ObjectId;
 /**
  * A Route for getting the sites information from DB
  */
-
 router.get("/:name", (req, res) => {
     let db_connect = dbo.getDb();
     db_connect
