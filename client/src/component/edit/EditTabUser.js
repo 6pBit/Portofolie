@@ -1,15 +1,15 @@
 import React from "react"
 import { validate } from "react-email-validator"
-import {Container, FormGroup, Form, Button, Col, Row, Modal, Alert} from "react-bootstrap"
+import {Container, FormGroup, Form, Button, Col, Modal} from "react-bootstrap"
 
-export default function EditTab(props) {
+/**
+ * @returns Container with content for EditTabUser
+ */
+export default function EditTab() {
 
   const isMounted = React.useRef(false)
   const idHelper = React.useRef("")
-
   const collection = "user"
-  const dbFilter = "6254341b8acb5f014cfe0800"
-
   const [currentFile, setCurrentFile] = React.useState(null)
   const [activateEdit, setActivateEdit] = React.useState(false)
   const [requestReload, setRequestReload] = React.useState(false)
@@ -51,7 +51,7 @@ export default function EditTab(props) {
       setCurrentFile(() => {
         if((currentFile === "" || currentFile === null) && event.target.files[event.target.files.length-1] !== null && event.target.files[event.target.files.length-1] !== "") {
             console.log("currentfile oppdatert")
-            return (event.target.files[0]) //fjerna return her  && event.target.files[0] !== null
+            return (event.target.files[0])
         }
       })
     }
@@ -59,7 +59,6 @@ export default function EditTab(props) {
 
   function handleSubmit(event){
       event.preventDefault();
-      
       if(validate(formData.epost) && formData.tlfNummer.length === 8) /* hardkoda :( */ {
         setSiteData( {
           ...formData
@@ -68,7 +67,6 @@ export default function EditTab(props) {
       } else {
         alert("Eposten eller telefonnummeret er ikke gyldig!")
       }
-        console.log(JSON.stringify(currentFile) + " dette er current file on submit")
   }
 
   function updateWithImageFile() {
@@ -87,7 +85,6 @@ export default function EditTab(props) {
         fetch("/fileUpload/image", requestForLocalStorage)
         .then(response => response.json())
         .then(data => (
-            console.log(data.imageUrl + " dette skal være bilde urlen"),
            
             requestForDatabase = {
                 method: 'POST',
@@ -100,12 +97,12 @@ export default function EditTab(props) {
                 )
               },
               
-              fetch(`/${collection}/editUser/${dbFilter}`, requestForDatabase)
+              fetch(`/${collection}/editUser`, requestForDatabase)
               .then( response => {
                 setCurrentFile(null)
                 document.getElementById('fileInput').value = null
                 setRequestReload(!requestReload)
-                handleAlert(response.json().data.stringify())
+                handleAlert("Oppdateringen var vellykket!")
               })
                 
         ))
@@ -120,20 +117,17 @@ export default function EditTab(props) {
         siteData
       )
     }
-    fetch(`/${collection}/editUser/${dbFilter}`, requestForDatabase )
+    fetch(`/${collection}/editUser`, requestForDatabase )
       .then(response => response.json())
       .then(data => {
-        //console.log("fetch resultat etter post fra EditTabUser.js " + response.json())
-        //setCurrentData(JSON.stringify(response.json()))response.json().data.stringify()
-        handleAlert("Dette gikk bra!")
+        handleAlert("Oppdateringen var vellykket!")
       })
   }
 
   function setData() {
-    fetch(`/user/withId/6254341b8acb5f014cfe0800`) // ikke ha hardkodet brukerid her.
+    fetch(`/user/withId`)
     .then(response => response.json()) 
     .then(data => (
-      //console.log(data + " type objekt useEffect som getter bruker EditTabUser.js"),
       idHelper.current = data._id,
       setSiteData( {
         fornavn: data.fornavn,
@@ -166,21 +160,17 @@ export default function EditTab(props) {
         updateUser()
       }
       setActivateEdit(!activateEdit)
-      //setRequestReload(!requestReload)
     } else {
       isMounted.current = true
     }
   }, [requestUpdate])
 
   function handleAlert(content) {
-    console.log("heiiiiiii")
     setAlertContent(content)
     setShowAlert(true)
     setTimeout(() => {
       setAlertContent("")
       setShowAlert(false)
-      //setRequestReload(!requestReload)
-      
     }, 3000)
   }
 
@@ -200,7 +190,7 @@ export default function EditTab(props) {
             </Modal.Body>
           </Modal>
         }
-          <div className="current_info">
+          <div className="sidebar-header">
               <article>
                   <img id="userImage"
                       src={siteData.imageUrl}
@@ -247,12 +237,9 @@ export default function EditTab(props) {
                   <Form.Control id="fileInput" type="file" accept=".png, .jpg, .jpeg" name="imageFile" onChange={handleChange} placeholder="Bilde"/>
               </Form.Group>
             }
-            {activateEdit && <Button key="5" variant="primary" name="userSubmit" value={"Edit"} onClick={handleSubmit}>Edit</Button>}
-                
-              
+            {activateEdit && <div class="d-flex justify-content-end"><Button key="5" variant="primary" name="userSubmit" value={"Edit"} onClick={handleSubmit}>Edit</Button> </div>}
         </Form>
 
       </Container>
-
     )
 }

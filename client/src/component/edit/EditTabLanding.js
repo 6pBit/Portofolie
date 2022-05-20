@@ -1,15 +1,19 @@
 import React from "react"
 import { Container, Col, Button, Modal, Form} from "react-bootstrap"
 
-export default function EditTabLanding(props) {
+/**
+ * @returns Container with content for EditTabLanding
+ */
+
+export default function EditTabLanding() {
 
     const collection = "sites"
     const dbFilter = "landing"
     const isMounted = React.useRef(false)
     const [showAlert, setShowAlert] = React.useState(false)
     const [alertContent, setAlertContent] = React.useState("")
-    const [refresh, setRefresh] = React.useState(false);
- 
+    const [refresh, setRefresh] = React.useState(false)
+    const [activateEdit, setActivateEdit] = React.useState(false)
     const [siteData, setSiteData] = React.useState({
         title: "",
         introductionTxt: ""
@@ -20,7 +24,6 @@ export default function EditTabLanding(props) {
     })
     
     function handleAlert(content) {
-        console.log("heiiiiiii")
         setAlertContent(content)
         setShowAlert(true)
         setTimeout(() => {
@@ -29,8 +32,6 @@ export default function EditTabLanding(props) {
     }, 3000)}
 
     function handleChange(event) {
-        console.log(event.target.value)
-  
         setFormData(prevFormData => {
           return {
             ...prevFormData,
@@ -45,6 +46,11 @@ export default function EditTabLanding(props) {
          ...formData
         })
         setRefresh(!refresh)
+        setActivateEdit(!activateEdit)
+    }
+
+    function handleClick() {
+        setActivateEdit(!activateEdit)
     }
 
     React.useEffect(() => {
@@ -73,17 +79,12 @@ export default function EditTabLanding(props) {
             }
             fetch(`/${collection}/${dbFilter}`, requestForDatabase )
               .then( response => {
-                //console.log("fetch resultat etter post fra Editlanding.js " + response.json())
-                //setCurrentData(JSON.stringify(response.json()))
-                handleAlert("Dette gikk bra gitt")
+                handleAlert("Oppdateringen var vellykket!")
             })
           } else {
             isMounted.current = true
           }
     }, [refresh])
-
-
-
 
     return(
         <Container>
@@ -100,21 +101,29 @@ export default function EditTabLanding(props) {
                     </Modal.Body>
                 </Modal>
             }
+
+            <div class="d-flex justify-content-end">
+                <Button
+                    key="69" 
+                    variant="primary" 
+                    name="edit"
+                    onClick={handleClick}
+                >Activate Editing</Button>
+            </div>
             
-            <Form>
+            <Form className="mb-3">
                 <Form.Group as={Col} controlId="formGroupTitle">
                     <Form.Label>Overskrift</Form.Label>
-                    <Form.Control type="text" name="title" placeholder="Denne teksten vises på toppen av siden" value={formData.title} onChange={handleChange}></Form.Control>
+                    <Form.Control type="text" name="title" placeholder="Denne teksten vises på toppen av siden" value={formData.title} onChange={handleChange} disabled={!activateEdit}></Form.Control>
                 </Form.Group>
                 <Form.Group as={Col} controlId="formGroupTitle">
                     <Form.Label>Introduksjonstekst</Form.Label>
-                    <Form.Control as="textarea" rows={8} type="text" name="introductionTxt" placeholder="Introduksjonstekst for siden" value={formData.introductionTxt} onChange={handleChange}></Form.Control>
+                    <Form.Control as="textarea" rows={8} type="text" name="introductionTxt" placeholder="Introduksjonstekst for siden" value={formData.introductionTxt} onChange={handleChange} disabled={!activateEdit}></Form.Control>
                 </Form.Group>
             </Form>
 
-            <Button onClick={handleSubmit}>Edit</Button>
+            {activateEdit && <div class="d-flex justify-content-end"><Button onClick={handleSubmit}>Edit</Button> </div>}
             
         </Container>
     )
-
 }

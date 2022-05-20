@@ -4,26 +4,28 @@ const router = express.Router()
 
 const ObjectId = require("mongodb").ObjectId;
 
-// Eksisterer kun en bruker. Så holder å 
-
-router.get("/withId/:id", (req, res) => {
+/**
+ * Gets user based on id
+ */
+router.get("/withId", (req, res) => {
   let db_connect = dbo.getDb();
   db_connect
     .collection("user")
-    .findOne({_id: ObjectId(req.params.id) }, function(err, result) {
+    .findOne({_id: ObjectId(process.env.USER_ID) }, function(err, result) {
       if (err) throw err;
       res.json(result);
     });
 });
 
-router.post("/editUser/:id", (req, res) => {
-
-  console.log(req.params.id + " id fra params route user")
+/**
+ * Edits user
+ */
+router.post("/editUser", (req, res) => {
 
   let db_connect = dbo.getDb();
 
   let myQuery = {
-    _id: ObjectId(req.params.id)
+    _id: ObjectId(process.env.USER_ID) 
   }
 
   let newObj = {$set:
@@ -34,24 +36,26 @@ router.post("/editUser/:id", (req, res) => {
     .collection("user")
     .updateOne(myQuery, newObj, function(err, result) {
       if(err) throw err;
-      console.log(JSON.stringify(result))
       res.json(result)
     })
 })
 
-
+/**
+ * Gets user
+ */
 router.get("/", (req, res) => {
     let db_connect = dbo.getDb();
     db_connect
       .collection("user")
       .findOne({}, function(err, result) {
         if (err) throw err;
-        console.log(result);
         res.json({ message: `${JSON.stringify(result)}`})  
       });
 });
 
-
+/**
+ * Posts new user
+ */
 router.post("/", (req, res) => {
   let db_connect = dbo.getDb();
   let newObj = {
@@ -67,11 +71,13 @@ router.post("/", (req, res) => {
     .collection("user")
     .insertOne(newObj, function(err, result) {
       if(err) throw err;
-      console.log(JSON.stringify(result))
       res.json({ message: `${JSON.stringify(result)}`})
     })
 })
 
+/**
+ * Gets all somelinks
+ */
 router.get("/someLinks", (req, res) => {
   let db_connect = dbo.getDb()
 
@@ -84,15 +90,16 @@ router.get("/someLinks", (req, res) => {
   .find(myQuery)
   .toArray(function(err, result) {
     if(err) throw err
-    console.log("Hei jeg ble kjørt")
     let final = result.map(media => {
       return(media.someName)
     })
-    final.forEach(media => console.log(media + " media"))
     res.json(result)
   })
 })
 
+/**
+ * Gets specific social media
+ */
 router.get("/spesificSome/:someName", (req, res) => {
   let db_connect = dbo.getDb();
 
@@ -102,11 +109,13 @@ router.get("/spesificSome/:someName", (req, res) => {
   .collection("user")
   .findOne(myQuery, (err, result) => {
       if(err) throw err
-      //console.log(" oppdaterte ett prosjekt med title: " + `${req.params.title}`)
       res.json(result)
   })
 })
 
+/**
+ * Updates specific social media in the database
+ */
 router.post("/update/:someName", (req, res) => {
   let db_connect = dbo.getDb();
 
@@ -119,11 +128,13 @@ router.post("/update/:someName", (req, res) => {
   .collection("user")
   .updateOne(myquery, newValues, (err, result) => {
       if(err) throw err
-      //console.log(" oppdaterte ett prosjekt med title: " + `${req.params.title}`)
       res.json(result)
   })
 })
 
+/**
+ * Inserts some to the database
+ */
 router.post("/insertSome", (req, res) => {
   let db_connect = dbo.getDb();
 
@@ -136,13 +147,14 @@ router.post("/insertSome", (req, res) => {
   .collection("user")
   .insertOne(newObject, (err, result) => {
       if(err) throw err
-      //console.log(" oppdaterte ett prosjekt med title: " + `${req.params.title}`)
       res.json(result)
   })
 })
 
+/**
+ * Deletes all specified social medias
+ */
 router.post("/deleteSeveral", (req, res) => {
-  console.log("Her er req.body i deleteSeveral" + JSON.stringify(req.body.someNames))
   let db_connect = dbo.getDb()
   let myQuery = {
       someName: {$in: req.body.someNames}
@@ -156,5 +168,3 @@ router.post("/deleteSeveral", (req, res) => {
 })
 
 module.exports = router;
-
-//$in["facebook", "snapchat", "instagram", "twitter", "linkedin", "tiktok", "wechat"]

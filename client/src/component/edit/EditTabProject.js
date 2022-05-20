@@ -2,23 +2,25 @@ import React from "react"
 import {Container, FormGroup, Form, Button, Col, Row, Modal, CloseButton} from "react-bootstrap"
 import ProjectCard from "../main/ProjectCard"
 
-export default function EditTabProject(props) {
+/** 
+ * @returns Container with content for EditTabProject
+ */
+
+export default function EditTabProject() {
 
     const collection = "projects"
-    const dbFilter = "mitt_forst"
     const isMounted = React.useRef(false)
 
-    //States som skal trigge useEffect
     const [triggerReRender, setTriggerReRender] = React.useState(false)
     const [wishToDelete, setWishToDelete] = React.useState(false)
     const [wishToUpdate, setWishToUpdate] = React.useState(false)
     //-----------------------------------------------------------------
-    //States for toggle av komponenter
+
     const [stateShowCheckboxes, setStateShowCheckboxes] = React.useState(false)
     const [showPopup, setShowPopup] = React.useState(false)
-    const [showTimedModal, setShowTimedModal] = React.useState(false)
+    const [activateEdit, setActivateEdit] = React.useState(false)
     //-----------------------------------------------------------------
-    //States som holder på data
+    
     const [currentProject, setCurrentProject] = React.useState({title: ""})
     const [currentFile, setCurrentFile] = React.useState(null)
     const [formData, setFormData] = React.useState({
@@ -41,28 +43,22 @@ export default function EditTabProject(props) {
     const [showAlert, setShowAlert] = React.useState(false)
     const [alertContent, setAlertContent] = React.useState("")
     //-------------------------------------------------------------------
-    //Document blir noen ganger ikke oppdatert om man ikke også oppdaterer title på prosjektet
-    React.useEffect(() => { //fjernet async her
 
-        //console.log("1 tabproject useffect ble kjørt")
+    React.useEffect(() => {
         if(isMounted.current) {
-
             if(document.getElementById('fileInput').value !== null)
                 insertImage()
             else
                 updateOrInsert()
-            
-          }
-
-          updateList() 
-
+        } else {
+            updateList() 
+        }
+        
     }, [wishToUpdate])
 
-    //useEffect for å oppdatere currentProject, og også for å oppdatere siteData om noe slettes
-    //slik at ikke gammel data vises på siden.
     React.useEffect(() => {
-        //console.log("2 tabproject useffect ble kjørt")
         if(isMounted.current && currentProject.title !== "") {
+            
             fetch(`/projects/specific/${currentProject.title}`)
             .then(response => response.json())
             .then(data => (
@@ -88,10 +84,7 @@ export default function EditTabProject(props) {
 
     }, [currentProject.title, triggerReRender])
     
-    //useEffect som trigges for å gjennomføre sletting mot databasen og server,
-    //og trigger rerender av siden.
     React.useEffect(() => {
-        //console.log("3 tabproject useffect ble kjørt")
         if(isMounted.current) {
 
             let temp = deleteArray.map((title) => {
@@ -102,30 +95,20 @@ export default function EditTabProject(props) {
      
             let inputString = temp.toString().replaceAll(',', '+')
             let requestForDatabase = {}
-            console.log(inputString + " før den blir send til imagestodelete")
             fetch(`/projects/imagesToDelete/${inputString}`)
             .then(response => response.json())
             .then(data => {
-                 //temp = data
-                 //console.log(JSON.stringify(data + " data fra imagesToDelete og puttes inn i fileopload delete images"))
+                 
                  requestForDatabase = {
                      method: 'POST',
                      headers: {'Content-Type': 'application/json'},
                      body: JSON.stringify({filePaths: [data]})
                 }
                  
-                //console.log(JSON.stringify(tempArray + " tempArray fra imagesToDelete og puttes inn i fileopload delete images"))
                 fetch("/fileUpload/delete/fromAws", requestForDatabase)
                 .then(response => response.json())
-                .then(data => {
-                    console.log("Ferdig med lokal bildesletting")
-         
-                     console.log(" data etter lokal sletting av bilder")
-                     //flytt alt under ut, så virker sletting.
-                    
-                })
+                .then(data => {})
      
-                 //console.log("Her er delteArray på clientsiden: " + JSON.stringify(deleteArray))
                 requestForDatabase = {
                      method: 'POST',
                      headers: {'Content-Type': 'application/json'},
@@ -135,17 +118,13 @@ export default function EditTabProject(props) {
                 fetch("/projects/deleteSeveral", requestForDatabase)
                 .then(response => response.json())
                 .then(data => {
-                    //data.map(project => console.log(project.title + " ble slettet fra databasen"))
                     setDeleteArray([])
-                    //setShowPopup(!showPopup)
                     showCheckboxes()
-
-                    //fra gammel delete
                     clean("formData")
                     clean("siteData")
                     clean("currentProject")
                     updateList()
-
+                    handleAlert("Slettingen var vellykket!")
                 })
      
              })
@@ -155,27 +134,23 @@ export default function EditTabProject(props) {
         }
     }, [wishToDelete])
 
-    //Oppdaterer state som holder på alle prosjekter fra databasen.
+    /**
+     * Updates the state which holds all projects from the database
+     */
     function updateList() {
         fetch("/projects/titles")
         .then(response => response.json())
         .then(data => (
-           //console.log(data + " data fra fetch editprojectstab"),
            setTableContent(data)
         ))
     }
 
-    //Laster opp bilde til server om bildet er en fil.
+    /**
+     * Inserts imagefile to AWS S3 and uploads image url to mongodb
+     */
     function insertImage() {
         if(currentFile !== "" && currentFile !== null) {
-            //console.log("Insert image kjørt")
-            /*
-            console.log(document.getElementById('fileInput').files[0] + " her er fila før den sendes til getsigned")
-            if(document.getElementById('fileInput').files[0] !== null)
-                getSignedRequest(document.getElementById('fileInput').files[0])
-            //getSignedRequest(encodeURIComponent(document.getElementById('fileInput').files[0]))
-            //getSignedRequest(currentFile)
-            */
+            
             const imageData = new FormData()
             imageData.append("image", currentFile)
 
@@ -189,7 +164,6 @@ export default function EditTabProject(props) {
             fetch("/fileUpload/image", requestForLocalStorage)
             .then(response => response.json())
             .then(data => (
-                console.log(data.imageUrl + " dette skal være bilde urlen"),
                
                 requestForDatabase = {
                     method: 'POST',
@@ -204,13 +178,11 @@ export default function EditTabProject(props) {
                   
                   fetch(`/${collection}/${currentOperation.operation === "insert" ? "insert" : "update/" + currentProject.title}`, requestForDatabase )
                     .then( response => {
-                        console.log("fetch resultat etter post fra Editproject.js " + response.json())
                         
                         if(currentOperation.operation === "insert") {
                             clean("formData")
                             clean("siteData")
                             clean("currentFile")
-                            updateList()
                             clean("currentProject")
                         }
                         clean("currentFile")
@@ -228,10 +200,10 @@ export default function EditTabProject(props) {
         }
     }
 
-    //Oppdaterer eller inserter mot databasen og server basert på 
-    //currentOperation state.
+    /**
+     * Updates or inserts to mongodb based on currentOperation state
+     */
     function updateOrInsert() {
-        console.log("Updateorinsert ble kjørt")
         const requestForDatabase = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -242,7 +214,6 @@ export default function EditTabProject(props) {
           
           fetch(`/${collection}/${currentOperation.operation === "insert" ? "insert" : "update/" + currentProject.title}`, requestForDatabase )
               .then( response => {
-                console.log("fetch resultat etter post fra Editproject.js " + response.json())
                 if(currentOperation.operation === "insert") {
                     clean("formData")
                     clean("siteData")
@@ -250,19 +221,23 @@ export default function EditTabProject(props) {
                     clean("currentFile")
                 }
                 clean("currentFile")
+                if(currentOperation.operation === "insert") {
+                    handleAlert("Vellykket innsetting")
+                }
+                if(currentOperation.operation === "update") {
+                    handleAlert("Oppdatering vellykket!")
+                }
+                clean("currentOperation")
                 updateList()
-                setCurrentOperation({
-                    operation: "view"
-                })
                 setTriggerReRender(!triggerReRender)
-                //timeOut()
           })
     }
 
-    //Håndterer forandringer i input feltene, og om det har blitt valgt en fil
-    //som skal lastes opp.
+    /**
+     * @param {*} event 
+     * Handles changes in the input fields, and if a file has been chosen for upload
+     */
     function handleChange(event) {
-        //console.log(event.target.value)
        
         if(event.target.name !== "imageFile") {
             setFormData(prevFormData => {
@@ -274,51 +249,44 @@ export default function EditTabProject(props) {
         } else {
             setCurrentFile(() => {
                 if((currentFile == "" || currentFile == null) && event.target.files[event.target.files.length-1] !== null && event.target.files[event.target.files.length-1] !== "") {
-                    console.log("currentfile oppdatert")
-                    return (event.target.files[0]) //fjerna return her  && event.target.files[0] !== null
+                    return (event.target.files[0])
                 }
-               
             })
-             //evt querySelector
         }
-
     }
 
-    //Håndterer submit, og setter igang insert eller update 
+    /**
+     * Handles submit and triggers insert or update
+     * @param {*} event 
+     */
     function handleSubmit(event){
         event.preventDefault();
         if(formData.title !== "" && currentOperation.operation !== "delete") {
             setSiteData( {
                 ...formData
             })
-            //insertImage()
-            console.log(JSON.stringify(currentFile) + " dette er current file on submit")
+            console.log("Handle submit kjørt wishtoupdate")
             setWishToUpdate(!wishToUpdate)
-            updateList()
-            /*
-            setCurrentOperation({
-                operation: "view"
-            })
-            */
         } 
     }
-    //Håndterer og setter igang sletting
+
+    /**
+     * Handels deletion of projects
+     * @param {*} event 
+     */
     function handleDelete(event) {
         
         if(event.target.name === "modalDelete") {
-            //fiks løsning
+            
             const all = document.querySelectorAll('input[type=checkbox]:checked')
             let tempList = []
-            for(let i=0; i<all.length; i++) {// kanskje legge til en forEach her istedenfor
+            for(let i=0; i<all.length; i++) {
                 tempList.push(all[i].value)
             }
             setDeleteArray(tempList)
-            //console.log("Her er alle titlene fra bokser som var valgt ved sletting")
             
             setShowPopup(!showPopup)
-                
-            deleteArray.map(item => console.log("Tittel fra deleteArray:" + item.title))
-            console.log("Delete button pressed")
+
             setWishToDelete(!wishToDelete)
             setCurrentOperation({
                 operation: "delete"
@@ -326,27 +294,29 @@ export default function EditTabProject(props) {
         }  else {
             setShowPopup(!showPopup)
         }
-        
-        //bør renske currentProject men noe rart med den
-        //Om den ikke fjernes blir man spurt om man vil slette den samme på nytt               
-        //updateList()//overflødig?              
+                  
     }
 
-    //Endrer state
     function showCheckboxes() {
-        //console.log("marker for sletting pressed")
         setStateShowCheckboxes(!stateShowCheckboxes)
+        setCurrentOperation({
+            operation: "delete"
+        })
     }
 
-    //Handler for lukking av Modal component
+    /**
+     * Handles closing of the modal component
+     */
     function handleClose() {
         setDeleteArray([])
         setShowPopup(!showPopup)
     }
 
-    //helper funksjon som setter nåværende valgt prosjekt.
+    /**
+     * Helper function which sets currently chosen project
+     * @param {*} event 
+     */
     function helper(event) {
-        //console.log(event.target.name)
         setCurrentProject({
             title: event.target.name
         })
@@ -355,7 +325,10 @@ export default function EditTabProject(props) {
         })   
     }
 
-    //helper funksjon som setter nåværende operasjon
+    /**
+     * Function that sets current operation
+     * @param {*} event 
+     */
     function operationHelper(event) {
         if(event.target.name === "insert") {
             clean("formData")
@@ -364,33 +337,22 @@ export default function EditTabProject(props) {
         setCurrentOperation({
             operation: event.target.name
         })
-    }
 
-    //Viser Modal med melding om vellykket sletting, endring eller insert,
-    //og fjerner den etter 3 sekunder. (3000 millisek). Må prøves ut.
-    function timeOut() {
-        setShowTimedModal(!showTimedModal)
-        const timeOut = setTimeout(() => {
-            setShowTimedModal(!showTimedModal)
-        }, 3000)
-        return () => {
-            clearTimeout(timeOut)
-        }
     }
 
     function handleAlert(content) {
-        console.log("heiiiiiii")
         setAlertContent(content)
         setShowAlert(true)
         setTimeout(() => {
           setAlertContent("")
           setShowAlert(false)
-          //setRequestReload(!requestReload)
-          
         }, 3000)
       }
 
-    //Hjelpefunksjon som rensker valgt state for innhold.
+    /**
+     * Helper function which cleans data fram given state
+     * @param {*} dataToClean 
+     */
     function clean(dataToClean) {
         if(dataToClean === "formData") {
             setFormData({
@@ -438,10 +400,7 @@ export default function EditTabProject(props) {
                         <Modal.Title>Sletting</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <h2>Du er iferd med å slette følgende prosjekter:</h2>
-                        {deleteArray.map(project => {
-                            <p>{project.title}</p>
-                        })}
+                        <h2>Er du sikker på at du ønsker å slette de valgte prosjektene?</h2>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>Lukk</Button>
@@ -452,9 +411,9 @@ export default function EditTabProject(props) {
 
         {showAlert &&
             <Modal 
-            show={showAlert}
-            backdrop="static"
-            keyboard={false}>
+                show={showAlert}
+                backdrop="static"
+                keyboard={false}>
             <Modal.Header>Tilbakemelding</Modal.Header>
             <Modal.Body>
                 <p className="mb-0">{alertContent}</p>
@@ -468,33 +427,30 @@ export default function EditTabProject(props) {
                 <div class="mr-0 d-flex justify-content-between">
                     <div class="me-1">
                         <Button
-                            
-                            key="5" 
+                            key="10" 
                             variant="primary" 
                             name="insert" 
                             onClick={operationHelper}
-                        >Add new project</Button>
+                        >Legg til nytt prosjekt</Button>
                     </div>
                     <Button
-                        key="5" 
+                        key="81" 
                         variant="primary" 
                         name="mark" 
                         onClick={showCheckboxes}
-                    >Mark</Button>
+                    >Marker</Button>
                     {stateShowCheckboxes &&
                         <div class="ms-1"> 
-                        <Button
-                            key="6" 
-                            variant="danger" 
-                            name="siteDelete" 
-                            disabled={!stateShowCheckboxes}
-                            onClick={handleDelete}
-                        >Delete</Button>
+                            <Button
+                                key="31" 
+                                variant="danger" 
+                                name="siteDelete" 
+                                disabled={!stateShowCheckboxes}
+                                onClick={handleDelete}
+                            >Slett</Button>
                         </div>
                     }
-                    
                 </div>
-                
             </div>
             
             <table class="table table-sm table-hover caption-top table-bordered">
@@ -529,7 +485,7 @@ export default function EditTabProject(props) {
                 
                 <Container className="justify-content-center" style={{display: 'flex'}}>
                     <Col>
-                        <h2>Preview of ProjectCard</h2>
+                        <h2>Forhåndsvisning av Prosjektkort</h2>
                         <Row>
                             <ProjectCard 
                                 id="card"            
@@ -547,20 +503,20 @@ export default function EditTabProject(props) {
             {(currentOperation.operation === "edit" || currentOperation.operation === "insert" || currentOperation.operation === "view") &&
                 <Container>
                     {currentOperation.operation !== "insert" &&
-                        <Row>
+                        <div class="d-flex justify-content-end">
                             <Button
                                 key="69" 
                                 variant="primary" 
                                 name="edit"
                                 onClick={operationHelper}
                             >Activate Editing</Button>
-                        </Row>
+                        </div>
                     }
                     
                     <Form className="mb-3">
                             <Form.Group as={Col} controlId="formGroupTitle">
                                 <Form.Label column sm={2}>Tittel</Form.Label>
-                                <Form.Control type="text" value={formData.title} name="title" onChange={handleChange} placeholder="Tittel for prosjektet" disabled={currentOperation.operation === "view"}/>
+                                <Form.Control type="text" value={formData.title} name="title" onChange={handleChange} placeholder="Tittel for prosjektet" disabled={(currentOperation.operation === "view" || currentOperation.operation === "edit")}/>
                             </Form.Group>
                             <Form.Group as={Col} controlId="formGroupTitle">
                                 <Form.Label column sm={2}>Beskrivelse</Form.Label>
@@ -578,41 +534,21 @@ export default function EditTabProject(props) {
                                 <Form.Label column sm={2}>Bildelenke</Form.Label>
                                 <Form.Control value={formData.imageUrl} name="imageUrl" onChange={handleChange} placeholder="Bildelenke" disabled={currentOperation.operation === "view"}/>
                             </FormGroup>
-                            {currentOperation.operation !== "view" &&
+                            {(currentOperation.operation !== "view" && activateEdit) &&
                                 <Form.Group as={Col} controlId="formGroupTitle">
                                     <Form.Label column sm={2}>Bilde</Form.Label>
                                     <Form.Control id="fileInput" type="file" accept=".png, .jpg, .jpeg" name="imageFile" onChange={handleChange} placeholder="Bilde"/>
                                 </Form.Group>
                             }
-                            {(currentOperation.operation === "edit" || currentOperation.operation === "insert" && currentOperation.operation !== "delete") &&
-                                <Button key="5" variant="primary" name="siteSubmit" value={currentOperation.operation} onClick={handleSubmit}>{currentOperation.operation}</Button>
-                            }
+                            
                     </Form>
+                    {(currentOperation.operation === "edit" || currentOperation.operation === "insert" && currentOperation.operation !== "delete") &&
+                        <div className="">
+                            <div class="d-flex justify-content-end"><Button key="65" variant="primary" name="siteSubmit" value={currentOperation.operation} onClick={handleSubmit}>{currentOperation.operation}</Button></div>
+                        </div>
+                    }
                 </Container>
             }
-        
         </Container>
     )
- 
 }
-
-/**
- * <Modal
-                id="timedModal"
-                size="sm"
-                show={!showTimedModal}
-            >
-                <Modal.Header CloseButton>
-                    <p>{currentOperation.operation} was successful! :D</p>
-                </Modal.Header>
-                <Modal.Body>
-                    {}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>Lukk</Button>
-                </Modal.Footer>
-            </Modal>
- * 
- * 
- * 
- */

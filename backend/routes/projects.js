@@ -1,54 +1,37 @@
-const { response } = require('express');
 const express = require('express');
-const { route } = require('express/lib/application');
-const db = require('../db/index.js');
 const dbo = require("../db/index.js");
 const router = express.Router()
 
 const ObjectId = require("mongodb").ObjectId;
 
-//Denne fungerer
-/*
 router.get("/", (req, res) => {
-    console.log(req.baseUrl + " projects route uten param")
     let db_connect = dbo.getDb()
     db_connect
     .collection("projects")
-    .findOne({title: "mitt_forst"}, function(err, result) { 
-        if(err) throw err
-        console.log(result + " get fra projects collection kjørt projects.js")
-        res.json(result)
-    })
-})
-*/
-router.get("/", (req, res) => {
-    //console.log(req.baseUrl + " projects route uten param")
-    let db_connect = dbo.getDb()
-    db_connect
-    .collection("projects")
-    .find({}) // bestemmer hva du ønsker å hente fra databasen
+    .find({})
     .toArray(function(err, result) {
-        //console.log(JSON.stringify(result) + " sender resultat array fra project get projects.js")
         if(err) throw err
         res.json(result)
     })
 })
 
+/**
+ * Gets specific project based on title given in req.params
+ */
 router.get("/specific/:title", (req, res) => {
-    console.log("her er parameter title: " + req.params.title)
     let db_connect = dbo.getDb();
     db_connect
         .collection("projects")
         .findOne({title: `${req.params.title}`}, function(err, result) {
         if(err) throw err
-        //console.log("get fra project collection spesifikk project sites.js")
-        //console.log(result + " her er det som sendes fra project")
         res.json(result)
     })
 })
 
+/**
+ * Gets all titles from the database
+ */
 router.get("/titles", (req, res) => {
-    console.log("henter kun titles")
     let db_connect = dbo.getDb()
     db_connect
         .collection("projects")
@@ -59,23 +42,26 @@ router.get("/titles", (req, res) => {
         })
 })
 
+/**
+ * Updates specific project based on title given in req.params
+ */
 router.post("/update/:title", (req, res) => {
     let db_connect = dbo.getDb();
-
     let myquery = { title: req.params.title };  
     let newvalues = {    
         $set: req.body
     }
-
     db_connect
     .collection("projects")
     .updateOne(myquery, newvalues, (err, result) => {
         if(err) throw err
-        //console.log(" oppdaterte ett prosjekt med title: " + `${req.params.title}`)
         res.json(result)
     })
 })
 
+/**
+ * Inserts a new project to the database
+ */
 router.post("/insert", (req, res) => {
     let db_connect = dbo.getDb();
   
@@ -89,6 +75,9 @@ router.post("/insert", (req, res) => {
     })
 })
 
+/**
+ * Deletes a spesific prject from the database
+ */
 router.post("/delete/:title", (req, res) => {
     let db_connect = dbo.getDb()
     let myQuery = {title: req.params.title}
@@ -100,38 +89,33 @@ router.post("/delete/:title", (req, res) => {
     })
 })
 
+/**
+ * Gets all imageurls from the database based on req.params
+ */
 router.get("/imagesToDelete/:titles", (req, res) => {
     let db_connect = dbo.getDb()
     let temp = req.params.titles.split('+')
-    /*
-    for(let i=0; i<req.params.length; i++) {
-        console.log(req.params.titles[i] + " dette legges inn i temp fra params")
-        temp.push(req.params.titles[i])
-    }*/
-    console.log(JSON.stringify(temp) + " temp i imagesToDelete")
     let myQuery = {
         title: {$in: temp}
     }
     db_connect
         .collection("projects")
-        .find(myQuery, {imageUrl: 1, _id: 0, title: 0, altText: 0, description: 0}) //vil ikke kun gi imageUrl, så bruker hele documentet
+        .find(myQuery, {imageUrl: 1, _id: 0, title: 0, altText: 0, description: 0})
         .toArray(function(err, result) {
                 if(err) throw err
-                console.log(JSON.stringify(result) + " dette er filepaths som skal slettes")
-                // får feilmeldinger om man får inn tom verdi eller en faktisk lenke her.
                 let final = result.map(project => {
                     return(
                         project.imageUrl
                     ) 
                 })
-                
-                console.log(JSON.stringify(final) + " dette er filepaths som skal slettes etter final")
                 res.json(final)
         })
 })
 
+/**
+ * Deletes all specified projects from the database
+ */
 router.post("/deleteSeveral", (req, res) => {
-    console.log("Her er req.body i deleteSeveral" + JSON.stringify(req.body.titles))
     let db_connect = dbo.getDb()
     let myQuery = {
         title: {$in: req.body.titles}
@@ -143,10 +127,5 @@ router.post("/deleteSeveral", (req, res) => {
         res.json(result)
     })
 })
-/*
-).deleteMany(myQuery, (err, result) => {
-    if(err) throw err
-    res.json("Det gikk gitt")
-})
-*/
+
 module.exports = router;
